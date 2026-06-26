@@ -9,7 +9,7 @@
  *   - UniProt (functional annotations)
  *   - WOAH Terrestrial Manual (disease significance)
  * 
- * Note: For zero-cost MVP, we use simplified protein representations
+ * Note: For the MVP, we use simplified protein representations
  * (binding pocket centroid + radius + charge profile) instead of full
  * atomic coordinates. This enables fast in-browser docking.
  */

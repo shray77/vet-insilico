@@ -7,6 +7,7 @@ import Viewer3D from "@/components/Viewer3D";
 import { PATHOGENS } from "@/data/pathogens";
 import { DRUGS } from "@/data/drugs";
 import { virtualScreening, getTopResults, type DockingResult } from "@/lib/docking";
+import { analyzeWithLLM, getHfToken } from "@/lib/hf";
 
 type Tab = "screening" | "learn";
 
@@ -368,6 +369,10 @@ export default function DrugRepurposingPage() {
               )}
             </div>
 
+            <div className="border-t border-zinc-200 dark:border-zinc-800 pt-3 mt-3">
+              <DrugLLMAnalysis result={selectedResult} />
+            </div>
+
             <div className="border-t border-zinc-200 dark:border-zinc-800 pt-3 mt-3 text-xs text-zinc-400">
               ⚠️ Упрощённая модель. Требуется in vitro / in vivo валидация.
             </div>
@@ -376,8 +381,124 @@ export default function DrugRepurposingPage() {
       )}
 
       <footer className="max-w-6xl mx-auto px-4 py-6 border-t border-zinc-200 dark:border-zinc-800 mt-8 text-center text-xs text-zinc-400">
-        VetInSilico Hub • Drug Repurposing • Zero-cost • Browser-only
+        VetInSilico Hub • Drug Repurposing • ML-powered
       </footer>
+    </div>
+  );
+}
+
+function DrugLLMAnalysis({ result }: { result: DockingResult }) {
+  const [analysis, setAnalysis] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const run = async () => {
+    if (!getHfToken()) {
+      setError("Задайте HF token — кнопка 🤖 в шапке");
+      return;
+    }
+    setLoading(true);
+    setError("");
+    try {
+      const prompt = `You are a veterinary pharmacology expert. Analyze this drug-target pair for repurposing potential.
+
+DRUG: ${result.drug.name} (INN: ${result.drug.inn})
+Pharm group: ${result.drug.pharm_group}
+Mechanism: ${result.drug.mechanism || "unknown"}
+MW=${result.drug.mw} Da, LogP=${result.drug.logp}, charge=${result.drug.charge}, RU registered=${result.drug.ru_registered}
+
+TARGET: ${result.target.name_ru} (PDB: ${result.target.pdb_id || "n/a"})
+Function: ${result.target.function_ru}
+
+DOCKING SCORE: ${result.score}/100 (shape=${result.shapeScore}, electrostatic=${result.electrostaticScore}, hydrophobic=${result.hydrophobicScore})
+ΔG=${result.bindingAffinity} kcal/mol, Lipinski=${result.lipinskiPass ? "pass" : "fail"}, selectivity=${result.selectivityIndex}/100
+
+Respond ONLY as JSON:
+{"repurposingPotential": "<low|moderate|high>", "confidenceScore": <0-100>, "rationale": "<one short sentence>", "keyRisks": ["...", "..."], "nextSteps": ["...", "..."]}`;
+      const r = await analyzeWithLLM<any>(
+        "You are a veterinary pharmacology expert. Respond ONLY with valid JSON, no markdown.",
+        prompt,
+        { maxTokens: 250, temperature: 0.3 },
+      );
+      setAnalysis(r);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="text-xs text-zinc-400">
+        ⏳ LLM анализирует кандидата...
+      </div>
+    );
+  }
+
+  if (error && !analysis) {
+    return (
+      <div>
+        <button
+          onClick={run}
+          className="px-3 py-2 rounded-lg bg-purple-100 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 text-xs font-medium hover:bg-purple-200 transition"
+        >
+          🤖 ML-анализ кандидата (Qwen 3B)
+        </button>
+        {error && <div className="mt-2 text-xs text-red-500">⚠️ {error}</div>}
+      </div>
+    );
+  }
+
+  if (!analysis) {
+    return (
+      <button
+        onClick={run}
+        className="px-3 py-2 rounded-lg bg-purple-100 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 text-xs font-medium hover:bg-purple-200 transition"
+      >
+        🤖 ML-анализ кандидата (Qwen 3B)
+      </button>
+    );
+  }
+
+  const potColor = analysis.repurposingPotential === "high" ? "#16a34a"
+    : analysis.repurposingPotential === "moderate" ? "#eab308" : "#dc2626";
+
+  return (
+    <div className="rounded-lg bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 p-3">
+      <div className="flex items-center justify-between mb-2">
+        <div className="text-xs font-bold text-purple-700 dark:text-purple-300">🤖 ML-анализ (Qwen 3B)</div>
+        <div className="flex gap-3 text-xs">
+          <span>
+            Потенциал:{" "}
+            <b style={{ color: potColor }}>
+              {analysis.repurposingPotential === "high" ? "Высокий" : analysis.repurposingPotential === "moderate" ? "Умеренный" : "Низкий"}
+            </b>
+          </span>
+          <span>
+            Уверенность: <b>{analysis.confidenceScore}/100</b>
+          </span>
+        </div>
+      </div>
+      <div className="text-xs text-zinc-700 dark:text-zinc-300 mb-2 italic">{analysis.rationale}</div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+        {Array.isArray(analysis.keyRisks) && analysis.keyRisks.length > 0 && (
+          <div>
+            <div className="text-red-600 dark:text-red-400 font-medium mb-1">⚠️ Риски:</div>
+            <ul className="list-disc list-inside space-y-0.5 text-zinc-700 dark:text-zinc-300">
+              {analysis.keyRisks.slice(0, 3).map((r: string, i: number) => <li key={i}>{r}</li>)}
+            </ul>
+          </div>
+        )}
+        {Array.isArray(analysis.nextSteps) && analysis.nextSteps.length > 0 && (
+          <div>
+            <div className="text-green-600 dark:text-green-400 font-medium mb-1">✅ Следующие шаги:</div>
+            <ul className="list-disc list-inside space-y-0.5 text-zinc-700 dark:text-zinc-300">
+              {analysis.nextSteps.slice(0, 3).map((s: string, i: number) => <li key={i}>{s}</li>)}
+            </ul>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

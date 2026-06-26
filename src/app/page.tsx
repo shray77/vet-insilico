@@ -10,9 +10,9 @@ const TOOLS = [
     href: "/drug-repurposing",
     icon: "🧬",
     title: "Drug Repurposing",
-    tagline: "Скрининг 200+ препаратов против патогенов",
-    desc: "Упрощённый in silico docking — выбираем патоген, считаем score сродства для всех препаратов, ранжируем по 3 факторам (форма, заряд, гидрофобность). 3D визуализация белок-лиганд через 3Dmol.js.",
-    stats: [`${DRUGS.length} препаратов`, `${PATHOGENS.length} патогенов`, "3D viewer"],
+    tagline: "Скрининг 200+ препаратов с LLM-анализом",
+    desc: "In silico docking — выбираем патоген, считаем score сродства для всех препаратов (форма, заряд, гидрофобность). 3D визуализация белок-лиганд через 3Dmol.js + LLM-анализ кандидатов через Qwen 3B.",
+    stats: [`${DRUGS.length} препаратов`, `${PATHOGENS.length} патогенов`, "LLM + 3D"],
     accent: "teal",
     badge: "Главный тул",
   },
@@ -30,9 +30,9 @@ const TOOLS = [
     href: "/epitopes",
     icon: "💉",
     title: "Vaccine Epitopes",
-    tagline: "B-клеточные и T-клеточные эпитопы",
-    desc: "Из аминокислотной последовательности белка находим: линейные B-эпитопы (Hopp-Woods, Chou-Fasman, Karplus-Schulz, Emini) и MHC-I 9-меры (HLA-A*02:01). Готовый кандидат для пептидной вакцины.",
-    stats: ["B + T эпитопы", "4 метода", "IC50 оценка"],
+    tagline: "B + T эпитопы с ESM-2 ML-оценкой",
+    desc: "Из аминокислотной последовательности белка находим: линейные B-эпитопы (Hopp-Woods, Chou-Fasman, Karplus-Schulz, Emini) и MHC-I 9-меры (HLA-A*02:01). ML-оценка naturalness через ESM-2 (Facebook protein language model).",
+    stats: ["B + T эпитопы", "4 метода", "ESM-2 ML"],
     accent: "purple",
     badge: null,
   },
@@ -40,9 +40,9 @@ const TOOLS = [
     href: "/primer-designer",
     icon: "🔬",
     title: "PCR Primer Designer",
-    tagline: "Дизайн праймеров для детекции",
-    desc: "Из целевой последовательности генома подбираем пары праймеров: Tm (nearest-neighbor SantaLucia), GC%, hairpin ΔG, 3'-end stability, GC-clamp, размер ампликона. Для ПЦР-диагностики патогенов.",
-    stats: ["Tm SantaLucia", "hairpin check", "ампликон 100-1000 bp"],
+    tagline: "Дизайн праймеров с ML-анализом",
+    desc: "Из целевой последовательности генома подбираем пары праймеров: Tm (nearest-neighbor SantaLucia), GC%, hairpin DP, self/cross-dimers, 3'-end stability, GC-clamp. ML-анализ специфичности через Qwen 3B.",
+    stats: ["SantaLucia NN", "DP hairpin", "LLM анализ"],
     accent: "amber",
     badge: null,
   },
@@ -90,12 +90,12 @@ export default function HubPage() {
             VetInSilico Hub
           </h1>
           <p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
-            Бесплатные инструменты для in silico исследований ветеринарии: drug repurposing,
-            ADMET, эпитопы вакцин, дизайн праймеров. Все вычисления в браузере — без сервера, без API.
+            Инструменты для in silico исследований ветеринарии: drug repurposing,
+            ADMET, эпитопы вакцин, дизайн праймеров. Гибридные вычисления: эвристики в браузере + FOSS ML-модели через HuggingFace Inference API.
           </p>
           <div className="flex flex-wrap justify-center gap-2 mt-6 text-xs">
             <span className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-900">🇷🇺 Адаптация под РФ</span>
-            <span className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-900">💰 Zero-cost</span>
+            <span className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-900">🤖 ML через HuggingFace</span>
             <span className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-900">🔒 Без бэкенда</span>
             <span className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-900">📦 Static export</span>
           </div>
@@ -141,7 +141,7 @@ export default function HubPage() {
             { v: PATHOGENS.length, label: "Патогенов", icon: "🦠" },
             { v: DRUGS.length, label: "Препаратов", icon: "💊" },
             { v: "4", label: "Инструмента", icon: "🛠" },
-            { v: "0₽", label: "Стоимость", icon: "💸" },
+            { v: "FOSS", label: "ML-модели", icon: "🤖" },
           ].map((s) => (
             <div key={s.label} className="rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 text-center">
               <div className="text-2xl mb-1">{s.icon}</div>
@@ -183,9 +183,9 @@ export default function HubPage() {
       </main>
 
       <footer className="max-w-6xl mx-auto px-4 py-6 border-t border-zinc-200 dark:border-zinc-800 mt-8 text-center text-xs text-zinc-400">
-        VetInSilico Hub • In silico tools for veterinary pathogens • Zero-cost • Browser-only
+        VetInSilico Hub • In silico tools for veterinary pathogens • ML-powered
         <div className="mt-1">
-          Источники: RCSB PDB • Российский реестр ветпрепаратов • DrugBank Open • PubChem
+          Источники: RCSB PDB • Российский реестр ветпрепаратов • DrugBank Open • PubChem • HuggingFace
         </div>
       </footer>
     </div>

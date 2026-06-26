@@ -4,11 +4,15 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
 import { analyzeSequence, SAMPLE_SEQUENCES } from "@/lib/epitopes";
+import { peptideNaturalness, getHfToken } from "@/lib/hf";
 
 export default function EpitopesPage() {
   const [sequence, setSequence] = useState(SAMPLE_SEQUENCES[0].seq);
   const [selectedSample, setSelectedSample] = useState(0);
   const [minScore, setMinScore] = useState(40);
+  const [analyzingIdx, setAnalyzingIdx] = useState<number | null>(null);
+  const [naturalness, setNaturalness] = useState<Record<number, { score: number; perResidue: { aa: string; prob: number }[] }>>({});
+  const [mlError, setMlError] = useState("");
 
   const result = useMemo(() => {
     if (!sequence || sequence.length < 20) return null;
@@ -18,6 +22,8 @@ export default function EpitopesPage() {
   const loadSample = (idx: number) => {
     setSelectedSample(idx);
     setSequence(SAMPLE_SEQUENCES[idx].seq);
+    setNaturalness({});
+    setMlError("");
   };
 
   // Color scale for epitope scores
@@ -176,11 +182,62 @@ export default function EpitopesPage() {
                               <div className="font-mono">{e.betaTurn}</div>
                             </div>
                           </div>
+                          {naturalness[i] && (
+                            <div className="mt-3 pt-3 border-t border-zinc-200 dark:border-zinc-800">
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-xs font-medium text-purple-700 dark:text-purple-300">🤖 ESM-2 Naturalness (ML)</span>
+                                <span className="text-xs font-bold" style={{ color: naturalness[i].score >= 0.3 ? "#16a34a" : naturalness[i].score >= 0.15 ? "#eab308" : "#dc2626" }}>
+                                  {(naturalness[i].score * 100).toFixed(1)}%
+                                </span>
+                              </div>
+                              <div className="flex gap-0.5">
+                                {naturalness[i].perResidue.map((r, j) => (
+                                  <div
+                                    key={j}
+                                    title={`${r.aa} @ pos ${j+1}: ${(r.prob * 100).toFixed(1)}%`}
+                                    className="flex-1 h-6 rounded-sm flex items-center justify-center text-[10px] font-mono font-bold text-white"
+                                    style={{ backgroundColor: `rgba(168, 85, 247, ${Math.max(0.15, r.prob)})` }}
+                                  >
+                                    {r.aa}
+                                  </div>
+                                ))}
+                              </div>
+                              <div className="text-[10px] text-zinc-400 mt-1">
+                                Вероятность каждой аминокислоты по ESM-2 (Facebook, 8M params). Выше = более консервативный/нативный участок.
+                              </div>
+                            </div>
+                          )}
+                          {!naturalness[i] && e.sequence.length <= 12 && (
+                            <button
+                              onClick={async () => {
+                                if (!getHfToken()) { setMlError("Задайте HF token — кнопка 🤖 в шапке"); return; }
+                                setAnalyzingIdx(i);
+                                setMlError("");
+                                try {
+                                  const r = await peptideNaturalness(e.sequence);
+                                  setNaturalness(prev => ({ ...prev, [i]: r }));
+                                } catch (err: any) {
+                                  setMlError(err.message || "ESM-2 error");
+                                } finally {
+                                  setAnalyzingIdx(null);
+                                }
+                              }}
+                              disabled={analyzingIdx === i}
+                              className="mt-3 px-2 py-1 rounded text-xs bg-purple-100 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-900/60 transition disabled:opacity-50"
+                            >
+                              {analyzingIdx === i ? "⏳ ESM-2..." : "🤖 ESM-2 naturalness"}
+                            </button>
+                          )}
                         </div>
                       ))}
                     {result.bCellEpitopes.filter((e) => e.score >= minScore).length === 0 && (
                       <div className="text-xs text-zinc-400 text-center py-4">
                         Нет эпитопов с score ≥ {minScore}. Снизьте порог.
+                      </div>
+                    )}
+                    {mlError && (
+                      <div className="text-xs text-red-500 mt-2 p-2 rounded bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
+                        ⚠️ {mlError}
                       </div>
                     )}
                   </div>
