@@ -4,7 +4,13 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
 import { analyzeSequence, SAMPLE_SEQUENCES } from "@/lib/epitopes";
-import { peptideNaturalness, getHfToken } from "@/lib/hf";
+import {
+  peptideNaturalness,
+  predictBEpitopesML,
+  predictMHCBindingML,
+  getHfToken,
+  type BEpitopeMLScore,
+} from "@/lib/hf";
 
 export default function EpitopesPage() {
   const [sequence, setSequence] = useState(SAMPLE_SEQUENCES[0].seq);
@@ -13,6 +19,18 @@ export default function EpitopesPage() {
   const [analyzingIdx, setAnalyzingIdx] = useState<number | null>(null);
   const [naturalness, setNaturalness] = useState<Record<number, { score: number; perResidue: { aa: string; prob: number }[] }>>({});
   const [mlError, setMlError] = useState("");
+
+  // Path B: ML B-epitope scan state
+  const [mlBScan, setMlBScan] = useState<{ scores: BEpitopeMLScore[]; meanPropensity: number } | null>(null);
+  const [mlBScanLoading, setMlBScanLoading] = useState(false);
+  const [mlBScanProgress, setMlBScanProgress] = useState<{ done: number; total: number }>({ done: 0, total: 0 });
+
+  // Path B: ML MHC binding state (per T-epitope)
+  const [mhcML, setMhcML] = useState<Record<number, {
+    ic50: number; rankProxy: number; anchorScore: number;
+    esmNaturalness: number; similarityScore: number; combined: number; confidence: number;
+  }>>({});
+  const [mhcMLLoading, setMhcMLLoading] = useState<number | null>(null);
 
   const result = useMemo(() => {
     if (!sequence || sequence.length < 20) return null;
@@ -24,6 +42,43 @@ export default function EpitopesPage() {
     setSequence(SAMPLE_SEQUENCES[idx].seq);
     setNaturalness({});
     setMlError("");
+    setMlBScan(null);
+    setMhcML({});
+  };
+
+  const runMLBScan = async () => {
+    if (!getHfToken()) { setMlError("Задайте HF token — кнопка 🤖 в шапке"); return; }
+    if (sequence.length > 200) {
+      setMlError("ML B-scan: обрежьте последовательность до ≤ 200 а.о. (cost limit)");
+      return;
+    }
+    setMlBScanLoading(true);
+    setMlError("");
+    setMlBScan(null);
+    try {
+      const r = await predictBEpitopesML(sequence, {
+        onProgress: (done, total) => setMlBScanProgress({ done, total }),
+      });
+      setMlBScan(r);
+    } catch (e: any) {
+      setMlError(e.message || "ESM-2 error");
+    } finally {
+      setMlBScanLoading(false);
+    }
+  };
+
+  const runMHCML = async (idx: number, peptide: string) => {
+    if (!getHfToken()) { setMlError("Задайте HF token — кнопка 🤖 в шапке"); return; }
+    setMhcMLLoading(idx);
+    setMlError("");
+    try {
+      const r = await predictMHCBindingML(peptide);
+      setMhcML(prev => ({ ...prev, [idx]: r }));
+    } catch (e: any) {
+      setMlError(e.message || "MHC ML error");
+    } finally {
+      setMhcMLLoading(null);
+    }
   };
 
   // Color scale for epitope scores
@@ -243,6 +298,117 @@ export default function EpitopesPage() {
                   </div>
                 </div>
 
+                {/* Path B: ML B-epitope scan */}
+                <div>
+                  <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 mb-3">
+                    🧬 ML B-эпитоп scan (BepiPred-3-style, ESM-2 35M)
+                  </h3>
+                  <div className="rounded-xl border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-950/20 p-4">
+                    {!mlBScan && !mlBScanLoading && (
+                      <div>
+                        <p className="text-xs text-purple-800 dark:text-purple-200 mb-3">
+                          Запускает ESM-2 (35M params, Facebook) на каждой позиции белка. Считает "surprise"
+                          (−log prob) — высокий surprise = поверхностный/дисордерный участок (хороший эпитоп).
+                          Это приближение BepiPred-3.0 (Haste et al. 2023), которая fine-tune'ит ESM-2 на 30k эпитопов.
+                          <b> Cost:</b> 1 ESM-2 call на остаток (~200ms each).
+                        </p>
+                        <button
+                          onClick={runMLBScan}
+                          disabled={sequence.length > 200}
+                          className="px-4 py-2 rounded-lg bg-purple-600 text-white text-sm font-medium hover:bg-purple-700 disabled:opacity-50 transition"
+                        >
+                          🧬 Запустить ML scan ({sequence.length} остатков)
+                        </button>
+                        {sequence.length > 200 && (
+                          <div className="text-xs text-red-500 mt-2">
+                            ⚠️ Обрежьте до ≤ 200 а.о. (cost limit)
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    {mlBScanLoading && (
+                      <div>
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-xs text-purple-700 dark:text-purple-300">
+                            ⏳ ESM-2 анализирует {mlBScanProgress.done}/{mlBScanProgress.total} остатков...
+                          </span>
+                        </div>
+                        <div className="h-2 rounded-full bg-purple-100 dark:bg-purple-900 overflow-hidden">
+                          <div
+                            className="h-full bg-purple-600 transition-all"
+                            style={{ width: `${mlBScanProgress.total > 0 ? (mlBScanProgress.done / mlBScanProgress.total) * 100 : 0}%` }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                    {mlBScan && (
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-xs font-medium text-purple-700 dark:text-purple-300">
+                            ✅ ML scan завершён. Mean propensity: <b>{(mlBScan.meanPropensity * 100).toFixed(1)}%</b>
+                          </span>
+                          <button
+                            onClick={() => setMlBScan(null)}
+                            className="text-xs text-zinc-400 hover:text-zinc-600"
+                          >
+                            ↻ Перезапустить
+                          </button>
+                        </div>
+                        {/* Per-residue propensity track */}
+                        <div className="rounded-lg bg-white dark:bg-zinc-900 p-3 mb-3">
+                          <div className="text-[10px] text-zinc-500 mb-1">Per-residue epitope propensity (purple = high):</div>
+                          <div className="flex flex-wrap gap-0.5 font-mono text-[10px]">
+                            {mlBScan.scores.map((s, i) => (
+                              <div
+                                key={i}
+                                title={`Pos ${s.position} ${s.residue}: propensity=${s.propensity}, surprise=${s.surprise}, prob=${s.prob}`}
+                                className="w-5 h-5 flex items-center justify-center rounded-sm font-bold text-white"
+                                style={{
+                                  backgroundColor: `rgba(168, 85, 247, ${Math.max(0.1, s.propensity)})`,
+                                  color: s.propensity > 0.5 ? "white" : "#a855f7",
+                                }}
+                              >
+                                {s.residue}
+                              </div>
+                            ))}
+                          </div>
+                          <div className="flex items-center gap-2 mt-2 text-[10px] text-zinc-500">
+                            <span>0%</span>
+                            <div className="flex-1 h-2 rounded bg-gradient-to-r from-transparent to-purple-600" />
+                            <span>100%</span>
+                          </div>
+                        </div>
+                        {/* Top ML-predicted epitopes */}
+                        <div className="text-xs">
+                          <div className="font-medium mb-1">Топ-5 участков с высоким propensity:</div>
+                          {(() => {
+                            const sorted = [...mlBScan.scores].sort((a, b) => b.propensity - a.propensity).slice(0, 5);
+                            return (
+                              <div className="space-y-1">
+                                {sorted.map((s, i) => {
+                                  const start = Math.max(0, s.position - 6);
+                                  const end = Math.min(mlBScan!.scores.length, s.position + 5);
+                                  const peptide = mlBScan!.scores.slice(start, end).map(x => x.residue).join("");
+                                  return (
+                                    <div key={i} className="flex items-center gap-2">
+                                      <span className="text-zinc-400">#{i + 1}</span>
+                                      <span className="font-mono font-bold text-purple-600 dark:text-purple-400">{peptide}</span>
+                                      <span className="text-zinc-400 text-[10px]">pos {s.position} ({s.residue})</span>
+                                      <span className="ml-auto font-bold" style={{ color: s.propensity > 0.7 ? "#16a34a" : s.propensity > 0.5 ? "#eab308" : "#dc2626" }}>
+                                        {(s.propensity * 100).toFixed(0)}%
+                                      </span>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          })()}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
                 {/* T-cell epitopes */}
                 <div>
                   <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 mb-3">
@@ -260,11 +426,13 @@ export default function EpitopesPage() {
                             <th className="px-3 py-2 text-center hidden md:table-cell">Качество</th>
                             <th className="px-3 py-2 text-center hidden md:table-cell">Анкоры</th>
                             <th className="px-3 py-2 text-center">Score</th>
+                            <th className="px-3 py-2 text-center">🧬 ML</th>
                           </tr>
                         </thead>
                         <tbody>
                           {result.tCellEpitopes.map((e, i) => {
                             const q = ic50Quality(e.ic50_estimate);
+                            const ml = mhcML[i];
                             return (
                               <tr key={i} className="border-t border-zinc-200 dark:border-zinc-800">
                                 <td className="px-3 py-2 text-zinc-400">{i + 1}</td>
@@ -285,6 +453,25 @@ export default function EpitopesPage() {
                                     {e.score}
                                   </span>
                                 </td>
+                                <td className="px-3 py-2 text-center">
+                                  {ml ? (
+                                    <span
+                                      title={`ML IC50: ${ml.ic50} nM, rank: ${ml.rankProxy}%, ESM: ${ml.esmNaturalness}, sim: ${ml.similarityScore}, conf: ${ml.confidence}`}
+                                      className="inline-flex items-center justify-center w-12 h-6 rounded-full text-xs font-bold text-white"
+                                      style={{ backgroundColor: ml.ic50 < 100 ? "#16a34a" : ml.ic50 < 500 ? "#eab308" : "#dc2626" }}
+                                    >
+                                      {ml.ic50}
+                                    </span>
+                                  ) : (
+                                    <button
+                                      onClick={() => runMHCML(i, e.sequence)}
+                                      disabled={mhcMLLoading === i}
+                                      className="text-[10px] px-2 py-1 rounded bg-purple-100 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 hover:bg-purple-200 transition disabled:opacity-50"
+                                    >
+                                      {mhcMLLoading === i ? "⏳" : "🧬"}
+                                    </button>
+                                  )}
+                                </td>
                               </tr>
                             );
                           })}
@@ -295,18 +482,42 @@ export default function EpitopesPage() {
                   <div className="text-xs text-zinc-400 mt-2">
                     <b>Анкоры</b> выделены жёлтым в последовательности (P2 и P9 для HLA-A*02:01).
                     <b> IC50 &lt; 50 nM</b> = высокий аффинитет, &lt; 500 nM = умеренный.
+                    <b> 🧬 ML</b> — NetMHCpan-стиль: anchor score + ESM-2 naturalness + similarity к known binders.
                   </div>
+                  {Object.keys(mhcML).length > 0 && (
+                    <div className="mt-3 rounded-lg border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-950/20 p-3 text-xs">
+                      <b>ML детали (последний запрос):</b>
+                      {(() => {
+                        const lastIdx = Math.max(...Object.keys(mhcML).map(Number));
+                        const ml = mhcML[lastIdx];
+                        return (
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
+                            <div><span className="text-zinc-500">IC50 (ML):</span> <b>{ml.ic50} nM</b></div>
+                            <div><span className="text-zinc-500">Rank proxy:</span> <b>{ml.rankProxy}%</b></div>
+                            <div><span className="text-zinc-500">Anchor score:</span> <b>{ml.anchorScore}</b></div>
+                            <div><span className="text-zinc-500">ESM naturalness:</span> <b>{ml.esmNaturalness}</b></div>
+                            <div><span className="text-zinc-500">Similarity:</span> <b>{ml.similarityScore}</b></div>
+                            <div><span className="text-zinc-500">Combined:</span> <b>{ml.combined}</b></div>
+                            <div><span className="text-zinc-500">Confidence:</span> <b>{ml.confidence}</b></div>
+                          </div>
+                        );
+                      })()}
+                    </div>
+                  )}
                 </div>
 
                 {/* Educational notes */}
                 <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 text-xs text-zinc-500 dark:text-zinc-400">
                   <b>Как это работает:</b><br/>
-                  • <b>B-эпитопы</b> — участки белка, распознаваемые антителами. Используем композицию из 4 шкал:
-                  гидрофильность (Hopp-Woods 1981), гибкость (Karplus-Schulz 1985), поверхностная доступность (Emini 1985),
-                  β-изгибы (Chou-Fasman 1978).<br/>
-                  • <b>T-эпитопы</b> — 9-мерные пептиды, представляющиеся MHC-I. Критичны позиции P2 (Leu/Met/Ile/Val)
-                  и P9 (Val/Leu/Ile). Алгоритм аппроксимирует BIMAS PSSM для HLA-A*02:01.<br/>
-                  • <b>⚠️</b> Готовый кандидат для пептидной вакцины требует валидации (binding assay, T-cell assay in vitro).
+                  • <b>B-эпитопы (rule-based)</b> — композиция из 4 шкал: гидрофильность (Hopp-Woods 1981),
+                  гибкость (Karplus-Schulz 1985), поверхностная доступность (Emini 1985), β-изгибы (Chou-Fasman 1978).<br/>
+                  • <b>B-эпитопы (ML Path B)</b> — ESM-2 (35M params, Facebook) на каждой позиции. "Surprise" = −log P(_actual residue | context).
+                  Высокий surprise = поверхностный/дисордерный участок (BepiPred-3.0 стиль, Haste et al. 2023).<br/>
+                  • <b>T-эпитопы (rule-based)</b> — 9-меры с P2/P9 анкорами для HLA-A*02:01 (BIMAS PSSM approximation).<br/>
+                  • <b>T-эпитопы (ML Path B)</b> — NetMHCpan-стиль: anchor score (BIMAS) + ESM-2 naturalness + BLOSUM62 similarity
+                  к known HLA-A*02:01 binders (8 reference peptides из литературы).<br/>
+                  • <b>⚠️</b> Real BepiPred-3.0 и NetMHCpan-4.1 fine-tune'ят модели на 30k+ и 180k+ измерений соответственно.
+                  Здесь — pre-trained ESM-2 как proxy. Для публикации требуется валидация (binding assay, T-cell assay in vitro).
                 </div>
               </>
             )}

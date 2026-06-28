@@ -5,154 +5,158 @@ import HubHeader from "@/components/HubHeader";
 import { DRUGS } from "@/data/drugs";
 import { PATHOGENS } from "@/data/pathogens";
 
-const TOOLS = [
+interface Tool {
+  href: string;
+  icon: string;
+  title: string;
+  tagline: string;
+  desc: string;
+  stats: string[];
+  accent: string;
+  badge?: string | null;
+}
+
+interface Category {
+  id: string;
+  title: string;
+  icon: string;
+  subtitle: string;
+  tools: Tool[];
+}
+
+const CATEGORIES: Category[] = [
   {
-    href: "/drug-repurposing",
-    icon: "🧬",
-    title: "Drug Repurposing",
-    tagline: "Скрининг 200+ препаратов с LLM-анализом",
-    desc: "In silico docking — выбираем патоген, считаем score сродства для всех препаратов (форма, заряд, гидрофобность). 3D визуализация белок-лиганд через 3Dmol.js + LLM-анализ кандидатов через Qwen 3B.",
-    stats: [`${DRUGS.length} препаратов`, `${PATHOGENS.length} патогенов`, "LLM + 3D"],
-    accent: "teal",
-    badge: "Главный тул",
-  },
-  {
-    href: "/admet",
+    id: "pharmacology",
+    title: "Фармакология",
     icon: "💊",
-    title: "ADMET Predictor",
-    tagline: "Фармакокинетика и токсичность in silico",
-    desc: "Из молекулярных свойств препарата (MW, LogP, заряд, HBD/HBA) предсказываем: пероральную биодоступность, BBB проницаемость, hERG, AMES, гепатотоксичность, CYP3A4, drug-likeness.",
-    stats: ["12 параметров", "rule-based", "алерты"],
-    accent: "blue",
-    badge: null,
+    subtitle: "Drug repurposing, ADMET, PK/PD — поиск и оценка препаратов",
+    tools: [
+      {
+        href: "/drug-repurposing",
+        icon: "🧬",
+        title: "Drug Repurposing",
+        tagline: "Скрининг 200+ препаратов с LLM-анализом",
+        desc: "In silico docking — выбираем патоген, считаем score сродства для всех препаратов. 3D визуализация белок-лиганд через 3Dmol.js + LLM-анализ кандидатов через Qwen 3B. Экспорт в CSV.",
+        stats: [`${DRUGS.length} препаратов`, `${PATHOGENS.length} патогенов`, "LLM + 3D"],
+        accent: "teal",
+        badge: "Главный тул",
+      },
+      {
+        href: "/admet",
+        icon: "💊",
+        title: "ADMET Predictor",
+        tagline: "Фармакокинетика и токсичность",
+        desc: "Из молекулярных свойств препарата (MW, LogP, заряд, HBD/HBA) предсказываем: биодоступность, BBB, hERG, AMES, гепатотоксичность, CYP3A4, drug-likeness.",
+        stats: ["12 параметров", "rule-based", "алерты"],
+        accent: "blue",
+        badge: null,
+      },
+      {
+        href: "/pkpd",
+        icon: "📊",
+        title: "PK/PD Simulator",
+        tagline: "Концентрация-время + dose-response",
+        desc: "Однокомпартментная PK модель. PD-индексы: AUC/MIC (фторхинолоны), Cmax/MIC (аминогликозиды), T>MIC (β-лактамы). 6 препаратов с реальными ветеринарными параметрами.",
+        stats: ["1-compartment PK", "Emax PD", "6 препаратов"],
+        accent: "rose",
+        badge: null,
+      },
+    ],
   },
   {
-    href: "/epitopes",
+    id: "vaccines-diagnostics",
+    title: "Вакцины и диагностика",
     icon: "💉",
-    title: "Vaccine Epitopes",
-    tagline: "B + T эпитопы с ESM-2 ML-оценкой",
-    desc: "Из аминокислотной последовательности белка находим: линейные B-эпитопы (Hopp-Woods, Chou-Fasman, Karplus-Schulz, Emini) и MHC-I 9-меры (HLA-A*02:01). ML-оценка naturalness через ESM-2 (Facebook protein language model).",
-    stats: ["B + T эпитопы", "4 метода", "ESM-2 ML"],
-    accent: "purple",
-    badge: null,
+    subtitle: "Эпитопы, праймеры, резистентность — дизайн вакцин и ПЦР-детекция",
+    tools: [
+      {
+        href: "/epitopes",
+        icon: "💉",
+        title: "Vaccine Epitopes",
+        tagline: "B + T эпитопы с ESM-2 ML",
+        desc: "Линейные B-эпитопы (Hopp-Woods, Chou-Fasman, Karplus-Schulz, Emini) + MHC-I 9-меры (HLA-A*02:01). ML-оценка naturalness через ESM-2 (Facebook protein language model).",
+        stats: ["B + T эпитопы", "4 метода", "ESM-2 ML"],
+        accent: "purple",
+        badge: null,
+      },
+      {
+        href: "/primer-designer",
+        icon: "🔬",
+        title: "PCR Primer Designer",
+        tagline: "SantaLucia NN + DP + LLM",
+        desc: "Tm (nearest-neighbor SantaLucia 1998), GC%, hairpin DP, self/cross-dimers ΔG, 3'-end stability, GC-clamp. ML-анализ специфичности и рисков через Qwen 3B.",
+        stats: ["SantaLucia NN", "DP hairpin", "LLM анализ"],
+        accent: "amber",
+        badge: null,
+      },
+      {
+        href: "/amr",
+        icon: "🦠",
+        title: "AMR Predictor",
+        tagline: "Резистентность к антибиотикам",
+        desc: "По гену-мишени (GyrA, RpoB, PBP, 16S rRNA) предсказываем резистентность. Rule-based мутации (CARD/ResFinder) + motif search (blaTEM, ermB, tetM, qnrA). 7 классов антибиотиков.",
+        stats: ["CARD subset", "10+ mutations", "7 motifs"],
+        accent: "orange",
+        badge: null,
+      },
+    ],
   },
   {
-    href: "/primer-designer",
-    icon: "🔬",
-    title: "PCR Primer Designer",
-    tagline: "Дизайн праймеров с ML-анализом",
-    desc: "Из целевой последовательности генома подбираем пары праймеров: Tm (nearest-neighbor SantaLucia), GC%, hairpin DP, self/cross-dimers, 3'-end stability, GC-clamp. ML-анализ специфичности через Qwen 3B.",
-    stats: ["SantaLucia NN", "DP hairpin", "LLM анализ"],
-    accent: "amber",
-    badge: null,
-  },
-  {
-    href: "/alignment",
-    icon: "🔗",
-    title: "Sequence Alignment",
-    tagline: "Needleman-Wunsch + Smith-Waterman",
-    desc: "Попарное выравнивание последовательностей (глобальное и локальное). Скоринг через BLOSUM62 (белки) или match/mismatch (ДНК). Считает identity, similarity, gaps, score.",
-    stats: ["NW + SW", "BLOSUM62", "DNA + protein"],
-    accent: "cyan",
-    badge: null,
-  },
-  {
-    href: "/phylogeny",
-    icon: "🌳",
-    title: "Phylogenetic Tree",
-    tagline: "UPGMA + Neighbor-Joining",
-    desc: "Строит филогенетическое дерево из набора гомологичных последовательностей. Kimura 2-parameter для ДНК, p-distance для белков. Вывод в Newick + dendrogram + heatmap distance matrix.",
-    stats: ["UPGMA + NJ", "Kimura 2P", "Newick export"],
-    accent: "emerald",
-    badge: null,
-  },
-  {
-    href: "/pkpd",
-    icon: "📊",
-    title: "PK/PD Simulator",
-    tagline: "Фармакокинетика + фармакодинамика",
-    desc: "Однокомпартментная модель с first-order absorption. Считаем Cmax, AUC, t½, Css. PD-индексы: AUC/MIC (фторхинолоны), Cmax/MIC (аминогликозиды), T>MIC (β-лактамы). Визуализация concentration-time + Emax.",
-    stats: ["1-compartment PK", "AUC/MIC, Cmax/MIC, T>MIC", "6 препаратов"],
-    accent: "rose",
-    badge: "Новое",
-  },
-  {
-    href: "/amr",
-    icon: "🦠",
-    title: "AMR Predictor",
-    tagline: "Резистентность к антибиотикам",
-    desc: "По последовательности гена-мишени (GyrA, RpoB, PBP, 16S rRNA) предсказываем резистентность. Rule-based поиск мутаций (CARD/ResFinder) + motif search (blaTEM, ermB, tetM, qnrA...). 7 классов антибиотиков.",
-    stats: ["CARD subset", "10+ mutations", "7 motifs"],
-    accent: "orange",
-    badge: "Новое",
-  },
-  {
-    href: "/restriction-map",
-    icon: "✂️",
-    title: "Restriction Map",
-    tagline: "Карта сайтов рестриктаз",
-    desc: "Находим сайты разрезания для 30+ рестриктаз в ДНК. EcoRI, BamHI, HindIII, SmaI, NotI, SfiI... Считаем позиции, размеры фрагментов, симулируем гель-электрофорез. IUPAC-коды поддерживаются.",
-    stats: ["30+ enzymes", "IUPAC codes", "Virtual gel"],
-    accent: "lime",
-    badge: "Новое",
+    id: "genomics",
+    title: "Геномика",
+    icon: "🧬",
+    subtitle: "Alignment, филогения, рестрикция — сравнение и картирование последовательностей",
+    tools: [
+      {
+        href: "/alignment",
+        icon: "🔗",
+        title: "Sequence Alignment",
+        tagline: "Needleman-Wunsch + Smith-Waterman",
+        desc: "Попарное выравнивание (глобальное и локальное). Скоринг через BLOSUM62 (белки) или match/mismatch (ДНК). Identity, similarity, gaps, score.",
+        stats: ["NW + SW", "BLOSUM62", "DNA + protein"],
+        accent: "cyan",
+        badge: null,
+      },
+      {
+        href: "/phylogeny",
+        icon: "🌳",
+        title: "Phylogenetic Tree",
+        tagline: "UPGMA + Neighbor-Joining",
+        desc: "Дерево из гомологичных последовательностей. Kimura 2-parameter (ДНК), p-distance (белки). Newick export + SVG dendrogram + heatmap distance matrix.",
+        stats: ["UPGMA + NJ", "Kimura 2P", "Newick"],
+        accent: "emerald",
+        badge: null,
+      },
+      {
+        href: "/restriction-map",
+        icon: "✂️",
+        title: "Restriction Map",
+        tagline: "Карта сайтов рестриктаз",
+        desc: "30+ рестриктаз (EcoRI, BamHI, HindIII, SmaI, NotI, SfiI...). IUPAC-коды. Линейная карта разрезов, размеры фрагментов, виртуальный гель-электрофорез.",
+        stats: ["30+ enzymes", "IUPAC codes", "Virtual gel"],
+        accent: "lime",
+        badge: null,
+      },
+    ],
   },
 ];
 
 const ACCENT_CLASSES: Record<string, { bg: string; border: string; text: string; gradient: string }> = {
-  teal: {
-    bg: "bg-teal-50 dark:bg-teal-950/20",
-    border: "border-teal-200 dark:border-teal-800",
-    text: "text-teal-600 dark:text-teal-400",
-    gradient: "from-teal-500 to-emerald-500",
-  },
-  blue: {
-    bg: "bg-blue-50 dark:bg-blue-950/20",
-    border: "border-blue-200 dark:border-blue-800",
-    text: "text-blue-600 dark:text-blue-400",
-    gradient: "from-blue-500 to-cyan-500",
-  },
-  purple: {
-    bg: "bg-purple-50 dark:bg-purple-950/20",
-    border: "border-purple-200 dark:border-purple-800",
-    text: "text-purple-600 dark:text-purple-400",
-    gradient: "from-purple-500 to-pink-500",
-  },
-  amber: {
-    bg: "bg-amber-50 dark:bg-amber-950/20",
-    border: "border-amber-200 dark:border-amber-800",
-    text: "text-amber-600 dark:text-amber-400",
-    gradient: "from-amber-500 to-orange-500",
-  },
-  cyan: {
-    bg: "bg-cyan-50 dark:bg-cyan-950/20",
-    border: "border-cyan-200 dark:border-cyan-800",
-    text: "text-cyan-600 dark:text-cyan-400",
-    gradient: "from-cyan-500 to-blue-500",
-  },
-  emerald: {
-    bg: "bg-emerald-50 dark:bg-emerald-950/20",
-    border: "border-emerald-200 dark:border-emerald-800",
-    text: "text-emerald-600 dark:text-emerald-400",
-    gradient: "from-emerald-500 to-teal-500",
-  },
-  rose: {
-    bg: "bg-rose-50 dark:bg-rose-950/20",
-    border: "border-rose-200 dark:border-rose-800",
-    text: "text-rose-600 dark:text-rose-400",
-    gradient: "from-rose-500 to-pink-500",
-  },
-  orange: {
-    bg: "bg-orange-50 dark:bg-orange-950/20",
-    border: "border-orange-200 dark:border-orange-800",
-    text: "text-orange-600 dark:text-orange-400",
-    gradient: "from-orange-500 to-red-500",
-  },
-  lime: {
-    bg: "bg-lime-50 dark:bg-lime-950/20",
-    border: "border-lime-200 dark:border-lime-800",
-    text: "text-lime-700 dark:text-lime-400",
-    gradient: "from-lime-500 to-green-500",
-  },
+  teal: { bg: "bg-teal-50 dark:bg-teal-950/20", border: "border-teal-200 dark:border-teal-800", text: "text-teal-600 dark:text-teal-400", gradient: "from-teal-500 to-emerald-500" },
+  blue: { bg: "bg-blue-50 dark:bg-blue-950/20", border: "border-blue-200 dark:border-blue-800", text: "text-blue-600 dark:text-blue-400", gradient: "from-blue-500 to-cyan-500" },
+  purple: { bg: "bg-purple-50 dark:bg-purple-950/20", border: "border-purple-200 dark:border-purple-800", text: "text-purple-600 dark:text-purple-400", gradient: "from-purple-500 to-pink-500" },
+  amber: { bg: "bg-amber-50 dark:bg-amber-950/20", border: "border-amber-200 dark:border-amber-800", text: "text-amber-600 dark:text-amber-400", gradient: "from-amber-500 to-orange-500" },
+  cyan: { bg: "bg-cyan-50 dark:bg-cyan-950/20", border: "border-cyan-200 dark:border-cyan-800", text: "text-cyan-600 dark:text-cyan-400", gradient: "from-cyan-500 to-blue-500" },
+  emerald: { bg: "bg-emerald-50 dark:bg-emerald-950/20", border: "border-emerald-200 dark:border-emerald-800", text: "text-emerald-600 dark:text-emerald-400", gradient: "from-emerald-500 to-teal-500" },
+  rose: { bg: "bg-rose-50 dark:bg-rose-950/20", border: "border-rose-200 dark:border-rose-800", text: "text-rose-600 dark:text-rose-400", gradient: "from-rose-500 to-pink-500" },
+  orange: { bg: "bg-orange-50 dark:bg-orange-950/20", border: "border-orange-200 dark:border-orange-800", text: "text-orange-600 dark:text-orange-400", gradient: "from-orange-500 to-red-500" },
+  lime: { bg: "bg-lime-50 dark:bg-lime-950/20", border: "border-lime-200 dark:border-lime-800", text: "text-lime-700 dark:text-lime-400", gradient: "from-lime-500 to-green-500" },
+};
+
+const CATEGORY_ACCENT: Record<string, { bg: string; text: string; border: string }> = {
+  pharmacology: { bg: "from-teal-500/10 to-blue-500/10", text: "text-teal-600 dark:text-teal-400", border: "border-teal-200 dark:border-teal-800" },
+  "vaccines-diagnostics": { bg: "from-purple-500/10 to-rose-500/10", text: "text-purple-600 dark:text-purple-400", border: "border-purple-200 dark:border-purple-800" },
+  genomics: { bg: "from-emerald-500/10 to-cyan-500/10", text: "text-emerald-600 dark:text-emerald-400", border: "border-emerald-200 dark:border-emerald-800" },
 };
 
 export default function HubPage() {
@@ -164,86 +168,104 @@ export default function HubPage() {
         {/* Hero */}
         <section className="text-center mb-12">
           <div className="inline-block px-3 py-1 rounded-full bg-teal-100 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 text-xs font-medium mb-4">
-            🧪 In silico toolkit для ветеринарной медицины
+            🧪 Open-source in silico toolkit для ветеринарии
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-teal-500 via-blue-500 to-purple-500 bg-clip-text text-transparent">
             VetInSilico Hub
           </h1>
           <p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
-            Инструменты для in silico исследований ветеринарии: drug repurposing,
-            ADMET, эпитопы вакцин, дизайн праймеров. Гибридные вычисления: эвристики в браузере + FOSS ML-модели через HuggingFace Inference API.
+            9 инструментов для in silico исследований ветеринарии — от drug repurposing до филогении.
+            Гибрид: эвристики в браузере + FOSS ML-модели через HuggingFace.
           </p>
           <div className="flex flex-wrap justify-center gap-2 mt-6 text-xs">
             <span className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-900">🇷🇺 Адаптация под РФ</span>
             <span className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-900">🤖 ML через HuggingFace</span>
             <span className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-900">🔒 Без бэкенда</span>
-            <span className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-900">📦 Static export</span>
+            <span className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-900">🧪 Apache 2.0</span>
           </div>
         </section>
 
-        {/* Tools grid */}
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
-          {TOOLS.map((tool) => {
-            const c = ACCENT_CLASSES[tool.accent];
-            return (
-              <Link
-                key={tool.href}
-                href={tool.href}
-                className={`hub-card block rounded-2xl border-2 p-6 ${c.border} ${c.bg}`}
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <div className={`text-4xl`}>{tool.icon}</div>
-                  {tool.badge && (
-                    <span className={`text-xs px-2 py-1 rounded-full bg-gradient-to-r ${c.gradient} text-white font-medium`}>
-                      {tool.badge}
-                    </span>
-                  )}
-                </div>
-                <h2 className="text-xl font-bold mb-1">{tool.title}</h2>
-                <p className={`text-sm ${c.text} font-medium mb-3`}>{tool.tagline}</p>
-                <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">{tool.desc}</p>
-                <div className="flex flex-wrap gap-2">
-                  {tool.stats.map((s) => (
-                    <span key={s} className="text-xs px-2 py-1 rounded bg-white/60 dark:bg-zinc-900/60 text-zinc-600 dark:text-zinc-400">
-                      {s}
-                    </span>
-                  ))}
-                </div>
-                <div className={`mt-4 text-sm font-medium ${c.text}`}>Открыть →</div>
-              </Link>
-            );
-          })}
-        </section>
-
-        {/* Stats */}
-        <section className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+        {/* Quick stats */}
+        <section className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-12">
           {[
             { v: PATHOGENS.length, label: "Патогенов", icon: "🦠" },
             { v: DRUGS.length, label: "Препаратов", icon: "💊" },
             { v: "9", label: "Инструментов", icon: "🛠" },
-            { v: "FOSS", label: "ML-модели", icon: "🤖" },
+            { v: "31", label: "Тестов pass", icon: "✅" },
           ].map((s) => (
-            <div key={s.label} className="rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 text-center">
-              <div className="text-2xl mb-1">{s.icon}</div>
-              <div className="text-2xl font-bold text-teal-600">{s.v}</div>
-              <div className="text-xs text-zinc-400">{s.label}</div>
+            <div key={s.label} className="rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 text-center">
+              <div className="text-xl mb-0.5">{s.icon}</div>
+              <div className="text-xl font-bold text-teal-600">{s.v}</div>
+              <div className="text-[10px] text-zinc-400">{s.label}</div>
             </div>
           ))}
         </section>
+
+        {/* Categories */}
+        {CATEGORIES.map((cat) => {
+          const ca = CATEGORY_ACCENT[cat.id];
+          return (
+            <section key={cat.id} className="mb-10">
+              {/* Category header */}
+              <div className={`rounded-2xl border ${ca.border} bg-gradient-to-r ${ca.bg} p-4 mb-4`}>
+                <div className="flex items-center gap-3">
+                  <div className="text-3xl">{cat.icon}</div>
+                  <div>
+                    <h2 className={`text-xl font-bold ${ca.text}`}>{cat.title}</h2>
+                    <p className="text-xs text-zinc-500 dark:text-zinc-400">{cat.subtitle}</p>
+                  </div>
+                  <div className="ml-auto text-xs text-zinc-400">{cat.tools.length} тул{cat.tools.length === 1 ? "" : "ов"}</div>
+                </div>
+              </div>
+              {/* Tool cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {cat.tools.map((tool) => {
+                  const c = ACCENT_CLASSES[tool.accent];
+                  return (
+                    <Link
+                      key={tool.href}
+                      href={tool.href}
+                      className={`hub-card block rounded-2xl border-2 p-5 ${c.border} ${c.bg}`}
+                    >
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="text-3xl">{tool.icon}</div>
+                        {tool.badge && (
+                          <span className={`text-[10px] px-2 py-0.5 rounded-full bg-gradient-to-r ${c.gradient} text-white font-medium`}>
+                            {tool.badge}
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="text-base font-bold mb-0.5">{tool.title}</h3>
+                      <p className={`text-xs ${c.text} font-medium mb-2`}>{tool.tagline}</p>
+                      <p className="text-xs text-zinc-600 dark:text-zinc-400 mb-3 leading-relaxed">{tool.desc}</p>
+                      <div className="flex flex-wrap gap-1">
+                        {tool.stats.map((s) => (
+                          <span key={s} className="text-[10px] px-1.5 py-0.5 rounded bg-white/60 dark:bg-zinc-900/60 text-zinc-600 dark:text-zinc-400">
+                            {s}
+                          </span>
+                        ))}
+                      </div>
+                      <div className={`mt-3 text-xs font-medium ${c.text}`}>Открыть →</div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </section>
+          );
+        })}
 
         {/* About */}
         <section className="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6 bg-white dark:bg-zinc-900">
           <h2 className="text-lg font-bold mb-3">Что такое in silico?</h2>
           <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-3">
-            <b>In silico</b> — исследования, проводимые на компьютере с помощью вычислительных
-            методов. В биомедицине это: предсказание свойств молекул, виртуальный скрининг,
-            молекулярный докинг, дизайн вакцин и праймеров — всё без пробирок.
+            <b>In silico</b> — исследования, проводимые на компьютере с помощью вычислительных методов.
+            В биомедицине: предсказание свойств молекул, виртуальный скрининг, молекулярный докинг,
+            дизайн вакцин и праймеров — всё без пробирок.
           </p>
           <p className="text-sm text-zinc-600 dark:text-zinc-400">
-            В ветеринарии in silico особенно ценно: для большинства патогенов животных
-            (АЧС, ящур, бешенство) нет специфических лекарств, а разработка нового препарата
-            занимает 10-15 лет. Эти инструменты помогают генерировать гипотезы за минуты,
-            экономя месяцы лабораторной работы.
+            В ветеринарии особенно ценно: для большинства патогенов животных (АЧС, ящур, бешенство)
+            нет специфических лекарств, а разработка нового препарата занимает 10-15 лет.
+            Эти инструменты помогают генерировать гипотезы за минуты, экономя месяцы лабораторной работы.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4 text-xs">
             <div className="rounded-lg bg-teal-50 dark:bg-teal-950/30 p-3">
@@ -263,9 +285,9 @@ export default function HubPage() {
       </main>
 
       <footer className="max-w-6xl mx-auto px-4 py-6 border-t border-zinc-200 dark:border-zinc-800 mt-8 text-center text-xs text-zinc-400">
-        VetInSilico Hub • In silico tools for veterinary pathogens • ML-powered
+        VetInSilico Hub • Open-source in silico tools for veterinary pathogens • Apache 2.0
         <div className="mt-1">
-          Источники: RCSB PDB • Российский реестр ветпрепаратов • DrugBank Open • PubChem • HuggingFace
+          Источники: RCSB PDB • Российский реестр ветпрепаратов • DrugBank Open • PubChem • HuggingFace • CARD
         </div>
       </footer>
     </div>
