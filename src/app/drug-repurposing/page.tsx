@@ -40,6 +40,57 @@ export default function DrugRepurposingPage() {
     [results, lipinskiOnly],
   );
 
+  const exportCSV = () => {
+    if (!pathogen || topResults.length === 0) return;
+    const headers = [
+      "rank", "drug_name", "inn", "pharm_group", "mechanism",
+      "target", "pdb_id", "score", "shape", "electrostatic", "hydrophobic",
+      "dg_kcal_mol", "lipinski_pass", "lipinski_violations",
+      "selectivity", "mw", "logp", "hbd", "hba", "charge", "ru_registered",
+    ];
+    const rows = topResults.map((r, i) => [
+      i + 1,
+      r.drug.name,
+      r.drug.inn,
+      r.drug.pharm_group,
+      r.drug.mechanism || "",
+      r.target.name_ru,
+      r.target.pdb_id || "",
+      r.score,
+      r.shapeScore,
+      r.electrostaticScore,
+      r.hydrophobicScore,
+      r.bindingAffinity,
+      r.lipinskiPass ? "pass" : "fail",
+      r.lipinskiViolations,
+      r.selectivityIndex,
+      r.drug.mw,
+      r.drug.logp,
+      r.drug.hbd,
+      r.drug.hba,
+      r.drug.charge,
+      r.drug.ru_registered ? "yes" : "no",
+    ]);
+    const csv = [
+      headers.join(","),
+      ...rows.map((row) => row.map((c) => {
+        const s = String(c);
+        // Escape quotes and wrap if needed
+        return /[,"\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+      }).join(",")),
+    ].join("\n");
+    // BOM for Excel UTF-8
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `vet-insilico-screening-${pathogen.id}-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   const scoreColor = (s: number) =>
     s >= 75 ? "#16a34a" : s >= 50 ? "#ca8a04" : s >= 30 ? "#ea580c" : "#dc2626";
 
@@ -166,9 +217,17 @@ export default function DrugRepurposingPage() {
 
             {topResults.length > 0 && (
               <section>
-                <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 mb-3">
-                  Шаг 3 — Топ кандидатов ({topResults.length})
-                </h3>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">
+                    Шаг 3 — Топ кандидатов ({topResults.length})
+                  </h3>
+                  <button
+                    onClick={exportCSV}
+                    className="px-3 py-1.5 rounded-lg bg-teal-100 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 text-xs font-medium hover:bg-teal-200 dark:hover:bg-teal-900/60 transition"
+                  >
+                    📥 Скачать CSV
+                  </button>
+                </div>
                 <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">

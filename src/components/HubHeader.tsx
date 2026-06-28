@@ -8,10 +8,12 @@ import { getHfToken } from "@/lib/hf";
 
 const TOOLS = [
   { href: "/", label: "Хаб", icon: "🏠" },
-  { href: "/drug-repurposing", label: "Drug Repurposing", icon: "🧬" },
+  { href: "/drug-repurposing", label: "Docking", icon: "🧬" },
   { href: "/admet", label: "ADMET", icon: "💊" },
   { href: "/epitopes", label: "Эпитопы", icon: "💉" },
   { href: "/primer-designer", label: "Праймеры", icon: "🔬" },
+  { href: "/alignment", label: "Alignment", icon: "🔗" },
+  { href: "/phylogeny", label: "Филогения", icon: "🌳" },
 ];
 
 export default function HubHeader() {

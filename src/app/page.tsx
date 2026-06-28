@@ -46,6 +46,26 @@ const TOOLS = [
     accent: "amber",
     badge: null,
   },
+  {
+    href: "/alignment",
+    icon: "🔗",
+    title: "Sequence Alignment",
+    tagline: "Needleman-Wunsch + Smith-Waterman",
+    desc: "Попарное выравнивание последовательностей (глобальное и локальное). Скоринг через BLOSUM62 (белки) или match/mismatch (ДНК). Считает identity, similarity, gaps, score.",
+    stats: ["NW + SW", "BLOSUM62", "DNA + protein"],
+    accent: "cyan",
+    badge: "Новое",
+  },
+  {
+    href: "/phylogeny",
+    icon: "🌳",
+    title: "Phylogenetic Tree",
+    tagline: "UPGMA + Neighbor-Joining",
+    desc: "Строит филогенетическое дерево из набора гомологичных последовательностей. Kimura 2-parameter для ДНК, p-distance для белков. Вывод в Newick + dendrogram + heatmap distance matrix.",
+    stats: ["UPGMA + NJ", "Kimura 2P", "Newick export"],
+    accent: "emerald",
+    badge: "Новое",
+  },
 ];
 
 const ACCENT_CLASSES: Record<string, { bg: string; border: string; text: string; gradient: string }> = {
@@ -72,6 +92,18 @@ const ACCENT_CLASSES: Record<string, { bg: string; border: string; text: string;
     border: "border-amber-200 dark:border-amber-800",
     text: "text-amber-600 dark:text-amber-400",
     gradient: "from-amber-500 to-orange-500",
+  },
+  cyan: {
+    bg: "bg-cyan-50 dark:bg-cyan-950/20",
+    border: "border-cyan-200 dark:border-cyan-800",
+    text: "text-cyan-600 dark:text-cyan-400",
+    gradient: "from-cyan-500 to-blue-500",
+  },
+  emerald: {
+    bg: "bg-emerald-50 dark:bg-emerald-950/20",
+    border: "border-emerald-200 dark:border-emerald-800",
+    text: "text-emerald-600 dark:text-emerald-400",
+    gradient: "from-emerald-500 to-teal-500",
   },
 };
 
@@ -140,7 +172,7 @@ export default function HubPage() {
           {[
             { v: PATHOGENS.length, label: "Патогенов", icon: "🦠" },
             { v: DRUGS.length, label: "Препаратов", icon: "💊" },
-            { v: "4", label: "Инструмента", icon: "🛠" },
+            { v: "6", label: "Инструментов", icon: "🛠" },
             { v: "FOSS", label: "ML-модели", icon: "🤖" },
           ].map((s) => (
             <div key={s.label} className="rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 text-center">
