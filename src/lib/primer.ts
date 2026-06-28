@@ -389,7 +389,7 @@ Amplicon: ${pair.ampliconSize} bp, ΔTm=${pair.tmDifference}°C, cross-dimer ΔG
 Respond ONLY as compact JSON:
 {"specificity": <0-100 integer>, "riskLevel": "<low|moderate|high>", "strengths": ["...","..."], "concerns": ["...","..."], "recommendation": "<one short sentence>"}`;
 
-  const system = "You are a PCR primer design expert. Respond ONLY with valid JSON, no markdown.";
+  const system = "You are a PCR primer design expert. ОТВЕЧАЙ НА РУССКОМ. Все текстовые поля в JSON (strengths, concerns, recommendation) должны быть на русском языке. Respond ONLY with valid JSON, no markdown.";
   const raw = await chatComplete(
     [
       { role: "system", content: system },
@@ -432,3 +432,172 @@ export const PRIMER_SAMPLE_TARGETS: { name: string; pathogen: string; seq: strin
     seq: "ATGGTGTCACCAATCGTGCCCGTCAAGAGGGTTGAGACAAAGATCGTCAAAGAGAAGATGGGCATCAAGAGCGTGGAAGAGAAGATGGGCATCAAGAGCGTGGAAGAGAAGATGGGCATCAAGAGCGTGGAAGAGAAGATGGGCATCAAGAGCGTGGAAGAGAAGATGGGCATCAAGAGCGTGGAAGAGAAGATGGGCATCAAGAGCGTGGAAGAGAAGATGGGCATCAAGAGCGTGGAAGAGAAGATGGGCATCAAGAGCGTGGAAGAGAAGATGGGCATCAAGAGCGTGGAAGAGAAGATGGGCATCAAGAGCGTGGAAGAG",
   },
 ];
+
+// ────────────────────────────────────────────────────────────────────
+// Path B: Mispriming check — search primer against host genomes
+// ────────────────────────────────────────────────────────────────────
+
+/**
+ * Reference host genome fragments for mispriming check.
+ * Real genomes are huge (3 Gbp for human), so we use representative
+ * fragments of common repeats / conserved genes (~5-10 kb each).
+ *
+ * Sources: UCSC Genome Browser (pig: susScr3, cattle: bosTau8, human: hg38)
+ */
+export const HOST_GENOMES: { species: string; commonName: string; fragments: string[] }[] = [
+  {
+    species: "Sus scrofa",
+    commonName: "Свинья (домашняя)",
+    fragments: [
+      // GAPDH fragment (highly conserved, common false-positive source)
+      "ATGGTGAAGGTCGGAGTGAACGGATTTGGCCGTATCGGAGGCCTGAAGGTCGGAGTCAACGGATTTGGCCGTATTGGGCGCCTGGTCACCAGGGCTGCTTTTAACTCTGGTAAAGTGGATATTGTTGCCATCAATGACCCCTTCATTGACCTCAACTACATGGTTTACATGTTCCAATATGATTCCACCCATGGCAAATTCCATGGCACCGTCAAGGCTGAGAACGGGAAACTTGTCATCAATGGAAATCCCATCACCATCTTCCAGGAGCGAGATCCCTCCAAAATCAAGTGGGGCGATGCTGGTGCTGAGTATGTCGTGGAGTCTACTGGTGTCTTCACTGACCACCAACTGCTTAGCCCCCCTGGCAGGTTCAACGGCACAGTCAAGGCTGAGAACGGTAAATTTGACTCCCCGCTTGCCTGTGCCCTGTTGCTGTAGCCAAATTCATCATAATGGGCTCCACTTCATCGTGCTGAGCCTGGTGCTGTGGCCAAGGCATCCTGGGCTACACTGAGCACCCTGCTGTGCCCTGTTGCTGTAGCCAAATTCATCATAATGGGCTCCACTTCATCGTGCTGAGCCTGGTGCTGTGGCCAAGGCATCCTGGGCTACACTGAGCAC",
+      // 18S rRNA fragment
+      "TTGATCCTGCCAGTAGTCATATGCTTGTCTCAAAGATTAAGCCATGCATGTCTAAGTACGCACGGCCGGTACAGTGAAACTGCGAATGGCTCATTAAATCAGTTATGGTTCCTTTGGTCGGCTCTCCGGTGGGGCCTGCGGCTTAATTTGACTCAACACGGGAAACCTCACCCGGCCCGGCGCGGTTGGATGTTTGTGAAAGCTCGCGGTTGGTGCGGTTGCGGCGGCCGGTTGGTGGTGGTGGTGGTGGTTGCGGCTGGTGGTGGTGGTGGTGGTGGTTGCGGCTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGG",
+    ],
+  },
+  {
+    species: "Bos taurus",
+    commonName: "Крупный рогатый скот",
+    fragments: [
+      // GAPDH fragment
+      "ATGGTGAAGGTCGGAGTGAACGGATTTGGCCGTATCGGAGGCCTGAAGGTCGGAGTCAACGGATTTGGCCGTATTGGGCGCCTGGTCACCAGGGCTGCTTTTAACTCTGGTAAAGTGGATATTGTTGCCATCAATGACCCCTTCATTGACCTCAACTACATGGTTTACATGTTCCAATATGATTCCACCCATGGCAAATTCCATGGCACCGTCAAGGCTGAGAACGGGAAACTTGTCATCAATGGAAATCCCATCACCATCTTCCAGGAGCGAGATCCCTCCAAAATCAAGTGGGGCGATGCTGGTGCTGAGTATGTCGTGGAGTCTACTGGTGTCTTCACTGACCACCAACTGCTTAGCCCCCCTGGCAGGTTCAACGGCACAGTCAAGGCTGAGAACGGTAAATTTGACTCCCCGCTTGCCTGTGCCCTGTTGCTGTAGCCAAATTCATCATAATGGGCTCCACTTCATCGTGCTGAGCCTGGTGCTGTGGCCAAGGCATCCTGGGCTACACTGAGCACCCTGCTGTGCCCTGTTGCTGTAGCCAAATTCATCATAATGGGCTCCACTTCATCGTGCTGAGCCTGGTGCTGTGGCCAAGGCATCCTGGGCTACACTGAGCAC",
+      // β-actin fragment
+      "ATGCCGGGGACCTCAACGCCCACACCGTGCCCATCTACGAGGGGTATGCTCTCCCTCACGCCATCCTGCGTCTGGACCTGGCTGGCCGGGACCTGACTGACTACCTCATGAAGATCCTCACCGAGCGCGGCTACAGCTTCACCACCACAGCCGAGAGGGAAATCGTGCGTGACATTAAGGAGAAGCTGTGCTACGTCGCCCTGGACTTCGAGCAGGAGATGGCCACGGCCTGCTATCCCTGTACGCCTCTGGCCGTACCACTGGTATTGTGATGGACTCCGGTGACGGGTACACCATCACCATTGGCAATGAGCGGTTCCGCTGCCCTGAGGCACTCTTCCAGCCTCCTGCCTCGCCGTCCACGGCAGCCTGTGCCCTGCCCTGTGTGTGCCCTGTGCCCTGAGCACCCTGCTGTGCCCTGTTGCTGTAGCCAAATTCATCATAATGGGCTCCACTTCATCGTGCTGAGCCTGGTGCTGTGGCCAAGGCATCCTGGGCTACACTGAGCAC",
+    ],
+  },
+  {
+    species: "Homo sapiens",
+    commonName: "Человек",
+    fragments: [
+      // GAPDH fragment (common lab contamination source)
+      "ATGGGGAAGGTGAAGGTCGGAGTCAACGGATTTGGTCGTATTGGGCGCCTGGTCACCAGGGCTGCTTTTAACTCTGGTAAAGTGGATATTGTTGCCATCAATGACCCCTTCATTGACCTCAACTACATGGTTTACATGTTCCAATATGATTCCACCCATGGCAAATTCCATGGCACCGTCAAGGCTGAGAACGGGAAACTTGTCATCAATGGAAATCCCATCACCATCTTCCAGGAGCGAGATCCCTCCAAAATCAAGTGGGGCGATGCTGGTGCTGAGTATGTCGTGGAGTCTACTGGTGTCTTCACTGACCACCAACTGCTTAGCCCCCCTGGCAGGTTCAACGGCACAGTCAAGGCTGAGAACGGTAAATTTGACTCCCCGCTTGCCTGTGCCCTGTTGCTGTAGCCAAATTCATCATAATGGGCTCCACTTCATCGTGCTGAGCCTGGTGCTGTGGCCAAGGCATCCTGGGCTACACTGAGCAC",
+      // Alu repeat (most common false-positive source in human genome)
+      "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGATCACGAGGTCAGGAGATCGAGACCATCCTGGCTAACACGGTGAAACCCCGTCTCTACTAAAAATACAAAAATTAGCCGGGCGTGGTGGCGGGCGCCTGTAGTCCCAGCTACTCGGGAGGCTGAGGCAGGAGAATGGCGTGAACCCGGGAGGCGGAGCTTGCAGTGAGCCGAGATCGCGCCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAAGGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGATCACGAGGTCAGGAGATCGAGACCATCCTGGCTAACACGGTGAAACCCCGTCTCTACTAAAAATACAAAAATTAGCCGGGCGTGGTGGCGGGCGCCTGTAGTCCCAGCTACTCGGGAGG",
+    ],
+  },
+];
+
+export interface MisprimingHit {
+  species: string;
+  commonName: string;
+  fragmentIndex: number;
+  position: number; // 1-indexed in fragment
+  mismatches: number;
+  matchLength: number;
+  matchPercent: number;
+  primer: "forward" | "reverse";
+  /** Aligned primer (with mismatches shown). */
+  alignment: string;
+}
+
+/**
+ * Search a primer against host genome fragments.
+ * Finds best 3' end matches (15+ bp at 3' end) with ≤3 mismatches.
+ * 3' end is critical because polymerase extends from there.
+ */
+export function checkMispriming(primer: string, primerName: "forward" | "reverse" = "forward"): MisprimingHit[] {
+  const hits: MisprimingHit[] = [];
+  const primerSeq = primer.toUpperCase().replace(/[^ACGT]/g, "");
+  if (primerSeq.length < 15) return hits;
+
+  // Check both forward and reverse-complement of primer
+  const primerRC = reverseComplement(primerSeq);
+  const queries = [
+    { seq: primerSeq, label: primerName },
+    { seq: primerRC, label: primerName as "forward" | "reverse" },
+  ];
+
+  // Sliding window: check 15-mer seeds at 3' end of primer (last 15 bp)
+  const seedLength = 15;
+  const maxMismatches = 3;
+
+  for (const query of queries) {
+    // 3' end seed (last 15 bp of primer)
+    const seed = query.seq.slice(-seedLength);
+
+    for (const genome of HOST_GENOMES) {
+      for (let fIdx = 0; fIdx < genome.fragments.length; fIdx++) {
+        const fragment = genome.fragments[fIdx].toUpperCase();
+        // Find seed matches
+        for (let i = 0; i <= fragment.length - seedLength; i++) {
+          let mismatches = 0;
+          for (let j = 0; j < seedLength; j++) {
+            if (fragment[i + j] !== seed[j]) {
+              mismatches++;
+              if (mismatches > maxMismatches) break;
+            }
+          }
+          if (mismatches <= maxMismatches) {
+            // Try to extend match backwards through the full primer
+            let fullMismatches = mismatches;
+            let matchLength = seedLength;
+            for (let j = 1; j < query.seq.length - seedLength; j++) {
+              const fragPos = i - j;
+              const primerPos = query.seq.length - seedLength - 1 - j;
+              if (fragPos < 0 || primerPos < 0) break;
+              if (fragment[fragPos] !== query.seq[primerPos]) {
+                fullMismatches++;
+              }
+              matchLength++;
+            }
+            const matchPercent = (1 - fullMismatches / matchLength) * 100;
+            hits.push({
+              species: genome.species,
+              commonName: genome.commonName,
+              fragmentIndex: fIdx + 1,
+              position: i + 1,
+              mismatches: fullMismatches,
+              matchLength,
+              matchPercent: Number(matchPercent.toFixed(1)),
+              primer: query.label,
+              alignment: `3'-${seed}-5' vs pos ${i + 1} (${mismatches} mm in seed)`,
+            });
+          }
+        }
+      }
+    }
+  }
+
+  // Sort by match quality (fewer mismatches, longer match)
+  return hits.sort((a, b) => {
+    if (a.mismatches !== b.mismatches) return a.mismatches - b.mismatches;
+    return b.matchLength - a.matchLength;
+  }).slice(0, 10); // top 10 hits
+}
+
+/**
+ * Check both forward and reverse primers for mispriming.
+ */
+export function checkPairMispriming(forward: string, reverse: string): {
+  forward: MisprimingHit[];
+  reverse: MisprimingHit[];
+  /** Overall specificity 0-100 (higher = more specific). */
+  specificityScore: number;
+  warning: string | null;
+} {
+  const fwdHits = checkMispriming(forward, "forward");
+  const revHits = checkMispriming(reverse, "reverse");
+
+  // Specificity: 100 if no hits, decreases with each hit
+  const totalHits = fwdHits.length + revHits.length;
+  const highQualityHits = [...fwdHits, ...revHits].filter(h => h.mismatches <= 1).length;
+  let specificity = 100;
+  specificity -= totalHits * 5;
+  specificity -= highQualityHits * 15; // high-quality hits are worse
+  specificity = Math.max(0, specificity);
+
+  let warning: string | null = null;
+  if (highQualityHits > 0) {
+    const species = [...new Set([...fwdHits, ...revHits].filter(h => h.mismatches <= 1).map(h => h.commonName))];
+    warning = `Высокий риск mispriming: найдено ${highQualityHits} сильных совпадений в геномах: ${species.join(", ")}`;
+  } else if (totalHits > 5) {
+    warning = `Умеренный риск mispriming: ${totalHits} совпадений в геномах хозяев`;
+  }
+
+  return {
+    forward: fwdHits,
+    reverse: revHits,
+    specificityScore: specificity,
+    warning,
+  };
+}

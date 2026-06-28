@@ -475,7 +475,7 @@ DOCKING SCORE: ${result.score}/100 (shape=${result.shapeScore}, electrostatic=${
 Respond ONLY as JSON:
 {"repurposingPotential": "<low|moderate|high>", "confidenceScore": <0-100>, "rationale": "<one short sentence>", "keyRisks": ["...", "..."], "nextSteps": ["...", "..."]}`;
       const r = await analyzeWithLLM<any>(
-        "You are a veterinary pharmacology expert. Respond ONLY with valid JSON, no markdown.",
+        "You are a veterinary pharmacology expert. ОТВЕЧАЙ НА РУССКОМ. Все текстовые поля в JSON (rationale, keyRisks, nextSteps) должны быть на русском языке. Respond ONLY with valid JSON, no markdown.",
         prompt,
         { maxTokens: 250, temperature: 0.3 },
       );

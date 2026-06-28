@@ -296,6 +296,277 @@ export const PATHOGENS: Pathogen[] = [
       },
     ],
   },
+  // ─── NEW: Salmonella enterica ─────────────────────────────────
+  {
+    id: "salmonella",
+    name_ru: "Сальмонеллёз",
+    name_en: "Salmonella enterica",
+    disease_key: "salmonellosis",
+    type: "bacterium",
+    genome: "dsDNA (~4.8 Mb)",
+    priority_ru: 2,
+    rf_status: "Карантинная инфекция, зооноз",
+    known_drug_classes: ["Фторхинолоны", "Цефалоспорины", "Макролиды"],
+    targets: [
+      {
+        id: "salmonella-gyra",
+        name: "ДНК-гираза GyrA",
+        name_ru: "ДНК-гираза GyrA",
+        pdb_id: "2XCT",
+        uniprot_id: "P0CES4",
+        mw_kda: 97,
+        function_ru: "Катализирует суперскручивание ДНК. Мишень фторхинолонов.",
+        essential: true,
+        pockets: [
+          {
+            cx: 25.1, cy: 12.4, cz: 8.7, radius: 12,
+            charge: -1, hydrophobicity: 0.4,
+            known_ligand_type: "fluoroquinolone",
+          },
+        ],
+      },
+      {
+        id: "salmonella-flic",
+        name: "Флагеллин FliC",
+        name_ru: "Флагеллин FliC",
+        pdb_id: "1UC1",
+        uniprot_id: "P06179",
+        mw_kda: 51,
+        function_ru: "Структурный белок жгутика, главный антиген.",
+        essential: false,
+        pockets: [
+          {
+            cx: 10.5, cy: 5.2, cz: 3.1, radius: 10,
+            charge: 0, hydrophobicity: 0.6,
+            known_ligand_type: "antibody",
+          },
+        ],
+      },
+    ],
+  },
+  // ─── NEW: BVDV (Bovine Viral Diarrhea Virus) ─────────────────
+  {
+    id: "bvdv",
+    name_ru: "Вирусная диарея КРС",
+    name_en: "Bovine Viral Diarrhea Virus",
+    disease_key: "bvd",
+    type: "virus",
+    genome: "(+)ssRNA (~12.5 kb)",
+    priority_ru: 2,
+    rf_status: "Карантинная болезнь КРС",
+    known_drug_classes: ["Нуклеозидные аналоги", "Ингибиторы протеазы"],
+    targets: [
+      {
+        id: "bvdv-ns3",
+        name: "NS3 протеаза/хеликаза",
+        name_ru: "NS3 протеаза/хеликаза",
+        pdb_id: "1S48",
+        uniprot_id: "Q01472",
+        mw_kda: 80,
+        function_ru: "Многофункциональный белок: сериновая протеаза + хеликаза. Ключевая мишень для противовирусных.",
+        essential: true,
+        pockets: [
+          {
+            cx: 15.2, cy: -8.4, cz: 11.3, radius: 13,
+            charge: 0, hydrophobicity: 0.5,
+            known_ligand_type: "protease_inhibitor",
+          },
+        ],
+      },
+      {
+        id: "bvdv-erns",
+        name: "Eᴿⁿˢ гликопротеин",
+        name_ru: "Eᴿⁿˢ гликопротеин",
+        pdb_id: "2BTT",
+        uniprot_id: "Q96662",
+        mw_kda: 44,
+        function_ru: "Рибонуклеаза на поверхности вириона, участвует в иммунной эвазии.",
+        essential: false,
+        pockets: [
+          {
+            cx: 8.7, cy: 4.1, cz: 2.5, radius: 9,
+            charge: 1, hydrophobicity: 0.3,
+            known_ligand_type: "rnase_inhibitor",
+          },
+        ],
+      },
+    ],
+  },
+  // ─── NEW: Leptospira ─────────────────────────────────────────
+  {
+    id: "leptospira",
+    name_ru: "Лептоспироз",
+    name_en: "Leptospira interrogans",
+    disease_key: "leptospirosis",
+    type: "bacterium",
+    genome: "dsDNA (~4.6 Mb, 2 хромосомы)",
+    priority_ru: 2,
+    rf_status: "Зооноз, особо опасная инфекция",
+    known_drug_classes: ["Пенициллины", "Тетрациклины", "Макролиды"],
+    targets: [
+      {
+        id: "leptospira-lip32",
+        name: "LipL32",
+        name_ru: "Лipoprotein LipL32",
+        pdb_id: "5DNG",
+        uniprot_id: "Q8R6N5",
+        mw_kda: 27,
+        function_ru: "Основной поверхностный липопротеин патогенных лептоспир, иммунодоминант.",
+        essential: false,
+        pockets: [
+          {
+            cx: 7.4, cy: 3.8, cz: 1.2, radius: 8,
+            charge: 0, hydrophobicity: 0.7,
+            known_ligand_type: "antibody",
+          },
+        ],
+      },
+      {
+        id: "leptospira-fab",
+        name: "FAB-синтаза",
+        name_ru: "β-кетоацил-ACP-синтаза",
+        pdb_id: "2Q9B",
+        uniprot_id: "Q8F4I3",
+        mw_kda: 43,
+        function_ru: "Ключевой фермент синтеза жирных кислот. Мишень триклозана.",
+        essential: true,
+        pockets: [
+          {
+            cx: 12.1, cy: 6.5, cz: 4.8, radius: 11,
+            charge: 0, hydrophobicity: 0.5,
+            known_ligand_type: "triclosan",
+          },
+        ],
+      },
+    ],
+  },
+  // ─── NEW: PEDV (Porcine Epidemic Diarrhea Virus) ─────────────
+  {
+    id: "pedv",
+    name_ru: "Эпидемическая диарея свиней",
+    name_en: "Porcine Epidemic Diarrhea Virus",
+    disease_key: "ped",
+    type: "virus",
+    genome: "(+)ssRNA (~28 kb)",
+    priority_ru: 3,
+    rf_status: "Карантинная болезнь свиней",
+    known_drug_classes: ["Нуклеозидные аналоги", "Ингибиторы протеазы"],
+    targets: [
+      {
+        id: "pedv-spike",
+        name: "S-гликопротеин",
+        name_ru: "Спайковый гликопротеин S",
+        pdb_id: "7XGX",
+        uniprot_id: "Q0Y0E9",
+        mw_kda: 180,
+        function_ru: "Связывается с рецептором APN энтероцитов. Главный антиген.",
+        essential: true,
+        pockets: [
+          {
+            cx: 30.5, cy: 15.2, cz: 10.7, radius: 16,
+            charge: 0, hydrophobicity: 0.4,
+            known_ligand_type: "receptor_mimetic",
+          },
+        ],
+      },
+      {
+        id: "pedv-3clpro",
+        name: "3CLpro протеаза",
+        name_ru: "Основная протеаза 3CLpro",
+        pdb_id: "7QEU",
+        uniprot_id: "Q0Y0E2",
+        mw_kda: 34,
+        function_ru: "Цистеиновая протеаза, расщепляет polyprotein. Мишень противовирусных.",
+        essential: true,
+        pockets: [
+          {
+            cx: 10.8, cy: -3.4, cz: 7.2, radius: 10,
+            charge: 0, hydrophobicity: 0.5,
+            known_ligand_type: "protease_inhibitor",
+          },
+        ],
+      },
+    ],
+  },
+  // ─── NEW: E. coli (ветеринарные патогенные штаммы) ──────────
+  {
+    id: "ecoli-vet",
+    name_ru: "Кишечная палочка (E. coli)",
+    name_en: "Escherichia coli (pathogenic)",
+    disease_key: "colibacillosis",
+    type: "bacterium",
+    genome: "dsDNA (~5 Mb)",
+    priority_ru: 2,
+    rf_status: "Массовые вспышки у молодняка",
+    known_drug_classes: ["Цефалоспорины", "Фторхинолоны", "Аминогликозиды"],
+    targets: [
+      {
+        id: "ecoli-gyra",
+        name: "ДНК-гираза GyrA",
+        name_ru: "ДНК-гираза GyrA",
+        pdb_id: "6F87",
+        uniprot_id: "P0AES4",
+        mw_kda: 97,
+        function_ru: "Катализирует суперскручивание ДНК. QRDR — мишень фторхинолонов.",
+        essential: true,
+        pockets: [
+          {
+            cx: 24.8, cy: 11.9, cz: 8.4, radius: 12,
+            charge: -1, hydrophobicity: 0.4,
+            known_ligand_type: "fluoroquinolone",
+          },
+        ],
+      },
+      {
+        id: "ecoli-ltab",
+        name: "Лабильный энтеротоксин LT",
+        name_ru: "Термолабильный энтеротоксин LT",
+        pdb_id: "1LTS",
+        uniprot_id: "P0CJ20",
+        mw_kda: 86,
+        function_ru: "AB₅-токсин, активирует аденилатциклазу → секреторная диарея.",
+        essential: false,
+        pockets: [
+          {
+            cx: 14.3, cy: 7.6, cz: 5.2, radius: 11,
+            charge: 1, hydrophobicity: 0.3,
+            known_ligand_type: "ganglioside",
+          },
+        ],
+      },
+    ],
+  },
+  // ─── NEW: Anaplasma marginale ────────────────────────────────
+  {
+    id: "anaplasma",
+    name_ru: "Анаплазмоз",
+    name_en: "Anaplasma marginale",
+    disease_key: "anaplasmosis",
+    type: "bacterium",
+    genome: "dsDNA (~1.2 Mb)",
+    priority_ru: 3,
+    rf_status: "Трансмиссивная болезнь КРС",
+    known_drug_classes: ["Тетрациклины", "Фторхинолоны"],
+    targets: [
+      {
+        id: "anaplasma-msp5",
+        name: "MSP5",
+        name_ru: "Major Surface Protein 5",
+        pdb_id: "2VWM",
+        uniprot_id: "Q0PFH6",
+        mw_kda: 21,
+        function_ru: "Поверхностный белок, иммунодоминант. Маркер для серодиагностики.",
+        essential: false,
+        pockets: [
+          {
+            cx: 6.2, cy: 2.8, cz: 1.5, radius: 7,
+            charge: 0, hydrophobicity: 0.5,
+            known_ligand_type: "antibody",
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 export function getPathogen(id: string): Pathogen | undefined {

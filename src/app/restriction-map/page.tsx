@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
 import {
   computeFragments,
+  findCuttingEnzymes,
   RESTRICTION_ENZYMES,
   RESTRICTION_SAMPLES,
   type RestrictionEnzyme,
@@ -13,10 +14,24 @@ import {
 export default function RestrictionMapPage() {
   const [sampleIdx, setSampleIdx] = useState(0);
   const [sequence, setSequence] = useState(RESTRICTION_SAMPLES[0].seq);
-  const [selectedEnzymes, setSelectedEnzymes] = useState<string[]>(["EcoRI", "HindIII", "BamHI", "EcoRV", "SmaI"]);
+  const [selectedEnzymes, setSelectedEnzymes] = useState<string[]>([]);
 
   const availableEnzymes = RESTRICTION_ENZYMES;
   const selectedEnzObjs = RESTRICTION_ENZYMES.filter((e) => selectedEnzymes.includes(e.name));
+
+  // Auto-detect which enzymes actually cut this sequence
+  const cuttingEnzymes = useMemo(() => {
+    if (!sequence || sequence.length < 10) return [];
+    return findCuttingEnzymes(sequence);
+  }, [sequence]);
+
+  // Auto-select all cutting enzymes on sequence change (if user hasn't manually selected)
+  const [userTouched, setUserTouched] = useState(false);
+  useEffect(() => {
+    if (!userTouched && cuttingEnzymes.length > 0) {
+      setSelectedEnzymes(cuttingEnzymes.slice(0, 10).map((c) => c.enzyme.name));
+    }
+  }, [cuttingEnzymes, userTouched]);
 
   const result = useMemo(() => {
     if (!sequence || sequence.length < 10) return null;
@@ -26,18 +41,22 @@ export default function RestrictionMapPage() {
   const loadSample = (idx: number) => {
     setSampleIdx(idx);
     setSequence(RESTRICTION_SAMPLES[idx].seq);
+    setUserTouched(false);
+    setSelectedEnzymes([]);
   };
 
   const toggleEnzyme = (name: string) => {
+    setUserTouched(true);
     setSelectedEnzymes((prev) =>
       prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name],
     );
   };
 
-  const loadAll = () => setSelectedEnzymes(RESTRICTION_ENZYMES.map((e) => e.name));
-  const loadNone = () => setSelectedEnzymes([]);
-  const loadFrequent = () => setSelectedEnzymes(RESTRICTION_ENZYMES.filter((e) => e.recognition.length <= 5).map((e) => e.name));
-  const loadRare = () => setSelectedEnzymes(RESTRICTION_ENZYMES.filter((e) => e.recognition.length >= 6).map((e) => e.name));
+  const loadAll = () => { setUserTouched(true); setSelectedEnzymes(RESTRICTION_ENZYMES.map((e) => e.name)); };
+  const loadNone = () => { setUserTouched(true); setSelectedEnzymes([]); };
+  const loadFrequent = () => { setUserTouched(true); setSelectedEnzymes(RESTRICTION_ENZYMES.filter((e) => e.recognition.length <= 5).map((e) => e.name)); };
+  const loadRare = () => { setUserTouched(true); setSelectedEnzymes(RESTRICTION_ENZYMES.filter((e) => e.recognition.length >= 6).map((e) => e.name)); };
+  const loadCutting = () => { setUserTouched(true); setSelectedEnzymes(cuttingEnzymes.map((c) => c.enzyme.name)); };
 
   return (
     <div className="min-h-screen">
@@ -99,32 +118,47 @@ export default function RestrictionMapPage() {
 
             <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 mb-3 mt-4">
               Ферменты ({selectedEnzymes.length}/{availableEnzymes.length})
+              {cuttingEnzymes.length > 0 && (
+                <span className="ml-2 text-[10px] text-lime-600 dark:text-lime-400">
+                  🔪 {cuttingEnzymes.length} режут эту последовательность
+                </span>
+              )}
             </h3>
             <div className="flex flex-wrap gap-1 mb-2 text-xs">
+              <button onClick={loadCutting} className="px-2 py-1 rounded bg-lime-100 dark:bg-lime-950/40 text-lime-700 dark:text-lime-300 hover:bg-lime-200 font-medium">
+                ✂️ Только режущие ({cuttingEnzymes.length})
+              </button>
               <button onClick={loadAll} className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200">Все</button>
               <button onClick={loadNone} className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200">Очистить</button>
-              <button onClick={loadFrequent} className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200">Частые</button>
-              <button onClick={loadRare} className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200">Редкие</button>
+              <button onClick={loadFrequent} className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200">Частые (4-5)</button>
+              <button onClick={loadRare} className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200">Редкие (6+)</button>
             </div>
             <div className="max-h-72 overflow-y-auto thin-scroll border border-zinc-200 dark:border-zinc-800 rounded-lg">
-              {availableEnzymes.map((e) => (
-                <label
-                  key={e.name}
-                  className={`flex items-center gap-2 px-2 py-1.5 text-xs border-b border-zinc-100 dark:border-zinc-800 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-900 ${
-                    selectedEnzymes.includes(e.name) ? "bg-lime-50 dark:bg-lime-950/30" : ""
-                  }`}
-                >
-                  <input
-                    type="checkbox"
-                    checked={selectedEnzymes.includes(e.name)}
-                    onChange={() => toggleEnzyme(e.name)}
-                    className="w-3 h-3 accent-lime-600"
-                  />
-                  <span className="font-mono font-bold w-16">{e.name}</span>
-                  <span className="font-mono text-zinc-500 flex-1">{e.recognition}</span>
-                  <span className="text-[10px] text-zinc-400">{e.recognition.length}bp</span>
-                </label>
-              ))}
+              {availableEnzymes.map((e) => {
+                const cutInfo = cuttingEnzymes.find((c) => c.enzyme.name === e.name);
+                return (
+                  <label
+                    key={e.name}
+                    className={`flex items-center gap-2 px-2 py-1.5 text-xs border-b border-zinc-100 dark:border-zinc-800 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-900 ${
+                      selectedEnzymes.includes(e.name) ? "bg-lime-50 dark:bg-lime-950/30" : ""
+                    } ${cutInfo ? "border-l-2 border-l-lime-400" : "opacity-60"}`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedEnzymes.includes(e.name)}
+                      onChange={() => toggleEnzyme(e.name)}
+                      className="w-3 h-3 accent-lime-600"
+                    />
+                    <span className="font-mono font-bold w-16">{e.name}</span>
+                    <span className="font-mono text-zinc-500 flex-1">{e.recognition}</span>
+                    {cutInfo ? (
+                      <span className="text-[10px] text-lime-600 dark:text-lime-400 font-bold">×{cutInfo.sites}</span>
+                    ) : (
+                      <span className="text-[10px] text-zinc-400">{e.recognition.length}bp</span>
+                    )}
+                  </label>
+                );
+              })}
             </div>
           </div>
 

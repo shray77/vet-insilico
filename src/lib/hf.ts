@@ -527,7 +527,7 @@ Respond ONLY as JSON:
 
   const raw = await chatComplete(
     [
-      { role: "system", content: "You are a chemoinformatics expert. Respond ONLY with valid JSON, no markdown." },
+      { role: "system", content: "You are a chemoinformatics expert. ОТВЕЧАЙ НА РУССКОМ. Все текстовые поля в JSON (rationale, alerts) должны быть на русском языке. Respond ONLY with valid JSON, no markdown." },
       { role: "user", content: prompt },
     ],
     { maxTokens: 400, temperature: 0.2, signal: opts.signal },

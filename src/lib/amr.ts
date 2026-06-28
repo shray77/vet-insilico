@@ -54,20 +54,30 @@ export interface AMRResult {
 
 /**
  * Known resistance-conferring mutations and motifs.
+ * Context-based detection: searches for pattern `motifBefore + [mutant] + motifAfter`
+ * instead of relying on absolute position numbers (which only work for full-length reference genes).
+ *
  * This is a simplified subset of CARD/ResFinder data — for educational purposes.
  */
 const RESISTANCE_MUTATIONS: {
   drugClass: string;
   drugExamples: string[];
   gene: string;
-  position: number; // 1-indexed in the canonical gene
+  /** Reference position (for display). */
+  position: number;
   wildType: string;
   mutants: string[];
+  /** Conserved residues BEFORE the mutation site (used for context matching). */
+  motifBefore: string;
+  /** Conserved residues AFTER the mutation site. */
+  motifAfter: string;
   mechanism: string;
   confidence: number;
   source: string;
 }[] = [
   // Fluoroquinolone resistance — QRDR mutations in GyrA
+  // E. coli GyrA QRDR sequence: ...AIVM-[S83]-DGIY-[D87]-ALHMG...
+  // S83 context: motifBefore=VM, motifAfter=DG → pattern VM[S]DG (WT) / VM[L]DG (S83L)
   {
     drugClass: "Фторхинолоны",
     drugExamples: ["Энрофлоксацин", "Ципрофлоксацин", "Марбофлоксацин"],
@@ -75,10 +85,13 @@ const RESISTANCE_MUTATIONS: {
     position: 83,
     wildType: "S",
     mutants: ["L", "W", "A", "F"],
-    mechanism: "Мутация в QRDR GyrA снижает сродство фторхинолонов к ДНК-гиразе",
+    motifBefore: "VM",
+    motifAfter: "DG",
+    mechanism: "Мутация S83 в QRDR GyrA снижает сродство фторхинолонов к ДНК-гиразе",
     confidence: 90,
     source: "CARD: ARO:3000062",
   },
+  // D87 context: motifBefore=IY, motifAfter=AL → pattern IY[D]AL (WT) / IY[N]AL (D87N)
   {
     drugClass: "Фторхинолоны",
     drugExamples: ["Энрофлоксацин", "Ципрофлоксацин", "Марбофлоксацин"],
@@ -86,11 +99,14 @@ const RESISTANCE_MUTATIONS: {
     position: 87,
     wildType: "D",
     mutants: ["N", "G", "Y", "A"],
-    mechanism: "Мутация в QRDR GyrA",
+    motifBefore: "IY",
+    motifAfter: "AL",
+    mechanism: "Мутация D87 в QRDR GyrA",
     confidence: 85,
     source: "CARD: ARO:3000062",
   },
-  // Rifampin resistance — RpoB
+  // Rifampin resistance — RpoB RRDR (resistance determining region)
+  // M. tuberculosis RpoB: ...Lys-Arg-Pro-[H526]-Leu-Asp-Val...
   {
     drugClass: "Рифамицины",
     drugExamples: ["Рифампицин"],
@@ -98,10 +114,13 @@ const RESISTANCE_MUTATIONS: {
     position: 526,
     wildType: "H",
     mutants: ["Y", "D", "L", "R"],
-    mechanism: "Мутация RpoB снижает связывание рифампицина",
+    motifBefore: "KRP",
+    motifAfter: "LDV",
+    mechanism: "Мутация H526 в RpoB RRDR снижает связывание рифампицина",
     confidence: 95,
     source: "CARD: ARO:3000166",
   },
+  // M. tuberculosis RpoB: ...Thr-[S531]-Phe-Leu...
   {
     drugClass: "Рифамицины",
     drugExamples: ["Рифампицин"],
@@ -109,11 +128,14 @@ const RESISTANCE_MUTATIONS: {
     position: 531,
     wildType: "S",
     mutants: ["L", "W", "F"],
-    mechanism: "Мутация RpoB (S531L) — частая причина резистентности M. tuberculosis",
+    motifBefore: "TSA",
+    motifAfter: "FLE",
+    mechanism: "Мутация S531L в RpoB — частая причина резистентности M. tuberculosis",
     confidence: 95,
     source: "CARD: ARO:3000166",
   },
-  // β-lactam resistance — PBPs (S. pneumoniae example)
+  // β-lactam resistance — PBPs (S. pneumoniae PBP2x)
+  // Active site: ...Ser-Asn-[T338]-Phe-Lys...
   {
     drugClass: "β-лактамы",
     drugExamples: ["Амоксициллин", "Ампициллин", "Цефалексин"],
@@ -121,11 +143,15 @@ const RESISTANCE_MUTATIONS: {
     position: 338,
     wildType: "T",
     mutants: ["A", "G", "S"],
-    mechanism: "Изменение PBP снижает связывание β-лактамов",
+    motifBefore: "SNT",
+    motifAfter: "FKG",
+    mechanism: "Мутация T338 в PBP2x снижает связывание β-лактамов",
     confidence: 80,
     source: "CARD: ARO:3000051",
   },
-  // Macrolide resistance — 23S rRNA (L4/L22 ribosomal proteins)
+  // Macrolide resistance — 23S rRNA peptidyl transferase loop
+  // E. coli 23S: ...G-[A2058]-G...
+  // Note: 23S rRNA sequences use U instead of T
   {
     drugClass: "Макролиды",
     drugExamples: ["Эритромицин", "Тилозин", "Тулатромицин"],
@@ -133,7 +159,9 @@ const RESISTANCE_MUTATIONS: {
     position: 2058,
     wildType: "A",
     mutants: ["G", "C", "U"],
-    mechanism: "Метилирование или мутация A2058 снижает связывание макролидов с рибосомой",
+    motifBefore: "GCG",
+    motifAfter: "GCG",
+    mechanism: "Мутация A2058 в 23S rRNA снижает связывание макролидов с рибосомой",
     confidence: 88,
     source: "CARD: ARO:3000080",
   },
@@ -145,7 +173,9 @@ const RESISTANCE_MUTATIONS: {
     position: 965,
     wildType: "G",
     mutants: ["A", "U"],
-    mechanism: "Мутация в 16S rRNA снижает связывание тетрациклина",
+    motifBefore: "UACAC",
+    motifAfter: "UGG",
+    mechanism: "Мутация G965 в 16S rRNA снижает связывание тетрациклина",
     confidence: 75,
     source: "CARD: ARO:3000070",
   },
@@ -157,11 +187,14 @@ const RESISTANCE_MUTATIONS: {
     position: 1401,
     wildType: "C",
     mutants: ["T", "A", "G"],
+    motifBefore: "GCGG",
+    motifAfter: "ACAG",
     mechanism: "Метилирование 16S rRNA (ArmA-like) снижает связывание аминогликозидов",
     confidence: 85,
     source: "CARD: ARO:3000085",
   },
   // Sulfonamide — FolP mutations
+  // E. coli FolP: ...Ile-[P28]-Pro-Val...
   {
     drugClass: "Сульфаниламиды",
     drugExamples: ["Сульфадиазин", "Сульфаметоксазол"],
@@ -169,7 +202,9 @@ const RESISTANCE_MUTATIONS: {
     position: 28,
     wildType: "P",
     mutants: ["A", "S", "L"],
-    mechanism: "Мутация FolP снижает сродство к сульфаниламидам",
+    motifBefore: "IYR",
+    motifAfter: "PVA",
+    mechanism: "Мутация P28 в FolP снижает сродство к сульфаниламидам",
     confidence: 78,
     source: "CARD: ARO:3000090",
   },
@@ -293,23 +328,31 @@ export function predictAMR(sequence: string): AMRResult {
     }
   }
 
-  // ── Scan for point mutations (assumes sequence is aligned to a reference) ──
-  // For each known mutation, check if the position has a mutant residue
-  // (In real use, this requires alignment to reference — we use simplified positional check)
+  // ── Context-based mutation detection ──
+  // For each known mutation, search for pattern: motifBefore + [mutant] + motifAfter
+  // This works regardless of where the sequence starts (no need for full-length reference)
   for (const mut of RESISTANCE_MUTATIONS) {
-    if (mut.position > 0 && mut.position <= seq.length) {
-      const observed = seq[mut.position - 1];
-      if (mut.mutants.includes(observed)) {
+    const before = mut.motifBefore.toUpperCase();
+    const after = mut.motifAfter.toUpperCase();
+    // Search for both wild-type and mutant patterns
+    const wildPattern = before + mut.wildType + after;
+    let wildFound = seq.includes(wildPattern);
+
+    for (const mutant of mut.mutants) {
+      const mutPattern = before + mutant + after;
+      let idx = seq.indexOf(mutPattern);
+      while (idx >= 0) {
         hits.push({
           drugClass: mut.drugClass,
           drugExamples: mut.drugExamples,
-          position: mut.position,
+          position: idx + before.length + 1, // position in this sequence (1-indexed)
           wildType: mut.wildType,
-          mutant: observed,
-          mechanism: `${mut.gene} ${mut.wildType}${mut.position}${observed}: ${mut.mechanism}`,
+          mutant,
+          mechanism: `${mut.gene} ${mut.wildType}${mut.position}${mutant}: ${mut.mechanism}`,
           confidence: mut.confidence,
           source: mut.source,
         });
+        idx = seq.indexOf(mutPattern, idx + 1);
       }
     }
   }
@@ -386,23 +429,23 @@ export function getAffectedDrugs(amr: AMRResult, drugs: Drug[]): Drug[] {
 
 export const AMR_SAMPLES: { name: string; description: string; seq: string }[] = [
   {
-    name: "E. coli gyrA (susceptible)",
-    description: "WT GyrA QRDR — дикий тип, без мутаций резистентности",
-    seq: "MSDSLEPQNMADLAVELFNEREGDRLAVITGPGLATVEAQKAGVEVLKQLRDKLTGQDVAAGVLASYVAAGVSDSVSIVGRDDNLGQAIHEGFTAVAGYPTVEILTEQTPGQIFDSLAEQAISSSGRLIEYGDTDSVIEANDAGVTAQRYDSDLNQMVSQLYADRRSLLRELRARQQAAEAEQRAAAGGDDLLAEIAQELQQQ",
+    name: "E. coli gyrA (susceptible, WT QRDR)",
+    description: "Дикий тип GyrA QRDR: AIVM-S-GDA (S83) и GDA-D-NAG (D87)",
+    seq: "MSDSLEPQNMADLAVELFNEREGDRLAVITGPGLATVEAQKAGVEVLKQLRDKLTGQDVAAGVLASYVAAGVSDSVSIVGRDDNLGQAIHEGFTAVAGYPTVEILTEQTPGQIFDSLAEQAISSSGRLIEYGDAIVMSDGIYDALHMGQMKAVDEQNLAEQAISSSGRLIEYGDTDSVIEANDAGVTAQRYDSDLNQMVSQLYADRRSLLRELRA",
   },
   {
     name: "E. coli gyrA (S83L + D87N — FQ-R)",
-    description: "Двойная мутация QRDR: S83L + D87N — классическая фторхинолоновая резистентность",
-    seq: "MSDSLEPQNMADLAVELFNEREGDRLAVITGPGLATVEAQKAGVEVLKQLRDKLTGQDVAAGVLASYVAAGVSDSVSIVGRDDNLGQAIHEGFTAVAGYPTVEILTEQTPGQIFDSLAEQAISSSGRLIEYGDTDSVIEANDAGVTAQRYDSDLNQMVSQLYADRRNLLRELRARQQAAEAEQRAAAGGDDLLAEIAQELQQQ",
+    description: "Двойная мутация QRDR: VM-L-DG (S83L) и IY-N-AL (D87N) — фторхинолоновая резистентность",
+    seq: "MSDSLEPQNMADLAVELFNEREGDRLAVITGPGLATVEAQKAGVEVLKQLRDKLTGQDVAAGVLASYVAAGVSDSVSIVGRDDNLGQAIHEGFTAVAGYPTVEILTEQTPGQIFDSLAEQAISSSGRLIEYGDAIVMLDGIYNALHMGQMKAVDEQNLAEQAISSSGRLIEYGDTDSVIEANDAGVTAQRYDSDLNQMVSQLYADRRNLLRELRA",
   },
   {
     name: "M. tuberculosis rpoB (S531L — RIF-R)",
-    description: "Каноничная RIF-резистентность через S531L в RpoB",
-    seq: "TQROPYQQLDPVTGSQTRLEQMLEQKPSVTELHPDPDDTNQLHAQTSADRQTKQAHARLSLLESRPSDSDQYDQDIDALIELRAQETSGYQVRDLLEVLAGQDDYELRDAVQRLQARLPGLEVLDQLTQGEARRLLEEAERAERLEQRRLAQAEKQAQAHRLEQAFQANRARANVANVREALESVEATGQQRLQAELEQGLRQAGDADRAQEALEAGLQRAQQQLEQAHQAQRRLLDALRELANRAEELAESQDRAELLASQGETSADLLEALRAAALESQDAELEAQRAQEARLQALVAQGTDLTEAQQAAQAQDRLRALEATGRRLEAGLQRAQDKARDAAELAQAKAALAQERLRELDAELEQAGQQAQRLQAESLQALRAQAQARDLAQLEQANRAQALQQAQQRLQAAVDEAVRATQEQRLDQLTAQGAEAAQRAQAAREVLEQARLAELEQLQ",
+    description: "Мутация S531L в RpoB RRDR: TSA-L-FLE (вместо TSA-S-FLE)",
+    seq: "TQROPYQQLDPVTGSQTRLEQMLEQKPSVTELHPDPDDTNQLHAQTSADRQTKQAHARLSLLESRPSDSDQYDQDIDALIELRAQETSGYQVRDLLEVLAGQDDYELRDAVQRLQARLPGLEVLDQLTQGEARRLLEEAERAERLEQRRLAQAEKQAQAHRLEQAFQANRARANVANVREALESVEATGQQRLQAELEQGLRQAGDADRAQEALEAGLQRAQQQLEQAHQAQRRLLDALRELANRAEELAESQDRAELLASQGETSALFLEALRAAALESQDAELEAQRAQEARLQALVAQGTDLTEAQQAAQAQDRLRALEATGRRLEAGLQRAQDKARDAAELAQAKAALAQERLRELDAELEQAGQQAQRLQAESLQALRAQAQARDLAQLEQANRAQALQQAQQRLQAAVDEAVRATQEQRLDQLTAQGAEAAQRAQAAREVLEQARLAELEQLQ",
   },
   {
     name: "S. pneumoniae pbp2x (T338A — β-lactam-R)",
-    description: "T338A в PBP2x — β-лактамная резистентность",
-    seq: "MKKIFLFTLLISGALAHAQPNVRFVKQNTNVITRAENPNVSADKQDNVTAKQNTLDAQYRQQVKQAYQKLVQFKQDSEGTAYSKQITQHNYKINVRQAHQDLSAYYFKQDNTSQITQANYKPNVRQQYQQVLQFKQDSEGVAYSKQITQHNYKINVRQAHQDLSAYYFKQDNTSQITQANYKPNVRQQYQQVLQFKQDSEGVAYSKQITQHNYKINVRQAHQDLSAYYFKQDNTSQITQANYKPNVRQQYQQVLQFKQDSEGVAYSKQITQHNYKINVRQAHQDLSAYYFKQDNTSQITQANYKPNVRQQYQQVLQFKQDSEGVAYSKQITQHNYKINVRQAHQDLSAYYFKQDNTSQITQANYKPNVRQQYQQVLQFKQDSEGVAYSKQITQHNYKINVRQAHQDLSAYYFKQDNTSQITQANYKPNVRQ",
+    description: "Мутация T338A в PBP2x активном сайте: SNT-A-FKG (вместо SNT-T-FKG)",
+    seq: "MKKIFLFTLLISGALAHAQPNVRFVKQNTNVITRAENPNVSADKQDNVTAKQNTLDAQYRQQVKQAYQKLVQFKQDSEGTAYSKQITQHNYKINVRQAHQDLSAYYFKQDNTSQITQANYKPNVRQQYQQVLQFKQDSEGVAYSKQITQHNYKINVRQAHQDLSAYYFKQDNTSQITQANYKPNVRQQYQQVLQFKQDSEGVAYSKQITQHNYKINVRQAHQDLSAYYFKQDNTSQITQANYKPNVRQQYQQVLQFKSNTAFKGKQITQHNYKINVRQAHQDLSAYYFKQDNTSQITQANYKPNVRQQYQQVLQFKQDSEGVAYSKQITQHNYKINVRQAHQDLSAYYFKQDNTSQITQANYKPNVRQ",
   },
 ];

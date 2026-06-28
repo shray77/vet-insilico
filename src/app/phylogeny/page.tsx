@@ -16,7 +16,7 @@ export default function PhylogenyPage() {
   const [sampleIdx, setSampleIdx] = useState(0);
   const [method, setMethod] = useState<"upgma" | "neighbor-joining">("neighbor-joining");
   const [customSeqs, setCustomSeqs] = useState(
-    PHYLO_SAMPLES[0].sequences.map((s) => ({ name: s.name, seq: s.seq })).join("\n"),
+    PHYLO_SAMPLES[0].sequences.map((s) => `${s.name}\t${s.seq}`).join("\n"),
   );
   const [type, setType] = useState<"protein" | "dna">(PHYLO_SAMPLES[0].type);
   const [error, setError] = useState("");

@@ -6,9 +6,11 @@ import HubHeader from "@/components/HubHeader";
 import {
   designPrimers,
   analyzePairWithLLM,
+  checkPairMispriming,
   PRIMER_SAMPLE_TARGETS,
   type PrimerPair,
   type PrimerLLMAnalysis,
+  type MisprimingHit,
 } from "@/lib/primer";
 import { getHfToken } from "@/lib/hf";
 
@@ -322,6 +324,9 @@ export default function PrimerDesignerPage() {
                             </button>
                           )}
                         </div>
+
+                        {/* Path B: Mispriming check */}
+                        <MisprimingCheck forward={p.forward.sequence} reverse={p.reverse.sequence} />
                       </div>
                     ))}
                   </div>
@@ -386,6 +391,95 @@ function LLMAnalysisView({ analysis }: { analysis: PrimerLLMAnalysis }) {
       </div>
       <div className="mt-2 pt-2 border-t border-purple-200 dark:border-purple-800 text-xs text-zinc-700 dark:text-zinc-300">
         <b>Рекомендация:</b> {analysis.recommendation}
+      </div>
+    </div>
+  );
+}
+
+function MisprimingCheck({ forward, reverse }: { forward: string; reverse: string }) {
+  const [checked, setChecked] = useState(false);
+  const [result, setResult] = useState<ReturnType<typeof checkPairMispriming> | null>(null);
+
+  const run = () => {
+    const r = checkPairMispriming(forward, reverse);
+    setResult(r);
+    setChecked(true);
+  };
+
+  if (!checked) {
+    return (
+      <div className="mt-3 pt-3 border-t border-zinc-200 dark:border-zinc-800">
+        <button
+          onClick={run}
+          className="px-3 py-2 rounded-lg bg-orange-100 dark:bg-orange-950/40 text-orange-700 dark:text-orange-300 text-xs font-medium hover:bg-orange-200 dark:hover:bg-orange-900/60 transition"
+        >
+          🔬 Mispriming check (Path B)
+        </button>
+        <div className="text-[10px] text-zinc-400 mt-1">
+          Проверка праймеров против геномов: свинья, КРС, человек (GAPDH, 18S rRNA, Alu)
+        </div>
+      </div>
+    );
+  }
+
+  if (!result) return null;
+
+  const specColor = result.specificityScore >= 80 ? "#16a34a" : result.specificityScore >= 50 ? "#eab308" : "#dc2626";
+  const allHits = [...result.forward, ...result.reverse];
+
+  return (
+    <div className="mt-3 pt-3 border-t border-zinc-200 dark:border-zinc-800">
+      <div className="rounded-lg border border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-950/20 p-3">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-xs font-bold text-orange-700 dark:text-orange-300">🔬 Mispriming check</span>
+          <span className="text-xs">
+            Специфичность:{" "}
+            <b style={{ color: specColor }}>{result.specificityScore}/100</b>
+          </span>
+        </div>
+
+        {result.warning && (
+          <div className="text-xs text-red-600 dark:text-red-400 p-2 rounded bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 mb-2">
+            ⚠️ {result.warning}
+          </div>
+        )}
+
+        {allHits.length === 0 ? (
+          <div className="text-xs text-green-600 dark:text-green-400">
+            ✅ Mispriming не обнаружен — праймеры специфичны к геномам хозяев
+          </div>
+        ) : (
+          <div>
+            <div className="text-[10px] text-zinc-500 mb-1">
+              Найдено {allHits.length} совпадений (топ-{Math.min(5, allHits.length)} показано):
+            </div>
+            <div className="space-y-1">
+              {allHits.slice(0, 5).map((h, i) => (
+                <div key={i} className="text-[10px] flex items-center gap-2 p-1 rounded bg-white dark:bg-zinc-900">
+                  <span className="font-mono font-bold w-12">{h.primer === "forward" ? "Fwd" : "Rev"}</span>
+                  <span className="flex-1 truncate">{h.commonName}</span>
+                  <span className="text-zinc-500">mm={h.mismatches}</span>
+                  <span className="text-zinc-500">len={h.matchLength}</span>
+                  <span style={{ color: h.matchPercent >= 90 ? "#dc2626" : h.matchPercent >= 75 ? "#eab308" : "#16a34a" }}>
+                    {h.matchPercent}%
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="text-[10px] text-zinc-400 mt-2">
+          3'-end seed matching (15 bp) с ≤3 mismatches против GAPDH/18S rRNA/β-actin/Alu фрагментов.
+          Real BLAST против полных геномов (3 Gbp) на сервере.
+        </div>
+
+        <button
+          onClick={() => setChecked(false)}
+          className="text-[10px] text-zinc-400 hover:text-zinc-600 mt-1"
+        >
+          ↻ Скрыть
+        </button>
       </div>
     </div>
   );
