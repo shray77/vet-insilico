@@ -14,6 +14,8 @@ interface Tool {
   stats: string[];
   accent: string;
   badge?: string | null;
+  /** Whether this tool uses ML via HuggingFace (requires HF token). */
+  requiresML?: boolean;
 }
 
 interface Category {
@@ -40,16 +42,18 @@ const CATEGORIES: Category[] = [
         stats: [`${DRUGS.length} препаратов`, `${PATHOGENS.length} патогенов`, "LLM + 3D"],
         accent: "teal",
         badge: "Главный тул",
+        requiresML: true,
       },
       {
         href: "/admet",
         icon: "💊",
         title: "ADMET Predictor",
         tagline: "Фармакокинетика и токсичность",
-        desc: "Из молекулярных свойств препарата (MW, LogP, заряд, HBD/HBA) предсказываем: биодоступность, BBB, hERG, AMES, гепатотоксичность, CYP3A4, drug-likeness.",
-        stats: ["12 параметров", "rule-based", "алерты"],
+        desc: "Из молекулярных свойств препарата (MW, LogP, заряд, HBD/HBA) предсказываем: биодоступность, BBB, hERG, AMES, гепатотоксичность, CYP3A4, drug-likeness. Path B: ML через Qwen LLM на SMILES.",
+        stats: ["12 параметров", "rule-based", "🧬 SMILES ML"],
         accent: "blue",
         badge: null,
+        requiresML: true,
       },
       {
         href: "/pkpd",
@@ -78,6 +82,7 @@ const CATEGORIES: Category[] = [
         stats: ["B + T эпитопы", "4 метода", "ESM-2 ML"],
         accent: "purple",
         badge: null,
+        requiresML: true,
       },
       {
         href: "/primer-designer",
@@ -88,6 +93,7 @@ const CATEGORIES: Category[] = [
         stats: ["SantaLucia NN", "DP hairpin", "LLM анализ"],
         accent: "amber",
         badge: null,
+        requiresML: true,
       },
       {
         href: "/amr",
@@ -225,15 +231,25 @@ export default function HubPage() {
                     <Link
                       key={tool.href}
                       href={tool.href}
-                      className={`hub-card block rounded-2xl border-2 p-5 ${c.border} ${c.bg}`}
+                      className={`hub-card block rounded-2xl border-2 p-5 ${c.border} ${c.bg} relative`}
                     >
                       <div className="flex items-start justify-between mb-2">
                         <div className="text-3xl">{tool.icon}</div>
-                        {tool.badge && (
-                          <span className={`text-[10px] px-2 py-0.5 rounded-full bg-gradient-to-r ${c.gradient} text-white font-medium`}>
-                            {tool.badge}
-                          </span>
-                        )}
+                        <div className="flex flex-col items-end gap-1">
+                          {tool.badge && (
+                            <span className={`text-[10px] px-2 py-0.5 rounded-full bg-gradient-to-r ${c.gradient} text-white font-medium`}>
+                              {tool.badge}
+                            </span>
+                          )}
+                          {tool.requiresML && (
+                            <span
+                              title="Требуется HF token для ML-функций (LLM анализ / ESM-2). Базовые функции работают без него."
+                              className="text-[9px] px-1.5 py-0.5 rounded-full bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 font-medium border border-purple-200 dark:border-purple-800"
+                            >
+                              🤖 требует ИИ
+                            </span>
+                          )}
+                        </div>
                       </div>
                       <h3 className="text-base font-bold mb-0.5">{tool.title}</h3>
                       <p className={`text-xs ${c.text} font-medium mb-2`}>{tool.tagline}</p>

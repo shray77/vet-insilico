@@ -5,10 +5,14 @@ import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
 import { DRUGS } from "@/data/drugs";
 import { predictADMET, ADMET_LABELS_RU, LEVEL_COLOR, type AdmetLevel } from "@/lib/admet";
+import { predictADMETML, getHfToken, type ADMETMLResult } from "@/lib/hf";
 
 export default function AdmetPage() {
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState<string>(DRUGS[0].id);
+  const [mlResult, setMlResult] = useState<ADMETMLResult | null>(null);
+  const [mlLoading, setMlLoading] = useState(false);
+  const [mlError, setMlError] = useState("");
 
   const filteredDrugs = useMemo(() => {
     const q = query.toLowerCase().trim();
@@ -24,6 +28,34 @@ export default function AdmetPage() {
   );
 
   const result = useMemo(() => predictADMET(drug), [drug]);
+
+  // Reset ML when drug changes
+  useMemo(() => {
+    setMlResult(null);
+    setMlError("");
+  }, [selectedId]);
+
+  const runML = async () => {
+    if (!drug.smiles) {
+      setMlError("У этого препарата нет SMILES — ML-анализ недоступен");
+      return;
+    }
+    if (!getHfToken()) {
+      setMlError("Задайте HF token — кнопка 🤖 в шапке");
+      return;
+    }
+    setMlLoading(true);
+    setMlError("");
+    setMlResult(null);
+    try {
+      const r = await predictADMETML(drug.smiles, drug.name);
+      setMlResult(r);
+    } catch (e: any) {
+      setMlError(e.message || "ML error");
+    } finally {
+      setMlLoading(false);
+    }
+  };
 
   const levelLabel = (l: AdmetLevel) =>
     l === "low" ? "Низкий" : l === "moderate" ? "Умеренный" : "Высокий";
@@ -244,6 +276,132 @@ export default function AdmetPage() {
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Path B: ML ADMET via LLM on SMILES */}
+            <div className="rounded-xl border-2 border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-950/20 p-4">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-sm font-semibold text-purple-700 dark:text-purple-300">
+                  🧬 ML ADMET (Path B, Qwen-Coder-3B через SMILES)
+                </h3>
+                {drug.smiles ? (
+                  <code className="text-[10px] font-mono text-purple-600 dark:text-purple-400 break-all max-w-[200px]">
+                    {drug.smiles.length > 30 ? drug.smiles.slice(0, 30) + "..." : drug.smiles}
+                  </code>
+                ) : (
+                  <span className="text-[10px] text-zinc-400">нет SMILES</span>
+                )}
+              </div>
+
+              {!mlResult && !mlLoading && (
+                <div>
+                  <p className="text-xs text-purple-800 dark:text-purple-200 mb-3">
+                    Запускает LLM (Qwen-Coder-3B, 3B params) на SMILES-структуре препарата.
+                    Модель видела миллионы SMILES в pretraining и может распознавать структурные алерты
+                    (токсофоры, реактивные группы). Это приближение ADMETlab 3.0 (которая использует GNN).
+                  </p>
+                  <button
+                    onClick={runML}
+                    disabled={!drug.smiles}
+                    className="px-4 py-2 rounded-lg bg-purple-600 text-white text-sm font-medium hover:bg-purple-700 disabled:opacity-50 transition"
+                  >
+                    🧬 ML анализ через SMILES
+                  </button>
+                  {!drug.smiles && (
+                    <div className="text-xs text-amber-500 mt-2">
+                      ⚠️ Для этого препарата нет SMILES в базе (только {DRUGS.filter(d => d.smiles).length} из {DRUGS.length} препаратов имеют SMILES)
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {mlLoading && (
+                <div className="text-sm text-purple-700 dark:text-purple-300">
+                  ⏳ LLM анализирует SMILES...
+                </div>
+              )}
+
+              {mlError && (
+                <div className="text-xs text-red-500 mt-2 p-2 rounded bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
+                  ⚠️ {mlError}
+                </div>
+              )}
+
+              {mlResult && (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="text-xs">
+                      <span className="text-zinc-500">Overall risk:</span>{" "}
+                      <span className={`font-bold px-2 py-0.5 rounded-full text-white ${
+                        mlResult.overallRisk === "low" ? "bg-green-500"
+                        : mlResult.overallRisk === "moderate" ? "bg-yellow-500" : "bg-red-500"
+                      }`}>
+                        {mlResult.overallRisk === "low" ? "Низкий" : mlResult.overallRisk === "moderate" ? "Умеренный" : "Высокий"}
+                      </span>
+                    </div>
+                    <div className="text-xs">
+                      <span className="text-zinc-500">Drug-likeness (ML):</span>{" "}
+                      <b className="text-purple-600">{mlResult.drugLikenessScore}/100</b>
+                    </div>
+                  </div>
+
+                  <div className="text-xs italic text-zinc-600 dark:text-zinc-300 p-2 rounded bg-white dark:bg-zinc-900">
+                    💭 {mlResult.rationale}
+                  </div>
+
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                    {[
+                      { label: "AMES мутаген.", v: mlResult.ames.positive, conf: mlResult.ames.confidence },
+                      { label: "hERG блокер", v: mlResult.herg.blocker, conf: mlResult.herg.confidence },
+                      { label: "Гепатотокс.", v: mlResult.hepatotoxic.positive, conf: mlResult.hepatotoxic.confidence },
+                      { label: "Канцероген.", v: mlResult.carcinogenic.positive, conf: mlResult.carcinogenic.confidence },
+                      { label: "Эндокрин. диср.", v: mlResult.endocrineDisruptor.positive, conf: mlResult.endocrineDisruptor.confidence },
+                      { label: "Респир. токс.", v: mlResult.respiratoryToxicity.positive, conf: mlResult.respiratoryToxicity.confidence },
+                    ].map((item, i) => (
+                      <div key={i} className="rounded-lg bg-white dark:bg-zinc-900 p-2 border border-zinc-200 dark:border-zinc-800">
+                        <div className="text-[10px] text-zinc-500">{item.label}</div>
+                        <div className="flex items-center gap-1">
+                          <span className={`text-sm font-bold ${item.v ? "text-red-500" : "text-green-500"}`}>
+                            {item.v ? "⚠️ Да" : "✓ Нет"}
+                          </span>
+                        </div>
+                        <div className="text-[9px] text-zinc-400">conf: {(item.conf * 100).toFixed(0)}%</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2 text-xs">
+                    <div className="rounded bg-white dark:bg-zinc-900 p-2 text-center">
+                      <div className="text-zinc-400 text-[10px]">BCF</div>
+                      <div className="font-bold text-purple-600">{mlResult.bioconcentrationFactor}</div>
+                    </div>
+                    <div className="rounded bg-white dark:bg-zinc-900 p-2 text-center">
+                      <div className="text-zinc-400 text-[10px]">TPSA</div>
+                      <div className="font-bold text-purple-600">{mlResult.tpsa} Å²</div>
+                    </div>
+                    <div className="rounded bg-white dark:bg-zinc-900 p-2 text-center">
+                      <div className="text-zinc-400 text-[10px]">Rot. bonds</div>
+                      <div className="font-bold text-purple-600">{mlResult.rotatableBonds}</div>
+                    </div>
+                  </div>
+
+                  {mlResult.alerts.length > 0 && (
+                    <div>
+                      <div className="text-[10px] text-amber-600 dark:text-amber-400 font-medium mb-1">⚠️ Структурные алерты:</div>
+                      <ul className="text-xs list-disc list-inside space-y-0.5 text-zinc-700 dark:text-zinc-300">
+                        {mlResult.alerts.map((a, i) => <li key={i}>{a}</li>)}
+                      </ul>
+                    </div>
+                  )}
+
+                  <button
+                    onClick={() => setMlResult(null)}
+                    className="text-xs text-zinc-400 hover:text-zinc-600"
+                  >
+                    ↻ Перезапустить ML
+                  </button>
+                </div>
+              )}
             </div>
 
             <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 text-xs text-zinc-500 dark:text-zinc-400">

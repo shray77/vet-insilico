@@ -455,3 +455,106 @@ export async function analyzeWithLLM<T = any>(
     throw new Error("LLM вернул невалидный JSON");
   }
 }
+
+// ────────────────────────────────────────────────────────────────────
+// Path B: ADMET prediction via LLM (Qwen) on SMILES
+// ────────────────────────────────────────────────────────────────────
+
+/**
+ * Research-grade ADMET prediction via LLM (Qwen-Coder-3B).
+ *
+ * Real ADMETlab 3.0 uses GNN trained on millions of compounds.
+ * Here we use Qwen LLM with the SMILES string as input — the model has
+ * seen many SMILES in pretraining and can reason about structural alerts.
+ *
+ * Output: toxicity endpoints + physicochemical properties predicted from SMILES.
+ *
+ * Note: this is an LLM approximation, not a specialized GNN. Confidence
+ * reflects LLM uncertainty, not model accuracy. For real research use
+ * ADMETlab 3.0 (https://admetlab3.scbdd.com/) or SwissADME.
+ */
+export interface ADMETMLResult {
+  // Toxicity endpoints (true/false + confidence 0-1)
+  ames: { positive: boolean; confidence: number };
+  herg: { blocker: boolean; confidence: number };
+  hepatotoxic: { positive: boolean; confidence: number };
+  carcinogenic: { positive: boolean; confidence: number };
+  endocrineDisruptor: { positive: boolean; confidence: number };
+  respiratoryToxicity: { positive: boolean; confidence: number };
+  // Environmental
+  bioconcentrationFactor: number;
+  // Physicochemical (LLM-estimated from SMILES)
+  tpsa: number; // topological polar surface area
+  rotatableBonds: number;
+  // Overall
+  drugLikenessScore: number; // 0-100
+  overallRisk: "low" | "moderate" | "high";
+  rationale: string;
+  alerts: string[];
+}
+
+export async function predictADMETML(
+  smiles: string,
+  drugName?: string,
+  opts: { signal?: AbortSignal } = {},
+): Promise<ADMETMLResult> {
+  if (!smiles || smiles.length < 5) {
+    throw new Error("ADMET ML: нужен SMILES");
+  }
+
+  const prompt = `You are a chemoinformatics and toxicology expert. Analyze this molecule's ADMET profile from its SMILES.
+
+${drugName ? `DRUG: ${drugName}\n` : ""}SMILES: ${smiles}
+
+Predict toxicity endpoints and physicochemical properties. Use your knowledge of structural alerts, functional groups, and known toxicophores.
+
+Respond ONLY as JSON:
+{
+  "ames": {"positive": true/false, "confidence": 0.0-1.0},
+  "herg": {"blocker": true/false, "confidence": 0.0-1.0},
+  "hepatotoxic": {"positive": true/false, "confidence": 0.0-1.0},
+  "carcinogenic": {"positive": true/false, "confidence": 0.0-1.0},
+  "endocrineDisruptor": {"positive": true/false, "confidence": 0.0-1.0},
+  "respiratoryToxicity": {"positive": true/false, "confidence": 0.0-1.0},
+  "bioconcentrationFactor": <number>,
+  "tpsa": <number, topological polar surface area>,
+  "rotatableBonds": <integer>,
+  "drugLikenessScore": <0-100 integer>,
+  "overallRisk": "<low|moderate|high>",
+  "rationale": "<one short sentence about key structural alerts>",
+  "alerts": ["<alert 1>", "<alert 2>"]
+}`;
+
+  const raw = await chatComplete(
+    [
+      { role: "system", content: "You are a chemoinformatics expert. Respond ONLY with valid JSON, no markdown." },
+      { role: "user", content: prompt },
+    ],
+    { maxTokens: 400, temperature: 0.2, signal: opts.signal },
+  );
+
+  const jsonMatch = raw.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) throw new Error("LLM не вернул JSON");
+  let parsed: any;
+  try {
+    parsed = JSON.parse(jsonMatch[0]);
+  } catch {
+    throw new Error("LLM вернул невалидный JSON");
+  }
+
+  return {
+    ames: { positive: !!parsed.ames?.positive, confidence: Number(parsed.ames?.confidence ?? 0.5) },
+    herg: { blocker: !!parsed.herg?.blocker, confidence: Number(parsed.herg?.confidence ?? 0.5) },
+    hepatotoxic: { positive: !!parsed.hepatotoxic?.positive, confidence: Number(parsed.hepatotoxic?.confidence ?? 0.5) },
+    carcinogenic: { positive: !!parsed.carcinogenic?.positive, confidence: Number(parsed.carcinogenic?.confidence ?? 0.5) },
+    endocrineDisruptor: { positive: !!parsed.endocrineDisruptor?.positive, confidence: Number(parsed.endocrineDisruptor?.confidence ?? 0.5) },
+    respiratoryToxicity: { positive: !!parsed.respiratoryToxicity?.positive, confidence: Number(parsed.respiratoryToxicity?.confidence ?? 0.5) },
+    bioconcentrationFactor: Number(parsed.bioconcentrationFactor ?? 0),
+    tpsa: Number(parsed.tpsa ?? 0),
+    rotatableBonds: Number(parsed.rotatableBonds ?? 0),
+    drugLikenessScore: Number(parsed.drugLikenessScore ?? 50),
+    overallRisk: parsed.overallRisk === "low" ? "low" : parsed.overallRisk === "high" ? "high" : "moderate",
+    rationale: String(parsed.rationale || "—"),
+    alerts: Array.isArray(parsed.alerts) ? parsed.alerts.slice(0, 5).map(String) : [],
+  };
+}
