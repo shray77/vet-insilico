@@ -10,10 +10,13 @@ const TOOLS = [
   { href: "/", label: "Хаб", icon: "🏠" },
   { href: "/drug-repurposing", label: "Docking", icon: "🧬" },
   { href: "/admet", label: "ADMET", icon: "💊" },
+  { href: "/pkpd", label: "PK/PD", icon: "📊" },
   { href: "/epitopes", label: "Эпитопы", icon: "💉" },
   { href: "/primer-designer", label: "Праймеры", icon: "🔬" },
   { href: "/alignment", label: "Alignment", icon: "🔗" },
   { href: "/phylogeny", label: "Филогения", icon: "🌳" },
+  { href: "/amr", label: "AMR", icon: "🦠" },
+  { href: "/restriction-map", label: "Рестрикция", icon: "✂️" },
 ];
 
 export default function HubHeader() {

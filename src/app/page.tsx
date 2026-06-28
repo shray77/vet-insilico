@@ -54,7 +54,7 @@ const TOOLS = [
     desc: "Попарное выравнивание последовательностей (глобальное и локальное). Скоринг через BLOSUM62 (белки) или match/mismatch (ДНК). Считает identity, similarity, gaps, score.",
     stats: ["NW + SW", "BLOSUM62", "DNA + protein"],
     accent: "cyan",
-    badge: "Новое",
+    badge: null,
   },
   {
     href: "/phylogeny",
@@ -64,6 +64,36 @@ const TOOLS = [
     desc: "Строит филогенетическое дерево из набора гомологичных последовательностей. Kimura 2-parameter для ДНК, p-distance для белков. Вывод в Newick + dendrogram + heatmap distance matrix.",
     stats: ["UPGMA + NJ", "Kimura 2P", "Newick export"],
     accent: "emerald",
+    badge: null,
+  },
+  {
+    href: "/pkpd",
+    icon: "📊",
+    title: "PK/PD Simulator",
+    tagline: "Фармакокинетика + фармакодинамика",
+    desc: "Однокомпартментная модель с first-order absorption. Считаем Cmax, AUC, t½, Css. PD-индексы: AUC/MIC (фторхинолоны), Cmax/MIC (аминогликозиды), T>MIC (β-лактамы). Визуализация concentration-time + Emax.",
+    stats: ["1-compartment PK", "AUC/MIC, Cmax/MIC, T>MIC", "6 препаратов"],
+    accent: "rose",
+    badge: "Новое",
+  },
+  {
+    href: "/amr",
+    icon: "🦠",
+    title: "AMR Predictor",
+    tagline: "Резистентность к антибиотикам",
+    desc: "По последовательности гена-мишени (GyrA, RpoB, PBP, 16S rRNA) предсказываем резистентность. Rule-based поиск мутаций (CARD/ResFinder) + motif search (blaTEM, ermB, tetM, qnrA...). 7 классов антибиотиков.",
+    stats: ["CARD subset", "10+ mutations", "7 motifs"],
+    accent: "orange",
+    badge: "Новое",
+  },
+  {
+    href: "/restriction-map",
+    icon: "✂️",
+    title: "Restriction Map",
+    tagline: "Карта сайтов рестриктаз",
+    desc: "Находим сайты разрезания для 30+ рестриктаз в ДНК. EcoRI, BamHI, HindIII, SmaI, NotI, SfiI... Считаем позиции, размеры фрагментов, симулируем гель-электрофорез. IUPAC-коды поддерживаются.",
+    stats: ["30+ enzymes", "IUPAC codes", "Virtual gel"],
+    accent: "lime",
     badge: "Новое",
   },
 ];
@@ -105,6 +135,24 @@ const ACCENT_CLASSES: Record<string, { bg: string; border: string; text: string;
     text: "text-emerald-600 dark:text-emerald-400",
     gradient: "from-emerald-500 to-teal-500",
   },
+  rose: {
+    bg: "bg-rose-50 dark:bg-rose-950/20",
+    border: "border-rose-200 dark:border-rose-800",
+    text: "text-rose-600 dark:text-rose-400",
+    gradient: "from-rose-500 to-pink-500",
+  },
+  orange: {
+    bg: "bg-orange-50 dark:bg-orange-950/20",
+    border: "border-orange-200 dark:border-orange-800",
+    text: "text-orange-600 dark:text-orange-400",
+    gradient: "from-orange-500 to-red-500",
+  },
+  lime: {
+    bg: "bg-lime-50 dark:bg-lime-950/20",
+    border: "border-lime-200 dark:border-lime-800",
+    text: "text-lime-700 dark:text-lime-400",
+    gradient: "from-lime-500 to-green-500",
+  },
 };
 
 export default function HubPage() {
@@ -134,7 +182,7 @@ export default function HubPage() {
         </section>
 
         {/* Tools grid */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
           {TOOLS.map((tool) => {
             const c = ACCENT_CLASSES[tool.accent];
             return (
@@ -172,7 +220,7 @@ export default function HubPage() {
           {[
             { v: PATHOGENS.length, label: "Патогенов", icon: "🦠" },
             { v: DRUGS.length, label: "Препаратов", icon: "💊" },
-            { v: "6", label: "Инструментов", icon: "🛠" },
+            { v: "9", label: "Инструментов", icon: "🛠" },
             { v: "FOSS", label: "ML-модели", icon: "🤖" },
           ].map((s) => (
             <div key={s.label} className="rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 text-center">
