@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
 import { DRUGS } from "@/data/drugs";
@@ -263,8 +263,26 @@ const CATEGORY_ACCENT: Record<string, { bg: string; text: string; border: string
 
 export default function HubPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  // Keyboard shortcut: "/" to focus search, "Escape" to clear
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "/" && document.activeElement?.tagName !== "INPUT" && document.activeElement?.tagName !== "TEXTAREA") {
+        e.preventDefault();
+        searchRef.current?.focus();
+      }
+      if (e.key === "Escape" && searchQuery) {
+        setSearchQuery("");
+        searchRef.current?.blur();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [searchQuery]);
+
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen fade-in">
       <HubHeader />
 
       <main className="max-w-6xl mx-auto px-4 py-8">
@@ -305,14 +323,18 @@ export default function HubPage() {
         </section>
 
         {/* Search */}
-        <div className="mb-6">
+        <div className="mb-6 relative">
           <input
+            ref={searchRef}
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="🔍 Поиск инструмента... (docking, CRISPR, primer, ELISA, ...)"
-            className="w-full px-4 py-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-sm focus:outline-none focus:border-teal-400"
+            className="w-full px-4 py-2.5 pr-16 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-sm focus:outline-none focus:border-teal-400 transition-colors"
           />
+          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-400 border border-zinc-200 dark:border-zinc-700 hidden sm:block">
+            /
+          </kbd>
         </div>
 
         {/* Categories */}
@@ -388,6 +410,24 @@ export default function HubPage() {
             </section>
           );
         })}
+
+        {/* No results */}
+        {searchQuery.trim() && CATEGORIES.every(cat =>
+          cat.tools.every(t =>
+            !t.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+            !t.tagline.toLowerCase().includes(searchQuery.toLowerCase()) &&
+            !t.desc.toLowerCase().includes(searchQuery.toLowerCase()) &&
+            !t.stats.some(s => s.toLowerCase().includes(searchQuery.toLowerCase()))
+          )
+        ) && (
+          <div className="text-center py-12 text-zinc-400">
+            <div className="text-4xl mb-3">🔍</div>
+            <div className="text-sm">Ничего не найдено по запросу «{searchQuery}»</div>
+            <button onClick={() => setSearchQuery("")} className="mt-3 text-xs text-teal-500 hover:underline">
+              Очистить поиск
+            </button>
+          </div>
+        )}
 
         {/* About */}
         <section className="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6 bg-white dark:bg-zinc-900">

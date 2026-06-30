@@ -5,11 +5,15 @@
     font-family: system-ui, -apple-system, sans-serif;
     @apply bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100;
   }
-  html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
+/* Thin scrollbar */
 .thin-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
 .thin-scroll::-webkit-scrollbar-thumb { background: #888; border-radius: 2px; }
+.thin-scroll::-webkit-scrollbar-track { background: transparent; }
 
 /* 3Dmol viewer fills container */
 .viewer-3d > div { width: 100% !important; height: 100% !important; }
@@ -19,6 +23,61 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 .hub-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow: 0 12px 32px -8px rgba(13, 148, 136, 0.3);
+}
+
+/* Fade-in animation for page content */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Spinner for loading states */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+/* Pulse for ML badges */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4); }
+  50% { box-shadow: 0 0 0 4px rgba(168, 85, 247, 0); }
+}
+.ml-badge-pulse {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Smooth color transitions for dark/light mode */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 150ms;
+  transition-timing-function: ease;
+}
+
+/* Exclude 3Dmol viewer from color transition (causes flicker) */
+.viewer-3d, .viewer-3d * {
+  transition: none !important;
+}
+
+/* Focus ring for accessibility */
+*:focus-visible {
+  outline: 2px solid #0d9488;
+  outline-offset: 2px;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(13, 148, 136, 0.3);
 }
