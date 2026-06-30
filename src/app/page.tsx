@@ -212,8 +212,8 @@ export default function HubPage() {
             VetInSilico Hub
           </h1>
           <p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
-            9 инструментов для in silico исследований ветеринарии — от drug repurposing до филогении.
-            Гибрид: эвристики в браузере + FOSS ML-модели через HuggingFace.
+            12 инструментов для in silico исследований ветеринарии — от drug repurposing до CRISPR и филогении.
+            Гибрид: эвристики в браузере + FOSS ML-модели через HuggingFace + RDKit.js WASM.
           </p>
           <div className="flex flex-wrap justify-center gap-2 mt-6 text-xs">
             <span className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-900">🇷🇺 Адаптация под РФ</span>
