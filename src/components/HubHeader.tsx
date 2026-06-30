@@ -12,14 +12,19 @@ const TOOLS = [
   { href: "/admet", label: "ADMET", icon: "💊" },
   { href: "/pkpd", label: "PK/PD", icon: "📊" },
   { href: "/dose-calculator", label: "Дозы", icon: "🧪" },
+  { href: "/pdb-viewer", label: "3D Viewer", icon: "🔬" },
   { href: "/epitopes", label: "Эпитопы", icon: "💉" },
-  { href: "/primer-designer", label: "Праймеры", icon: "🔬" },
-  { href: "/crispr", label: "CRISPR", icon: "🧬" },
+  { href: "/primer-designer", label: "Праймеры", icon: "🧬" },
+  { href: "/crispr", label: "CRISPR", icon: "✂️" },
   { href: "/codon-optimizer", label: "Кодоны", icon: "🔤" },
+  { href: "/ai-vet", label: "AI Вет", icon: "🩺" },
   { href: "/alignment", label: "Align", icon: "🔗" },
   { href: "/phylogeny", label: "Филогения", icon: "🌳" },
+  { href: "/molecular-clock", label: "Часы", icon: "⏱️" },
   { href: "/amr", label: "AMR", icon: "🦠" },
   { href: "/restriction-map", label: "Рестрикция", icon: "✂️" },
+  { href: "/plasmid-map", label: "Плазмида", icon: "🧫" },
+  { href: "/elisa", label: "ELISA", icon: "📊" },
 ];
 
 export default function HubHeader() {

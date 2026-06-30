@@ -73,6 +73,16 @@ const CATEGORIES: Category[] = [
         desc: "36 схем дозирования для 6 видов животных (свинья, КРС, птица, собака, кошка, лошадь). Расчёт по весу, коррекция на возраст, концентрацию, стоимость курса. Plumb's + РФ реестр.",
         stats: ["36 схем", "6 видов", "с коррекцией"],
         accent: "cyan",
+        badge: null,
+      },
+      {
+        href: "/pdb-viewer",
+        icon: "🔬",
+        title: "Protein Structure Viewer",
+        tagline: "3D визуализация PDB структур",
+        desc: "Просмотр 3D структур белков из RCSB PDB через 3Dmol.js. 5 стилей: cartoon, stick, sphere, surface, lines. Лиганды и ионы металлов выделяются. 8 готовых структур.",
+        stats: ["3Dmol.js", "5 стилей", "PDB search"],
+        accent: "violet",
         badge: "Новое",
       },
     ],
@@ -133,7 +143,18 @@ const CATEGORIES: Category[] = [
         desc: "Оптимизация ДНК для экспрессии в свинье/КРС/курице/E. coli. Таблицы Kazusa, CAI (Codon Adaptation Index), избегание сайтов рестриктаз и шпилек. Для рекомбинантных вакцин.",
         stats: ["4 вида", "Kazusa tables", "CAI + GC"],
         accent: "fuchsia",
+        badge: null,
+      },
+      {
+        href: "/ai-vet",
+        icon: "🩺",
+        title: "AI Veterinarian",
+        tagline: "Дифференциальный диагноз через LLM",
+        desc: "Вводишь вид + возраст + симптомы → дифференциальный диагноз с вероятностями, рекомендуемые тесты, уровень срочности. LLM Qwen-Coder-3B через HuggingFace.",
+        stats: ["LLM диагноз", "8 видов", "срочность"],
+        accent: "rose",
         badge: "Новое",
+        requiresML: true,
       },
     ],
   },
@@ -173,6 +194,44 @@ const CATEGORIES: Category[] = [
         accent: "lime",
         badge: null,
       },
+      {
+        href: "/plasmid-map",
+        icon: "🧫",
+        title: "Plasmid Map Designer",
+        tagline: "ORF + restriction sites на плазмиде",
+        desc: "Анализ плазмид: поиск ORF (ATG/GTG/TTG → stop на обеих цепях), сайты рестриктаз, GC content. Circular SVG карта с ORF дугами и cut site метками.",
+        stats: ["ORF detection", "Circular map", "GC profile"],
+        accent: "stone",
+        badge: "Новое",
+      },
+      {
+        href: "/molecular-clock",
+        icon: "⏱️",
+        title: "Molecular Clock Calculator",
+        tagline: "Время расхождения по генетическому расстоянию",
+        desc: "Оценка времени расхождения по формуле T = d / (2r). 12 опубликованных clock rates (ASFV, Influenza, Rabies, FMDV, BVDV, Brucella, mtDNA...). 95% CI.",
+        stats: ["12 clock rates", "K2P distance", "95% CI"],
+        accent: "slate",
+        badge: "Новое",
+      },
+    ],
+  },
+  {
+    id: "diagnostics-tools",
+    title: "Диагностика и инструменты",
+    icon: "📊",
+    subtitle: "ELISA, AI ветврач — лабораторные и клинические инструменты",
+    tools: [
+      {
+        href: "/elisa",
+        icon: "📊",
+        title: "ELISA Cut-off Calculator",
+        tagline: "Cut-off + ROC + AUC для ELISA",
+        desc: "Статистический анализ OD значений. Cut-off = mean + 2SD/3SD. ROC curve, AUC, sensitivity/specificity если есть positive controls. CV% для оценки качества.",
+        stats: ["Mean + 2SD", "ROC + AUC", "Sens/Spec"],
+        accent: "teal",
+        badge: "Новое",
+      },
     ],
   },
 ];
@@ -189,12 +248,16 @@ const ACCENT_CLASSES: Record<string, { bg: string; border: string; text: string;
   lime: { bg: "bg-lime-50 dark:bg-lime-950/20", border: "border-lime-200 dark:border-lime-800", text: "text-lime-700 dark:text-lime-400", gradient: "from-lime-500 to-green-500" },
   indigo: { bg: "bg-indigo-50 dark:bg-indigo-950/20", border: "border-indigo-200 dark:border-indigo-800", text: "text-indigo-600 dark:text-indigo-400", gradient: "from-indigo-500 to-purple-500" },
   fuchsia: { bg: "bg-fuchsia-50 dark:bg-fuchsia-950/20", border: "border-fuchsia-200 dark:border-fuchsia-800", text: "text-fuchsia-600 dark:text-fuchsia-400", gradient: "from-fuchsia-500 to-pink-500" },
+  violet: { bg: "bg-violet-50 dark:bg-violet-950/20", border: "border-violet-200 dark:border-violet-800", text: "text-violet-600 dark:text-violet-400", gradient: "from-violet-500 to-purple-500" },
+  stone: { bg: "bg-stone-50 dark:bg-stone-950/20", border: "border-stone-200 dark:border-stone-800", text: "text-stone-600 dark:text-stone-400", gradient: "from-stone-500 to-amber-500" },
+  slate: { bg: "bg-slate-50 dark:bg-slate-950/20", border: "border-slate-200 dark:border-slate-800", text: "text-slate-600 dark:text-slate-400", gradient: "from-slate-500 to-zinc-500" },
 };
 
 const CATEGORY_ACCENT: Record<string, { bg: string; text: string; border: string }> = {
   pharmacology: { bg: "from-teal-500/10 to-blue-500/10", text: "text-teal-600 dark:text-teal-400", border: "border-teal-200 dark:border-teal-800" },
   "vaccines-diagnostics": { bg: "from-purple-500/10 to-rose-500/10", text: "text-purple-600 dark:text-purple-400", border: "border-purple-200 dark:border-purple-800" },
   genomics: { bg: "from-emerald-500/10 to-cyan-500/10", text: "text-emerald-600 dark:text-emerald-400", border: "border-emerald-200 dark:border-emerald-800" },
+  "diagnostics-tools": { bg: "from-teal-500/10 to-orange-500/10", text: "text-teal-600 dark:text-teal-400", border: "border-teal-200 dark:border-teal-800" },
 };
 
 export default function HubPage() {
@@ -212,8 +275,8 @@ export default function HubPage() {
             VetInSilico Hub
           </h1>
           <p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
-            12 инструментов для in silico исследований ветеринарии — от drug repurposing до CRISPR и филогении.
-            Гибрид: эвристики в браузере + FOSS ML-модели через HuggingFace + RDKit.js WASM.
+            17 инструментов для in silico исследований ветеринарии — от drug repurposing до CRISPR, филогении и AI-диагностики.
+            Гибрид: эвристики в браузере + FOSS ML через HuggingFace + RDKit.js WASM.
           </p>
           <div className="flex flex-wrap justify-center gap-2 mt-6 text-xs">
             <span className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-900">🇷🇺 Адаптация под РФ</span>
@@ -229,7 +292,7 @@ export default function HubPage() {
             { v: PATHOGENS.length, label: "Патогенов", icon: "🦠" },
             { v: DRUGS.length, label: "Препаратов", icon: "💊" },
             { v: DRUGS.filter(d => d.smiles).length, label: "SMILES", icon: "🧪" },
-            { v: "12", label: "Инструментов", icon: "🛠" },
+            { v: "17", label: "Инструментов", icon: "🛠" },
           ].map((s) => (
             <div key={s.label} className="rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 text-center">
               <div className="text-xl mb-0.5">{s.icon}</div>
