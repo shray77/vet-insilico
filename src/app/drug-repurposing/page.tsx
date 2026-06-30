@@ -9,6 +9,7 @@ import { DRUGS } from "@/data/drugs";
 import { virtualScreening, getTopResults, type DockingResult } from "@/lib/docking";
 import { analyzeWithLLM, getHfToken } from "@/lib/hf";
 import { dockWithRDKit, type MolecularDescriptors } from "@/lib/rdkit-docking";
+import { apiDocking, type DockingAPIResult } from "@/lib/api";
 
 type Tab = "screening" | "learn";
 
@@ -572,8 +573,11 @@ Respond ONLY as JSON:
 
 function RDKitDescriptors({ drug, targetName }: { drug: DockingResult["drug"]; targetName: string }) {
   const [result, setResult] = useState<Awaited<ReturnType<typeof dockWithRDKit>> | null>(null);
+  const [backendResult, setBackendResult] = useState<DockingAPIResult | null>(null);
   const [loading, setLoading] = useState(false);
+  const [backendLoading, setBackendLoading] = useState(false);
   const [error, setError] = useState("");
+  const [backendError, setBackendError] = useState("");
 
   const run = async () => {
     setLoading(true);
@@ -589,68 +593,136 @@ function RDKitDescriptors({ drug, targetName }: { drug: DockingResult["drug"]; t
     }
   };
 
-  if (loading) {
-    return (
-      <div className="text-xs text-teal-600 dark:text-teal-400">
-        ⏳ RDKit.js WASM загружается и анализирует SMILES (~4MB, первый запуск дольше)...
-      </div>
-    );
-  }
+  const runBackend = async () => {
+    setBackendLoading(true);
+    setBackendError("");
+    setBackendResult(null);
+    try {
+      const r = await apiDocking(drug.smiles!, drug.name, targetName);
+      setBackendResult(r);
+    } catch (e: any) {
+      setBackendError(e.message || "Backend error");
+    } finally {
+      setBackendLoading(false);
+    }
+  };
 
-  if (error && !result) {
-    return (
-      <div>
-        <button onClick={run} className="px-3 py-2 rounded-lg bg-teal-100 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 text-xs font-medium hover:bg-teal-200 transition">
-          🧬 Real descriptors (RDKit.js WASM)
-        </button>
-        {error && <div className="mt-2 text-xs text-red-500">⚠️ {error}</div>}
-      </div>
-    );
-  }
-
-  if (!result) {
-    return (
-      <button onClick={run} className="px-3 py-2 rounded-lg bg-teal-100 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 text-xs font-medium hover:bg-teal-200 transition">
-        🧬 Real descriptors (RDKit.js WASM)
-      </button>
-    );
-  }
-
-  const d = result.drug.descriptors;
   return (
-    <div className="rounded-lg bg-teal-50 dark:bg-teal-950/20 border border-teal-200 dark:border-teal-800 p-3">
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-xs font-bold text-teal-700 dark:text-teal-300">🧬 Real molecular descriptors (RDKit.js)</span>
-        <span className="text-[10px] text-zinc-400">Path B</span>
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs mb-2">
-        <div><span className="text-zinc-400">MW:</span> <b>{d.mw}</b> Da</div>
-        <div><span className="text-zinc-400">LogP:</span> <b>{d.logp}</b></div>
-        <div><span className="text-zinc-400">TPSA:</span> <b>{d.tpsa}</b> Ų</div>
-        <div><span className="text-zinc-400">HBD:</span> <b>{d.hbd}</b></div>
-        <div><span className="text-zinc-400">HBA:</span> <b>{d.hba}</b></div>
-        <div><span className="text-zinc-400">RotB:</span> <b>{d.rotatableBonds}</b></div>
-        <div><span className="text-zinc-400">AromRings:</span> <b>{d.aromaticRings}</b></div>
-        <div><span className="text-zinc-400">fCsp3:</span> <b>{d.fractionCSP3}</b></div>
-      </div>
-      <div className="grid grid-cols-2 gap-2 text-xs mb-2">
-        <div><span className="text-zinc-400">Lipinski:</span> <b className={result.lipinskiPass ? "text-green-500" : "text-red-500"}>{result.lipinskiPass ? "✅ Pass" : `⚠️ ${result.lipinskiViolations} violations`}</b></div>
-        <div><span className="text-zinc-400">Drug-likeness:</span> <b className="text-teal-600">{result.drugLikeness}/100</b></div>
-      </div>
-      {d.canonicalSMILES && (
-        <div className="text-[10px] text-zinc-400 mt-1 break-all">
-          Canonical: <code>{d.canonicalSMILES}</code>
+    <div className="space-y-3">
+      {/* Backend (real Python RDKit) */}
+      {drug.smiles && (
+        <div className="rounded-lg bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 p-3">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300">🚀 Real backend (RDKit, HF Space)</span>
+            <span className="text-[10px] text-zinc-400">Python</span>
+          </div>
+          {!backendResult && !backendLoading && (
+            <button onClick={runBackend} className="px-3 py-2 rounded-lg bg-emerald-600 text-white text-xs font-medium hover:bg-emerald-700 transition">
+              🚀 Запустить real RDKit backend
+            </button>
+          )}
+          {backendLoading && (
+            <div className="text-xs text-emerald-600 dark:text-emerald-400">
+              <span className="spinner inline-block mr-2"></span>
+              Запрос к HF Space (может занять 10-30с при cold start)...
+            </div>
+          )}
+          {backendError && (
+            <div className="text-xs text-red-500 mt-2">⚠️ {backendError}</div>
+          )}
+          {backendResult && (
+            <div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs mb-2">
+                <div><span className="text-zinc-400">MW:</span> <b>{backendResult.descriptors.mw}</b> Da</div>
+                <div><span className="text-zinc-400">LogP:</span> <b>{backendResult.descriptors.logp}</b></div>
+                <div><span className="text-zinc-400">TPSA:</span> <b>{backendResult.descriptors.tpsa}</b> Ų</div>
+                <div><span className="text-zinc-400">HBD:</span> <b>{backendResult.descriptors.hbd}</b></div>
+                <div><span className="text-zinc-400">HBA:</span> <b>{backendResult.descriptors.hba}</b></div>
+                <div><span className="text-zinc-400">RotB:</span> <b>{backendResult.descriptors.rotatable_bonds}</b></div>
+                <div><span className="text-zinc-400">fCsp3:</span> <b>{backendResult.descriptors.fraction_csp3}</b></div>
+                <div><span className="text-zinc-400">Charge:</span> <b>{backendResult.descriptors.formal_charge}</b></div>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs mb-2">
+                <div><span className="text-zinc-400">Lipinski:</span> <b className={backendResult.lipinski.pass ? "text-green-500" : "text-red-500"}>{backendResult.lipinski.pass ? "✅ Pass" : `⚠️ ${backendResult.lipinski.violations} violations`}</b></div>
+                <div><span className="text-zinc-400">Veber:</span> <b className={backendResult.veber_pass ? "text-green-500" : "text-red-500"}>{backendResult.veber_pass ? "✅ Pass" : "⚠️ Fail"}</b></div>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs mb-2">
+                <div><span className="text-zinc-400">Drug-likeness:</span> <b className="text-emerald-600">{backendResult.drug_likeness}/100</b></div>
+                <div><span className="text-zinc-400">ΔG:</span> <b className="text-emerald-600">{backendResult.binding_affinity_kcal_mol} kcal/mol</b></div>
+              </div>
+              {backendResult.drug.inchi_key && (
+                <div className="text-[10px] text-zinc-400 mt-1">InChIKey: <code>{backendResult.drug.inchi_key}</code></div>
+              )}
+              {backendResult.drug.canonical_smiles && (
+                <div className="text-[10px] text-zinc-400 break-all">Canonical: <code>{backendResult.drug.canonical_smiles}</code></div>
+              )}
+              {backendResult.alerts.length > 0 && (
+                <div className="mt-2">
+                  <div className="text-[10px] text-amber-600 dark:text-amber-400 font-medium">⚠️ Alerts:</div>
+                  <ul className="text-[10px] list-disc list-inside text-zinc-600 dark:text-zinc-400">
+                    {backendResult.alerts.map((a, i) => <li key={i}>{a}</li>)}
+                  </ul>
+                </div>
+              )}
+              <button onClick={() => setBackendResult(null)} className="text-[10px] text-zinc-400 hover:text-zinc-600 mt-1">↻ Скрыть</button>
+            </div>
+          )}
         </div>
       )}
-      {result.alerts.length > 0 && (
-        <div className="mt-2">
-          <div className="text-[10px] text-amber-600 dark:text-amber-400 font-medium">⚠️ Alerts:</div>
-          <ul className="text-[10px] list-disc list-inside text-zinc-600 dark:text-zinc-400">
-            {result.alerts.map((a, i) => <li key={i}>{a}</li>)}
-          </ul>
-        </div>
-      )}
-      <button onClick={() => setResult(null)} className="text-[10px] text-zinc-400 hover:text-zinc-600 mt-1">↻ Скрыть</button>
+
+      {/* Browser RDKit.js (WASM fallback) */}
+      <div>
+        {loading ? (
+          <div className="text-xs text-teal-600 dark:text-teal-400">
+            <span className="spinner inline-block mr-2"></span>
+            RDKit.js WASM загружается (~4MB, первый запуск дольше)...
+          </div>
+        ) : error && !result ? (
+          <div>
+            <button onClick={run} className="px-3 py-2 rounded-lg bg-teal-100 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 text-xs font-medium hover:bg-teal-200 transition">
+              🧬 Browser RDKit.js (WASM fallback)
+            </button>
+            <div className="mt-2 text-xs text-red-500">⚠️ {error}</div>
+          </div>
+        ) : !result ? (
+          <button onClick={run} className="px-3 py-2 rounded-lg bg-teal-100 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 text-xs font-medium hover:bg-teal-200 transition">
+            🧬 Browser RDKit.js (WASM fallback)
+          </button>
+        ) : (
+          <div className="rounded-lg bg-teal-50 dark:bg-teal-950/20 border border-teal-200 dark:border-teal-800 p-3">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-bold text-teal-700 dark:text-teal-300">🧬 Browser descriptors (RDKit.js WASM)</span>
+              <span className="text-[10px] text-zinc-400">in-browser</span>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs mb-2">
+              <div><span className="text-zinc-400">MW:</span> <b>{result.drug.descriptors.mw}</b> Da</div>
+              <div><span className="text-zinc-400">LogP:</span> <b>{result.drug.descriptors.logp}</b></div>
+              <div><span className="text-zinc-400">TPSA:</span> <b>{result.drug.descriptors.tpsa}</b> Ų</div>
+              <div><span className="text-zinc-400">HBD:</span> <b>{result.drug.descriptors.hbd}</b></div>
+              <div><span className="text-zinc-400">HBA:</span> <b>{result.drug.descriptors.hba}</b></div>
+              <div><span className="text-zinc-400">RotB:</span> <b>{result.drug.descriptors.rotatableBonds}</b></div>
+              <div><span className="text-zinc-400">AromRings:</span> <b>{result.drug.descriptors.aromaticRings}</b></div>
+              <div><span className="text-zinc-400">fCsp3:</span> <b>{result.drug.descriptors.fractionCSP3}</b></div>
+            </div>
+            <div className="grid grid-cols-2 gap-2 text-xs mb-2">
+              <div><span className="text-zinc-400">Lipinski:</span> <b className={result.lipinskiPass ? "text-green-500" : "text-red-500"}>{result.lipinskiPass ? "✅ Pass" : `⚠️ ${result.lipinskiViolations} violations`}</b></div>
+              <div><span className="text-zinc-400">Drug-likeness:</span> <b className="text-teal-600">{result.drugLikeness}/100</b></div>
+            </div>
+            {result.drug.descriptors.canonicalSMILES && (
+              <div className="text-[10px] text-zinc-400 mt-1 break-all">Canonical: <code>{result.drug.descriptors.canonicalSMILES}</code></div>
+            )}
+            {result.alerts.length > 0 && (
+              <div className="mt-2">
+                <div className="text-[10px] text-amber-600 dark:text-amber-400 font-medium">⚠️ Alerts:</div>
+                <ul className="text-[10px] list-disc list-inside text-zinc-600 dark:text-zinc-400">
+                  {result.alerts.map((a, i) => <li key={i}>{a}</li>)}
+                </ul>
+              </div>
+            )}
+            <button onClick={() => setResult(null)} className="text-[10px] text-zinc-400 hover:text-zinc-600 mt-1">↻ Скрыть</button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
