@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
 import { DRUGS } from "@/data/drugs";
@@ -261,6 +262,7 @@ const CATEGORY_ACCENT: Record<string, { bg: string; text: string; border: string
 };
 
 export default function HubPage() {
+  const [searchQuery, setSearchQuery] = useState("");
   return (
     <div className="min-h-screen">
       <HubHeader />
@@ -302,8 +304,30 @@ export default function HubPage() {
           ))}
         </section>
 
+        {/* Search */}
+        <div className="mb-6">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="🔍 Поиск инструмента... (docking, CRISPR, primer, ELISA, ...)"
+            className="w-full px-4 py-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-sm focus:outline-none focus:border-teal-400"
+          />
+        </div>
+
         {/* Categories */}
         {CATEGORIES.map((cat) => {
+          // Filter tools by search query
+          const filteredTools = searchQuery.trim()
+            ? cat.tools.filter(t =>
+                t.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                t.tagline.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                t.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                t.stats.some(s => s.toLowerCase().includes(searchQuery.toLowerCase()))
+              )
+            : cat.tools;
+          if (filteredTools.length === 0) return null;
+          const cat2 = cat;
           const ca = CATEGORY_ACCENT[cat.id];
           return (
             <section key={cat.id} className="mb-10">
@@ -315,12 +339,12 @@ export default function HubPage() {
                     <h2 className={`text-xl font-bold ${ca.text}`}>{cat.title}</h2>
                     <p className="text-xs text-zinc-500 dark:text-zinc-400">{cat.subtitle}</p>
                   </div>
-                  <div className="ml-auto text-xs text-zinc-400">{cat.tools.length} тул{cat.tools.length === 1 ? "" : "ов"}</div>
+                  <div className="ml-auto text-xs text-zinc-400">{filteredTools.length} тул{filteredTools.length === 1 ? "" : "ов"}</div>
                 </div>
               </div>
               {/* Tool cards */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {cat.tools.map((tool) => {
+                {filteredTools.map((tool) => {
                   const c = ACCENT_CLASSES[tool.accent];
                   return (
                     <Link
