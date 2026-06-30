@@ -60,12 +60,13 @@ export default function Viewer3D({
 }: Viewer3DProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<any>(null);
-  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+  const [status, setStatus] = useState<"idle" | "loading" | "ready" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [currentStyle, setCurrentStyle] = useState<ViewerStyle>(style);
 
-  // (Re)load when PDB ID or style changes
+  // (Re)load when PDB ID or style changes — but only if user has activated it
   useEffect(() => {
+    if (status === "idle") return; // Don't auto-load
     let cancelled = false;
     setStatus("loading");
     setErrorMsg("");
@@ -179,7 +180,7 @@ export default function Viewer3D({
     <div className="w-full">
       <div className="flex flex-wrap items-center gap-2 mb-2">
         <span className="text-xs text-zinc-400">Стиль:</span>
-        {styleButtons.map((b) => (
+        {status !== "idle" && styleButtons.map((b) => (
           <button
             key={b.val}
             onClick={() => changeStyle(b.val)}
@@ -207,10 +208,25 @@ export default function Viewer3D({
         className="w-full rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden bg-zinc-900 relative"
         style={{ height: `${height}px` }}
       >
+        {status === "idle" && (
+          <div className="absolute inset-0 flex items-center justify-center text-zinc-400 text-sm">
+            <div className="text-center">
+              <button
+                onClick={() => setStatus("loading")}
+                className="px-4 py-2 rounded-lg bg-teal-600 text-white text-sm font-medium hover:bg-teal-700 transition"
+              >
+                🧬 Загрузить 3D структуру {pdbId.toUpperCase()}
+              </button>
+              <div className="text-xs mt-2 text-zinc-500">
+                Загрузит ~200KB PDB + 3Dmol.js (WebGL)
+              </div>
+            </div>
+          </div>
+        )}
         {status === "loading" && (
           <div className="absolute inset-0 flex items-center justify-center text-zinc-400 text-sm">
             <div className="text-center">
-              <div className="text-3xl mb-2 animate-spin">⏳</div>
+              <span className="spinner inline-block mb-2"></span>
               <div>Загрузка {pdbId.toUpperCase()} с RCSB PDB...</div>
               <div className="text-xs mt-1 text-zinc-500">3Dmol.js + WebGL</div>
             </div>
