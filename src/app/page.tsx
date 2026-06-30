@@ -65,6 +65,16 @@ const CATEGORIES: Category[] = [
         accent: "rose",
         badge: null,
       },
+      {
+        href: "/dose-calculator",
+        icon: "🧪",
+        title: "Antibiotic Dose Calculator",
+        tagline: "Дозировка по весу/виду/возрасту",
+        desc: "36 схем дозирования для 6 видов животных (свинья, КРС, птица, собака, кошка, лошадь). Расчёт по весу, коррекция на возраст, концентрацию, стоимость курса. Plumb's + РФ реестр.",
+        stats: ["36 схем", "6 видов", "с коррекцией"],
+        accent: "cyan",
+        badge: "Новое",
+      },
     ],
   },
   {
@@ -104,6 +114,26 @@ const CATEGORIES: Category[] = [
         stats: ["CARD subset", "10+ mutations", "7 motifs"],
         accent: "orange",
         badge: null,
+      },
+      {
+        href: "/crispr",
+        icon: "🧬",
+        title: "CRISPR gRNA Designer",
+        tagline: "Дизайн guide RNA для SpCas9",
+        desc: "Поиск NGG PAM на обеих цепях, on-target score (Doench 2016 упрощённо), off-target проверка против геномов хозяев, GC content, hairpin ΔG. Для редактирования CD163, ANP32A, MSTN.",
+        stats: ["SpCas9 NGG", "Doench 2016", "off-target check"],
+        accent: "indigo",
+        badge: "Новое",
+      },
+      {
+        href: "/codon-optimizer",
+        icon: "🔤",
+        title: "Codon Optimization",
+        tagline: "Оптимизация кодонов под вид",
+        desc: "Оптимизация ДНК для экспрессии в свинье/КРС/курице/E. coli. Таблицы Kazusa, CAI (Codon Adaptation Index), избегание сайтов рестриктаз и шпилек. Для рекомбинантных вакцин.",
+        stats: ["4 вида", "Kazusa tables", "CAI + GC"],
+        accent: "fuchsia",
+        badge: "Новое",
       },
     ],
   },
@@ -157,6 +187,8 @@ const ACCENT_CLASSES: Record<string, { bg: string; border: string; text: string;
   rose: { bg: "bg-rose-50 dark:bg-rose-950/20", border: "border-rose-200 dark:border-rose-800", text: "text-rose-600 dark:text-rose-400", gradient: "from-rose-500 to-pink-500" },
   orange: { bg: "bg-orange-50 dark:bg-orange-950/20", border: "border-orange-200 dark:border-orange-800", text: "text-orange-600 dark:text-orange-400", gradient: "from-orange-500 to-red-500" },
   lime: { bg: "bg-lime-50 dark:bg-lime-950/20", border: "border-lime-200 dark:border-lime-800", text: "text-lime-700 dark:text-lime-400", gradient: "from-lime-500 to-green-500" },
+  indigo: { bg: "bg-indigo-50 dark:bg-indigo-950/20", border: "border-indigo-200 dark:border-indigo-800", text: "text-indigo-600 dark:text-indigo-400", gradient: "from-indigo-500 to-purple-500" },
+  fuchsia: { bg: "bg-fuchsia-50 dark:bg-fuchsia-950/20", border: "border-fuchsia-200 dark:border-fuchsia-800", text: "text-fuchsia-600 dark:text-fuchsia-400", gradient: "from-fuchsia-500 to-pink-500" },
 };
 
 const CATEGORY_ACCENT: Record<string, { bg: string; text: string; border: string }> = {
@@ -197,7 +229,7 @@ export default function HubPage() {
             { v: PATHOGENS.length, label: "Патогенов", icon: "🦠" },
             { v: DRUGS.length, label: "Препаратов", icon: "💊" },
             { v: DRUGS.filter(d => d.smiles).length, label: "SMILES", icon: "🧪" },
-            { v: "9", label: "Инструментов", icon: "🛠" },
+            { v: "12", label: "Инструментов", icon: "🛠" },
           ].map((s) => (
             <div key={s.label} className="rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 text-center">
               <div className="text-xl mb-0.5">{s.icon}</div>

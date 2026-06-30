@@ -8,6 +8,7 @@ import { PATHOGENS } from "@/data/pathogens";
 import { DRUGS } from "@/data/drugs";
 import { virtualScreening, getTopResults, type DockingResult } from "@/lib/docking";
 import { analyzeWithLLM, getHfToken } from "@/lib/hf";
+import { dockWithRDKit, type MolecularDescriptors } from "@/lib/rdkit-docking";
 
 type Tab = "screening" | "learn";
 
@@ -432,6 +433,13 @@ export default function DrugRepurposingPage() {
               <DrugLLMAnalysis result={selectedResult} />
             </div>
 
+            {/* Path B: Real molecular descriptors via RDKit.js */}
+            {selectedResult.drug.smiles && (
+              <div className="border-t border-zinc-200 dark:border-zinc-800 pt-3 mt-3">
+                <RDKitDescriptors drug={selectedResult.drug} targetName={selectedResult.target.name_ru} />
+              </div>
+            )}
+
             <div className="border-t border-zinc-200 dark:border-zinc-800 pt-3 mt-3 text-xs text-zinc-400">
               ⚠️ Упрощённая модель. Требуется in vitro / in vivo валидация.
             </div>
@@ -558,6 +566,91 @@ Respond ONLY as JSON:
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function RDKitDescriptors({ drug, targetName }: { drug: DockingResult["drug"]; targetName: string }) {
+  const [result, setResult] = useState<Awaited<ReturnType<typeof dockWithRDKit>> | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const run = async () => {
+    setLoading(true);
+    setError("");
+    setResult(null);
+    try {
+      const r = await dockWithRDKit(drug.smiles!, drug.name, targetName);
+      setResult(r);
+    } catch (e: any) {
+      setError(e.message || "RDKit error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="text-xs text-teal-600 dark:text-teal-400">
+        ⏳ RDKit.js WASM загружается и анализирует SMILES (~4MB, первый запуск дольше)...
+      </div>
+    );
+  }
+
+  if (error && !result) {
+    return (
+      <div>
+        <button onClick={run} className="px-3 py-2 rounded-lg bg-teal-100 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 text-xs font-medium hover:bg-teal-200 transition">
+          🧬 Real descriptors (RDKit.js WASM)
+        </button>
+        {error && <div className="mt-2 text-xs text-red-500">⚠️ {error}</div>}
+      </div>
+    );
+  }
+
+  if (!result) {
+    return (
+      <button onClick={run} className="px-3 py-2 rounded-lg bg-teal-100 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 text-xs font-medium hover:bg-teal-200 transition">
+        🧬 Real descriptors (RDKit.js WASM)
+      </button>
+    );
+  }
+
+  const d = result.drug.descriptors;
+  return (
+    <div className="rounded-lg bg-teal-50 dark:bg-teal-950/20 border border-teal-200 dark:border-teal-800 p-3">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs font-bold text-teal-700 dark:text-teal-300">🧬 Real molecular descriptors (RDKit.js)</span>
+        <span className="text-[10px] text-zinc-400">Path B</span>
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs mb-2">
+        <div><span className="text-zinc-400">MW:</span> <b>{d.mw}</b> Da</div>
+        <div><span className="text-zinc-400">LogP:</span> <b>{d.logp}</b></div>
+        <div><span className="text-zinc-400">TPSA:</span> <b>{d.tpsa}</b> Ų</div>
+        <div><span className="text-zinc-400">HBD:</span> <b>{d.hbd}</b></div>
+        <div><span className="text-zinc-400">HBA:</span> <b>{d.hba}</b></div>
+        <div><span className="text-zinc-400">RotB:</span> <b>{d.rotatableBonds}</b></div>
+        <div><span className="text-zinc-400">AromRings:</span> <b>{d.aromaticRings}</b></div>
+        <div><span className="text-zinc-400">fCsp3:</span> <b>{d.fractionCSP3}</b></div>
+      </div>
+      <div className="grid grid-cols-2 gap-2 text-xs mb-2">
+        <div><span className="text-zinc-400">Lipinski:</span> <b className={result.lipinskiPass ? "text-green-500" : "text-red-500"}>{result.lipinskiPass ? "✅ Pass" : `⚠️ ${result.lipinskiViolations} violations`}</b></div>
+        <div><span className="text-zinc-400">Drug-likeness:</span> <b className="text-teal-600">{result.drugLikeness}/100</b></div>
+      </div>
+      {d.canonicalSMILES && (
+        <div className="text-[10px] text-zinc-400 mt-1 break-all">
+          Canonical: <code>{d.canonicalSMILES}</code>
+        </div>
+      )}
+      {result.alerts.length > 0 && (
+        <div className="mt-2">
+          <div className="text-[10px] text-amber-600 dark:text-amber-400 font-medium">⚠️ Alerts:</div>
+          <ul className="text-[10px] list-disc list-inside text-zinc-600 dark:text-zinc-400">
+            {result.alerts.map((a, i) => <li key={i}>{a}</li>)}
+          </ul>
+        </div>
+      )}
+      <button onClick={() => setResult(null)} className="text-[10px] text-zinc-400 hover:text-zinc-600 mt-1">↻ Скрыть</button>
     </div>
   );
 }
