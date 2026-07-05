@@ -157,6 +157,53 @@ export async function apiPrimer(
   return res.json();
 }
 
+// ─── Vina Docking (smina/Vina) ──────────────────────────────────────
+
+export interface VinaDockingResult {
+  engine: string;
+  vina_available: boolean;
+  drug: { name: string; smiles: string; canonical_smiles: string; inchi_key: string };
+  target: string;
+  pdb_id: string;
+  descriptors: Record<string, number>;
+  vina_results: {
+    best_affinity_kcal_mol: number;
+    num_poses: number;
+    poses: { rank: number; affinity_kcal_mol: number; rmsd_lb: number; rmsd_ub: number }[];
+    box_center: number[];
+    box_size: number[];
+    exhaustiveness: number;
+    elapsed_seconds: number;
+  };
+  drug_likeness: number;
+  lipinski: { pass: boolean; violations: number };
+  alerts: string[];
+}
+
+export async function apiVinaDocking(
+  pdbId: string,
+  smiles: string,
+  drugName?: string,
+  targetName?: string,
+  opts: { boxSize?: number[]; exhaustiveness?: number; numPoses?: number } = {},
+): Promise<VinaDockingResult> {
+  const res = await fetchWithTimeout(`${API_BASE}/api/vina-docking`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      pdb_id: pdbId,
+      smiles,
+      drug_name: drugName,
+      target_name: targetName,
+      box_size: opts.boxSize ?? [25, 25, 25],
+      exhaustiveness: opts.exhaustiveness ?? 8,
+      num_poses: opts.numPoses ?? 5,
+    }),
+  }, 120000); // 2 min timeout — docking can be slow
+  if (!res.ok) throw new Error(`Backend ${res.status}: ${await res.text()}`);
+  return res.json();
+}
+
 // ─── Health check ───────────────────────────────────────────────────
 
 export async function apiHealth(): Promise<boolean> {

@@ -9,7 +9,7 @@ import { DRUGS } from "@/data/drugs";
 import { virtualScreening, getTopResults, type DockingResult } from "@/lib/docking";
 import { analyzeWithLLM, getHfToken } from "@/lib/hf";
 import { dockWithRDKit, type MolecularDescriptors } from "@/lib/rdkit-docking";
-import { apiDocking, type DockingAPIResult } from "@/lib/api";
+import { apiDocking, apiVinaDocking, type DockingAPIResult, type VinaDockingResult } from "@/lib/api";
 
 type Tab = "screening" | "learn";
 
@@ -574,10 +574,13 @@ Respond ONLY as JSON:
 function RDKitDescriptors({ drug, targetName }: { drug: DockingResult["drug"]; targetName: string }) {
   const [result, setResult] = useState<Awaited<ReturnType<typeof dockWithRDKit>> | null>(null);
   const [backendResult, setBackendResult] = useState<DockingAPIResult | null>(null);
+  const [vinaResult, setVinaResult] = useState<VinaDockingResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [backendLoading, setBackendLoading] = useState(false);
+  const [vinaLoading, setVinaLoading] = useState(false);
   const [error, setError] = useState("");
   const [backendError, setBackendError] = useState("");
+  const [vinaError, setVinaError] = useState("");
 
   const run = async () => {
     setLoading(true);
@@ -607,8 +610,84 @@ function RDKitDescriptors({ drug, targetName }: { drug: DockingResult["drug"]; t
     }
   };
 
+  const runVina = async () => {
+    setVinaLoading(true);
+    setVinaError("");
+    setVinaResult(null);
+    try {
+      // Find PDB ID from the selected result's target
+      const pdbId = (window as any).__currentPdbId || "3QZJ";
+      const r = await apiVinaDocking(pdbId, drug.smiles!, drug.name, targetName);
+      setVinaResult(r);
+    } catch (e: any) {
+      setVinaError(e.message || "Vina error");
+    } finally {
+      setVinaLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-3">
+      {/* Vina docking (real molecular docking) */}
+      {drug.smiles && (
+        <div className="rounded-lg bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800 p-3">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-bold text-purple-700 dark:text-purple-300">🚀 AutoDock Vina (real docking)</span>
+            <span className="text-[10px] text-zinc-400">HF Space backend</span>
+          </div>
+          {!vinaResult && !vinaLoading && (
+            <div>
+              <button onClick={runVina} className="px-3 py-2 rounded-lg bg-purple-600 text-white text-xs font-medium hover:bg-purple-700 transition">
+                🚀 Запустить real Vina docking (1-2 мин)
+              </button>
+              <div className="text-[10px] text-zinc-400 mt-1">
+                Скачать PDB → подготовить receptor+ligand → Vina simulation → реальный ΔG
+              </div>
+            </div>
+          )}
+          {vinaLoading && (
+            <div className="text-xs text-purple-600 dark:text-purple-400">
+              <span className="spinner inline-block mr-2"></span>
+              Vina docking... (1-2 минуты, зависит от размера PDB)
+            </div>
+          )}
+          {vinaError && (
+            <div className="text-xs text-red-500 mt-2">⚠️ {vinaError}</div>
+          )}
+          {vinaResult && (
+            <div>
+              <div className="grid grid-cols-2 gap-2 text-xs mb-2">
+                <div className="rounded bg-white dark:bg-zinc-900 p-2 text-center">
+                  <div className="text-zinc-400 text-[10px]">Best ΔG</div>
+                  <div className="text-lg font-bold text-purple-600">{vinaResult.vina_results.best_affinity_kcal_mol} <span className="text-xs">kcal/mol</span></div>
+                </div>
+                <div className="rounded bg-white dark:bg-zinc-900 p-2 text-center">
+                  <div className="text-zinc-400 text-[10px]">Poses</div>
+                  <div className="text-lg font-bold text-purple-600">{vinaResult.vina_results.num_poses}</div>
+                  <div className="text-[10px] text-zinc-400">{vinaResult.vina_results.elapsed_seconds}s</div>
+                </div>
+              </div>
+              {vinaResult.vina_results.poses.length > 0 && (
+                <div className="text-xs space-y-1">
+                  <div className="text-[10px] text-zinc-400 mb-1">Все pose'ы:</div>
+                  {vinaResult.vina_results.poses.map((p) => (
+                    <div key={p.rank} className="flex items-center gap-2 p-1 rounded bg-white dark:bg-zinc-900">
+                      <span className="text-zinc-400 w-6">#{p.rank}</span>
+                      <span className="font-bold text-purple-600">{p.affinity_kcal_mol} kcal/mol</span>
+                      <span className="text-zinc-400 text-[10px]">RMSD: {p.rmsd_lb}-{p.rmsd_ub} Å</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className="text-[10px] text-zinc-400 mt-1">
+                Engine: {vinaResult.engine} | PDB: {vinaResult.pdb_id} | Box: {vinaResult.vina_results.box_center.join(", ")}
+              </div>
+              <button onClick={() => setVinaResult(null)} className="text-[10px] text-zinc-400 hover:text-zinc-600 mt-1">↻ Скрыть</button>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Backend (real Python RDKit) */}
       {drug.smiles && (
         <div className="rounded-lg bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 p-3">
