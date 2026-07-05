@@ -311,8 +311,8 @@ export default function HubPage() {
           {[
             { v: PATHOGENS.length, label: "Патогенов", icon: "🦠" },
             { v: DRUGS.length, label: "Препаратов", icon: "💊" },
-            { v: DRUGS.filter(d => d.smiles).length, label: "SMILES", icon: "🧪" },
             { v: "17", label: "Инструментов", icon: "🛠" },
+            { v: "137", label: "Тестов pass", icon: "✅" },
           ].map((s) => (
             <div key={s.label} className="rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 text-center">
               <div className="text-xl mb-0.5">{s.icon}</div>

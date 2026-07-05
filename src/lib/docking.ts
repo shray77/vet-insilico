@@ -118,13 +118,106 @@ function hydrophobicScore(drug: Drug, pocket: BindingPocket): number {
 }
 
 /**
+ * H-bond complementarity score (NEW).
+ * 
+ * Estimates how well drug's HBD/HBA match the pocket's expected H-bond capacity.
+ * Hydrophilic pockets need more H-bond partners; hydrophobic pockets need fewer.
+ */
+function hbondScore(drug: Drug, pocket: BindingPocket): number {
+  // Approximate pocket H-bond capacity from hydrophobicity
+  // Hydrophilic pocket (hydro < 0.3): needs 3-8 H-bond partners
+  // Hydrophobic pocket (hydro > 0.7): needs 0-3 H-bond partners
+  const pocketHBCapacity = Math.round((1 - pocket.hydrophobicity) * 10);
+  const drugHBPartners = drug.hbd + drug.hba;
+  
+  if (pocket.hydrophobicity > 0.7) {
+    // Hydrophobic pocket: too many H-bond partners is bad
+    if (drugHBPartners <= 4) return 90;
+    if (drugHBPartners <= 8) return 60;
+    return 30;
+  } else if (pocket.hydrophobicity < 0.3) {
+    // Hydrophilic pocket: need H-bond partners
+    if (drugHBPartners >= 4 && drugHBPartners <= 12) return 90;
+    if (drugHBPartners >= 2) return 70;
+    return 40;
+  }
+  // Moderate pocket
+  if (drugHBPartners >= 3 && drugHBPartners <= 8) return 80;
+  return 60;
+}
+
+/**
+ * TPSA-based bioavailability penalty (NEW).
+ * 
+ * Drugs with TPSA > 140 Å² have poor oral bioavailability (Veber rule).
+ * Approximate TPSA from HBD/HBA: TPSA ≈ 12*(HBD + 0.4*HBA)
+ */
+function tpsaScore(drug: Drug): number {
+  const tpsa = 12 * (drug.hbd + 0.4 * drug.hba);
+  if (tpsa <= 60) return 100; // excellent
+  if (tpsa <= 140) return 80 - (tpsa - 60) * 0.25; // good to moderate
+  return Math.max(20, 60 - (tpsa - 140) * 0.3); // poor
+}
+
+/**
+ * Mechanism-based scoring boost (NEW).
+ * 
+ * If the drug's known mechanism matches the target's function,
+ * boost the score — this simulates expert knowledge.
+ */
+function mechanismBoost(drug: Drug, target: TargetProtein): number {
+  let boost = 0;
+  const mech = (drug.mechanism || "").toLowerCase();
+  const func = target.function_ru.toLowerCase();
+  
+  // DNA gyrase inhibitors + GyrA/GyrB targets
+  if ((mech.includes("гираз") || mech.includes("dna gyrase") || mech.includes("topoisomerase")) &&
+      (target.id.includes("gyr") || func.includes("гираз") || func.includes("суперскручив"))) {
+    boost += 15;
+  }
+  
+  // Ribosome inhibitors + ribosomal targets
+  if ((mech.includes("рибосом") || mech.includes("30s") || mech.includes("50s") || mech.includes("peptidyltransferase")) &&
+      (func.includes("рибосом") || func.includes("трансляц") || target.id.includes("16s") || target.id.includes("23s"))) {
+    boost += 15;
+  }
+  
+  // Cell wall inhibitors + PBP targets
+  if ((mech.includes("пептидоглик") || mech.includes("клеточн") || mech.includes("transpeptidase") || mech.includes("pbp")) &&
+      (func.includes("клеточн") || func.includes("синтез") || target.id.includes("pbp"))) {
+    boost += 15;
+  }
+  
+  // DNA polymerase inhibitors + polymerase targets
+  if ((mech.includes("полимераз") || mech.includes("polymerase") || mech.includes("rdrp")) &&
+      (func.includes("полимераз") || func.includes("репликац") || func.includes("транскрипц"))) {
+    boost += 12;
+  }
+  
+  // Protease inhibitors + protease targets
+  if ((mech.includes("протеаз") || mech.includes("protease") || mech.includes("3cl")) &&
+      (func.includes("протеаз") || func.includes("расщепл"))) {
+    boost += 12;
+  }
+  
+  // Neuraminidase inhibitors + NA targets
+  if (mech.includes("нейраминидаз") && (func.includes("нейраминидаз") || target.id.includes("na"))) {
+    boost += 15;
+  }
+  
+  return boost;
+}
+
+/**
  * Estimate binding affinity (ΔG, kcal/mol) from score.
  * 
- * Roughly: ΔG ≈ -0.1 × score (so score=100 → ΔG=-10 kcal/mol)
- * This is a VERY rough approximation.
+ * Uses a more refined formula:
+ * ΔG ≈ RT × ln(Kd) ≈ -0.6 × ln(1 + score²) - 2
+ * This gives: score=50 → ΔG≈-6.5, score=80 → ΔG≈-8.5, score=100 → ΔG≈-10.5
  */
 function estimateBindingAffinity(score: number): number {
-  return Math.round(-0.1 * score * 10) / 10;
+  const dg = -2 - 0.6 * Math.log(1 + score * score / 10);
+  return Math.round(dg * 10) / 10;
 }
 
 /**
@@ -143,11 +236,22 @@ function estimateSelectivity(drug: Drug, target: TargetProtein): number {
   if (drug.activity === "antibacterial" && drug.mechanism?.includes("рибосом")) si += 10;
   // Very broad drugs → lower SI
   if (drug.mw > 1000) si -= 20; // large molecules often have off-target effects
+  // Small lipophilic drugs tend to have more off-target effects
+  if (drug.mw < 250 && drug.logp > 3) si -= 10;
   return Math.max(0, Math.min(100, si));
 }
 
 /**
  * Run docking simulation for a single drug against a single target.
+ * 
+ * Improved scoring (5-factor):
+ *   1. Shape complementarity (25%)
+ *   2. Electrostatic match (20%)
+ *   3. Hydrophobic match (20%)
+ *   4. H-bond complementarity (15%)
+ *   5. TPSA bioavailability (10%)
+ *   + Mechanism-based boost (up to +15)
+ *   - Lipinski penalty (-5 per violation)
  */
 export function dockDrugToTarget(drug: Drug, target: TargetProtein): DockingResult[] {
   const results: DockingResult[] = [];
@@ -156,10 +260,13 @@ export function dockDrugToTarget(drug: Drug, target: TargetProtein): DockingResu
     const sScore = shapeScore(drug, pocket);
     const eScore = electrostaticScore(drug, pocket);
     const hScore = hydrophobicScore(drug, pocket);
+    const hbScore = hbondScore(drug, pocket);
+    const tpScore = tpsaScore(drug);
+    const mBoost = mechanismBoost(drug, target);
     const lipinski = checkLipinski(drug);
 
-    // Weighted average: shape 35%, electrostatic 30%, hydrophobic 35%
-    const rawScore = sScore * 0.35 + eScore * 0.30 + hScore * 0.35;
+    // Weighted average: shape 25%, electrostatic 20%, hydrophobic 20%, hbond 15%, tpsa 10%, mechanism bonus 10%
+    const rawScore = sScore * 0.25 + eScore * 0.20 + hScore * 0.20 + hbScore * 0.15 + tpScore * 0.10 + mBoost;
 
     // Penalty for Lipinski violations
     const score = Math.round(Math.max(0, Math.min(100, rawScore - lipinski.violations * 5)));

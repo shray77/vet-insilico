@@ -567,6 +567,154 @@ export const PATHOGENS: Pathogen[] = [
       },
     ],
   },
+  // ─── NEW: Clostridium perfringens ────────────────────────────
+  {
+    id: "clostridium",
+    name_ru: "Клостридиоз",
+    name_en: "Clostridium perfringens",
+    disease_key: "clostridiosis",
+    type: "bacterium",
+    genome: "dsDNA (~3.6 Mb)",
+    priority_ru: 2,
+    rf_status: "Энтеротоксемия, газовая гангрена",
+    known_drug_classes: ["Пенициллины", "Тетрациклины", "Макролиды"],
+    targets: [
+      {
+        id: "clostridium-cpa",
+        name: "Alpha-toxin (PLC)",
+        name_ru: "Альфа-токсин (фосфолипаза C)",
+        pdb_id: "1QMY",
+        uniprot_id: "P0C216",
+        mw_kda: 45,
+        function_ru: "Лецитиназа — разрушает мембраны клеток хозяина. Главный фактор вирулентности.",
+        essential: true,
+        pockets: [
+          { cx: 15.2, cy: 8.4, cz: 6.1, radius: 11, charge: 1, hydrophobicity: 0.5, known_ligand_type: "phospholipid" },
+        ],
+      },
+    ],
+  },
+  // ─── NEW: Campylobacter jejuni ───────────────────────────────
+  {
+    id: "campylobacter",
+    name_ru: "Кампилобактериоз",
+    name_en: "Campylobacter jejuni",
+    disease_key: "campylobacteriosis",
+    type: "bacterium",
+    genome: "dsDNA (~1.6 Mb)",
+    priority_ru: 2,
+    rf_status: "Зооноз, пищевая инфекция",
+    known_drug_classes: ["Макролиды", "Фторхинолоны", "Тетрациклины"],
+    targets: [
+      {
+        id: "campylobacter-gyra",
+        name: "DNA gyrase GyrA",
+        name_ru: "ДНК-гираза GyrA",
+        pdb_id: "5NVL",
+        uniprot_id: "P0C9M1",
+        mw_kda: 97,
+        function_ru: "Катализирует суперскручивание ДНК. Мишень фторхинолонов.",
+        essential: true,
+        pockets: [
+          { cx: 22.1, cy: 10.3, cz: 7.5, radius: 12, charge: -1, hydrophobicity: 0.4, known_ligand_type: "fluoroquinolone" },
+        ],
+      },
+    ],
+  },
+  // ─── NEW: Mycoplasma hyopneumoniae ───────────────────────────
+  {
+    id: "mycoplasma",
+    name_ru: "Микоплазмоз свиней",
+    name_en: "Mycoplasma hyopneumoniae",
+    disease_key: "mycoplasmosis",
+    type: "bacterium",
+    genome: "dsDNA (~0.9 Mb)",
+    priority_ru: 3,
+    rf_status: "Энзоотическая пневмония свиней",
+    known_drug_classes: ["Макролиды", "Тетрациклины", "Фторхинолоны"],
+    targets: [
+      {
+        id: "mycoplasma-p146",
+        name: "P146 adhesin",
+        name_ru: "Адгезин P146",
+        pdb_id: "2MTS",
+        uniprot_id: "Q6P0Q5",
+        mw_kda: 146,
+        function_ru: "Поверхностный белок-адгезин, отвечает за прикрепление к эпителию дыхательных путей.",
+        essential: false,
+        pockets: [
+          { cx: 18.5, cy: 9.2, cz: 5.3, radius: 14, charge: 0, hydrophobicity: 0.6, known_ligand_type: "receptor" },
+        ],
+      },
+    ],
+  },
+  // ─── NEW: Avian Influenza H5N1 (already have HPAI but add H5N1-specific) ─
+  {
+    id: "h5n1",
+    name_ru: "Грипп H5N1 (высокопатогенный)",
+    name_en: "Avian Influenza H5N1",
+    disease_key: "h5n1",
+    type: "virus",
+    genome: "(-)ssRNA (~13.5 kb, 8 сегментов)",
+    priority_ru: 1,
+    rf_status: "Особо опасная болезнь, карантин",
+    known_drug_classes: ["Ингибиторы нейраминидазы", "Ингибиторы M2"],
+    targets: [
+      {
+        id: "h5n1-ha",
+        name: "Hemagglutinin H5",
+        name_ru: "Гемагглютинин H5",
+        pdb_id: "2FK0",
+        uniprot_id: "Q2IH04",
+        mw_kda: 77,
+        function_ru: "Связывается с сиаловой кислотой клеток хозяина. Главный антиген. Мишень для вакцин.",
+        essential: true,
+        pockets: [
+          { cx: 20.1, cy: 12.5, cz: 8.3, radius: 13, charge: 0, hydrophobicity: 0.4, known_ligand_type: "sialic_acid" },
+        ],
+      },
+      {
+        id: "h5n1-na",
+        name: "Neuraminidase N1",
+        name_ru: "Нейраминидаза N1",
+        pdb_id: "2HTY",
+        uniprot_id: "Q2IH05",
+        mw_kda: 50,
+        function_ru: "Отщепляет сиаловую кислоту — высвобождение вирионов. Мишень осельтамивира и занамивира.",
+        essential: true,
+        pockets: [
+          { cx: 16.3, cy: 7.8, cz: 4.2, radius: 10, charge: -1, hydrophobicity: 0.3, known_ligand_type: "oseltamivir" },
+        ],
+      },
+    ],
+  },
+  // ─── NEW: Corynebacterium pseudotuberculosis ─────────────────
+  {
+    id: "corynebacterium",
+    name_ru: "Казеозный лимфаденит",
+    name_en: "Corynebacterium pseudotuberculosis",
+    disease_key: "cla",
+    type: "bacterium",
+    genome: "dsDNA (~2.3 Mb)",
+    priority_ru: 3,
+    rf_status: "Хроническая болезнь овец и коз",
+    known_drug_classes: ["Пенициллины", "Тетрациклины", "Макролиды"],
+    targets: [
+      {
+        id: "corynebacterium-pld",
+        name: "Phospholipase D",
+        name_ru: "Фосфолипаза D",
+        pdb_id: "1V0O",
+        uniprot_id: "P0C1Z5",
+        mw_kda: 31,
+        function_ru: "Фактор вирулентности — способствует распространению бактерии в лимфоузлах.",
+        essential: false,
+        pockets: [
+          { cx: 10.2, cy: 5.1, cz: 3.4, radius: 9, charge: 0, hydrophobicity: 0.5, known_ligand_type: "phospholipid" },
+        ],
+      },
+    ],
+  },
 ];
 
 export function getPathogen(id: string): Pathogen | undefined {
