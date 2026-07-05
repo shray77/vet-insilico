@@ -8,7 +8,7 @@ import { findGuides, CRISPR_SAMPLES } from "@/lib/crispr";
 export default function CrisprPage() {
   const [sampleIdx, setSampleIdx] = useState(0);
   const [sequence, setSequence] = useState(CRISPR_SAMPLES[0].seq);
-  const [minScore, setMinScore] = useState(50);
+  const [minScore, setMinScore] = useState(20);
 
   const results = useMemo(() => {
     if (!sequence || sequence.length < 23) return [];
