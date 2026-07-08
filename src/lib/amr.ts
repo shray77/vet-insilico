@@ -336,7 +336,7 @@ export function predictAMR(sequence: string): AMRResult {
     const after = mut.motifAfter.toUpperCase();
     // Search for both wild-type and mutant patterns
     const wildPattern = before + mut.wildType + after;
-    let wildFound = seq.includes(wildPattern);
+    const wildFound = seq.includes(wildPattern);
 
     for (const mutant of mut.mutants) {
       const mutPattern = before + mutant + after;

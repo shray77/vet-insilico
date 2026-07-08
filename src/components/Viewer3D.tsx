@@ -130,7 +130,7 @@ export default function Viewer3D({
         viewerRef.current = null;
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // deps intentionally limited — style change should re-render without re-fetch
   }, [pdbId, currentStyle, highlightLigand]);
 
   function applyStyle(viewer: any, $3Dmol: any, style: ViewerStyle, ligand?: string) {

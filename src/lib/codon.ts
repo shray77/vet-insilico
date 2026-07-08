@@ -233,16 +233,32 @@ export function optimizeCodons(
       for (const candidate of candidates) {
         const testSeq = optimized + candidate.codon;
         let hasRestriction = false;
+        let avoidedSite = "";
         for (const site of RESTRICTION_SITES) {
           if (testSeq.slice(-8).includes(site) || testSeq.slice(-site.length) === site) {
             hasRestriction = true;
-            restrictionSitesAvoided.push(site);
+            avoidedSite = site;
             break;
           }
         }
         if (!hasRestriction) {
           chosen = candidate;
+          // Only record as "avoided" if we actually found a clean alternative
+          // (i.e., this candidate was chosen BECAUSE it avoided the site that
+          // a previous candidate had).
           break;
+        } else {
+          // This candidate has a restriction site — if we end up using a
+          // later candidate, record that we avoided this site.
+          // Track it temporarily; only commit if a clean one is found.
+          const remainingCandidates = candidates.slice(candidates.indexOf(candidate) + 1);
+          const hasCleanAlternative = remainingCandidates.some(c => {
+            const t = optimized + c.codon;
+            return !RESTRICTION_SITES.some(s => t.slice(-8).includes(s) || t.slice(-s.length) === s);
+          });
+          if (hasCleanAlternative) {
+            restrictionSitesAvoided.push(avoidedSite);
+          }
         }
       }
     }

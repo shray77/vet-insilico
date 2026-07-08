@@ -8,9 +8,13 @@ describe("simulatePK", () => {
       ...profile.params,
       dose: 5,
       nDoses: 3,
+      interval: 24,
     });
     expect(result.times.length).toBeGreaterThan(0);
     expect(result.concentrations.length).toBe(result.times.length);
+    // Cmax must be positive — proves doses were actually applied
+    const cmax = Math.max(...result.concentrations);
+    expect(cmax).toBeGreaterThan(0);
   });
 
   it("Cmax is positive for any valid dose", () => {

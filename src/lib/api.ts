@@ -7,7 +7,19 @@
  * Falls back to in-browser algorithms if backend is unavailable (cold start, etc).
  */
 
-const API_BASE = "https://shrayyyy-vet-insilico-backend.hf.space";
+// Backend URL — can be overridden via NEXT_PUBLIC_BACKEND_URL env var
+// (useful when the default HF Space is down or cold-starting).
+// Also check localStorage for runtime override (set via HfTokenModal).
+const DEFAULT_BACKEND = "https://shrayyyy-vet-insilico-backend.hf.space";
+function getBackendUrl(): string {
+  // Check localStorage for runtime override first
+  if (typeof window !== "undefined") {
+    const override = localStorage.getItem("vet:backend_url");
+    if (override) return override;
+  }
+  return process.env.NEXT_PUBLIC_BACKEND_URL || DEFAULT_BACKEND;
+}
+const API_BASE = getBackendUrl();
 const TIMEOUT_MS = 30000; // 30s — HF Spaces cold start can take 30-60s
 
 async function fetchWithTimeout(url: string, opts: RequestInit = {}, timeout = TIMEOUT_MS): Promise<Response> {

@@ -447,7 +447,19 @@ export async function analyzeWithLLM<T = any>(
     ],
     opts,
   );
-  const jsonMatch = raw.match(/\{[\s\S]*\}/);
+  // Balanced-brace JSON extractor — handles nested objects in LLM responses.
+  // Previous greedy regex /\{[\s\S]*\}/ matched from first { to last },
+  // including trailing prose, breaking JSON.parse. This counts brace depth.
+  let jsonStr: string | null = null;
+  {
+    let depth = 0;
+    let start = -1;
+    for (let i = 0; i < raw.length; i++) {
+      if (raw[i] === "{") { if (depth === 0) start = i; depth++; }
+      else if (raw[i] === "}") { depth--; if (depth === 0 && start >= 0) { jsonStr = raw.slice(start, i + 1); break; } }
+    }
+  }
+  const jsonMatch = jsonStr;
   if (!jsonMatch) throw new Error("LLM не вернул JSON");
   try {
     return JSON.parse(jsonMatch[0]) as T;
@@ -533,7 +545,19 @@ Respond ONLY as JSON:
     { maxTokens: 400, temperature: 0.2, signal: opts.signal },
   );
 
-  const jsonMatch = raw.match(/\{[\s\S]*\}/);
+  // Balanced-brace JSON extractor — handles nested objects in LLM responses.
+  // Previous greedy regex /\{[\s\S]*\}/ matched from first { to last },
+  // including trailing prose, breaking JSON.parse. This counts brace depth.
+  let jsonStr: string | null = null;
+  {
+    let depth = 0;
+    let start = -1;
+    for (let i = 0; i < raw.length; i++) {
+      if (raw[i] === "{") { if (depth === 0) start = i; depth++; }
+      else if (raw[i] === "}") { depth--; if (depth === 0 && start >= 0) { jsonStr = raw.slice(start, i + 1); break; } }
+    }
+  }
+  const jsonMatch = jsonStr;
   if (!jsonMatch) throw new Error("LLM не вернул JSON");
   let parsed: any;
   try {

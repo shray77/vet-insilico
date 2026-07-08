@@ -23,7 +23,17 @@ jobs:
         with:
           bun-version: latest
       - run: bun install
-      - run: bun run build
+
+      # Run tests before build — catches regressions in lib/ algorithms
+      - name: Run unit tests
+        run: bun run test
+
+      # Lint — catches unused vars, no-debugger, prefer-const, etc.
+      - name: Lint
+        run: bun run lint
+
+      - name: Build static export
+        run: bun run build
         env:
           NODE_ENV: production
           CI: "true"

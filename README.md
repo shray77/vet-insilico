@@ -50,11 +50,11 @@
 - **Molecular toolkit**: RDKit.js WASM (CDN, 4MB)
 - **ML**: HuggingFace Inference API (Qwen2.5-Coder-3B-Instruct via nscale, ESM-2 35M via hf-inference)
 - **Hosting**: GitHub Pages (static, no backend)
-- **Tests**: Vitest, 121 tests, 12 test files
+- **Tests**: Vitest, 137 tests, 13 test files
 
 ## Data
 
-- **11 pathogens** (ASFV, FMDV, Brucella, HPAI, Newcastle, Rabies, Salmonella, BVDV, Leptospira, PEDV, E. coli, Anaplasma)
+- **12 pathogens** (ASFV, FMDV, Brucella, HPAI, Newcastle, Rabies, Salmonella, BVDV, Leptospira, PEDV, E. coli, Anaplasma)
 - **204 drugs** with molecular properties
 - **190 drugs with SMILES** (from PubChem)
 - **30+ restriction enzymes**
@@ -76,7 +76,7 @@ ML features (LLM analysis, ESM-2 naturalness, RDKit descriptors) require a free 
 bun install
 bun run dev          # http://localhost:3000
 bun run build        # → out/ (static export)
-bun run test         # 121 tests
+bun run test         # 137 tests
 bun run test:coverage # with coverage report
 ```
 
