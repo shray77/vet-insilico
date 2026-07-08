@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
 import Viewer3D from "@/components/Viewer3D";
@@ -456,15 +456,18 @@ export default function DrugRepurposingPage() {
 }
 
 function DrugLLMAnalysis({ result }: { result: DockingResult }) {
-  const [analysis, setAnalysis] = useState<any>(null);
+  const [analysis, setAnalysis] = useState<Record<string, unknown> | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const abortRef = useRef<AbortController | null>(null);
 
   const run = async () => {
     if (!getHfToken()) {
       setError("Задайте HF token — кнопка 🤖 в шапке");
       return;
     }
+    const ctrl = new AbortController();
+    abortRef.current = ctrl;
     setLoading(true);
     setError("");
     try {
@@ -483,23 +486,34 @@ DOCKING SCORE: ${result.score}/100 (shape=${result.shapeScore}, electrostatic=${
 
 Respond ONLY as JSON:
 {"repurposingPotential": "<low|moderate|high>", "confidenceScore": <0-100>, "rationale": "<one short sentence>", "keyRisks": ["...", "..."], "nextSteps": ["...", "..."]}`;
-      const r = await analyzeWithLLM<any>(
+      const r = await analyzeWithLLM<Record<string, unknown>>(
         "You are a veterinary pharmacology expert. ОТВЕЧАЙ НА РУССКОМ. Все текстовые поля в JSON (rationale, keyRisks, nextSteps) должны быть на русском языке. Respond ONLY with valid JSON, no markdown.",
         prompt,
-        { maxTokens: 250, temperature: 0.3 },
+        { maxTokens: 250, temperature: 0.3, signal: ctrl.signal },
       );
       setAnalysis(r);
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      if (e instanceof DOMException && e.name === "AbortError") return;
+      setError(e instanceof Error ? e.message : String(e));
     } finally {
       setLoading(false);
+      abortRef.current = null;
     }
+  };
+
+  const cancel = () => {
+    abortRef.current?.abort();
+    setLoading(false);
+    abortRef.current = null;
   };
 
   if (loading) {
     return (
-      <div className="text-xs text-zinc-400">
-        ⏳ LLM анализирует кандидата...
+      <div className="text-xs text-zinc-400 flex items-center gap-2">
+        <span>⏳ LLM анализирует кандидата...</span>
+        <button onClick={cancel} className="text-red-500 hover:text-red-700 underline">
+          отменить
+        </button>
       </div>
     );
   }
@@ -529,8 +543,10 @@ Respond ONLY as JSON:
     );
   }
 
-  const potColor = analysis.repurposingPotential === "high" ? "#16a34a"
-    : analysis.repurposingPotential === "moderate" ? "#eab308" : "#dc2626";
+  // Cast to a known shape for rendering — LLM JSON is validated at parse time
+  const a = analysis as Record<string, any>;
+  const potColor = a.repurposingPotential === "high" ? "#16a34a"
+    : a.repurposingPotential === "moderate" ? "#eab308" : "#dc2626";
 
   return (
     <div className="rounded-lg bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 p-3">
@@ -540,29 +556,29 @@ Respond ONLY as JSON:
           <span>
             Потенциал:{" "}
             <b style={{ color: potColor }}>
-              {analysis.repurposingPotential === "high" ? "Высокий" : analysis.repurposingPotential === "moderate" ? "Умеренный" : "Низкий"}
+              {a.repurposingPotential === "high" ? "Высокий" : a.repurposingPotential === "moderate" ? "Умеренный" : "Низкий"}
             </b>
           </span>
           <span>
-            Уверенность: <b>{analysis.confidenceScore}/100</b>
+            Уверенность: <b>{a.confidenceScore}/100</b>
           </span>
         </div>
       </div>
-      <div className="text-xs text-zinc-700 dark:text-zinc-300 mb-2 italic">{analysis.rationale}</div>
+      <div className="text-xs text-zinc-700 dark:text-zinc-300 mb-2 italic">{a.rationale}</div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-        {Array.isArray(analysis.keyRisks) && analysis.keyRisks.length > 0 && (
+        {Array.isArray(a.keyRisks) && a.keyRisks.length > 0 && (
           <div>
             <div className="text-red-600 dark:text-red-400 font-medium mb-1">⚠️ Риски:</div>
             <ul className="list-disc list-inside space-y-0.5 text-zinc-700 dark:text-zinc-300">
-              {analysis.keyRisks.slice(0, 3).map((r: string, i: number) => <li key={i}>{r}</li>)}
+              {a.keyRisks.slice(0, 3).map((r: string, i: number) => <li key={i}>{r}</li>)}
             </ul>
           </div>
         )}
-        {Array.isArray(analysis.nextSteps) && analysis.nextSteps.length > 0 && (
+        {Array.isArray(a.nextSteps) && a.nextSteps.length > 0 && (
           <div>
             <div className="text-green-600 dark:text-green-400 font-medium mb-1">✅ Следующие шаги:</div>
             <ul className="list-disc list-inside space-y-0.5 text-zinc-700 dark:text-zinc-300">
-              {analysis.nextSteps.slice(0, 3).map((s: string, i: number) => <li key={i}>{s}</li>)}
+              {a.nextSteps.slice(0, 3).map((s: string, i: number) => <li key={i}>{s}</li>)}
             </ul>
           </div>
         )}

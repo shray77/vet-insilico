@@ -15,6 +15,8 @@
  * means ~16M tokens per $0.50 credit — enough for thousands of analyses.
  */
 
+import { extractJson } from "./json-utils";
+
 const HF_TOKEN_KEY = "vis-hf-token";
 const ROUTER_BASE = "https://router.huggingface.co";
 const LLM_MODEL = "Qwen/Qwen2.5-Coder-3B-Instruct";
@@ -447,22 +449,10 @@ export async function analyzeWithLLM<T = any>(
     ],
     opts,
   );
-  // Balanced-brace JSON extractor — handles nested objects in LLM responses.
-  // Previous greedy regex /\{[\s\S]*\}/ matched from first { to last },
-  // including trailing prose, breaking JSON.parse. This counts brace depth.
-  let jsonStr: string | null = null;
-  {
-    let depth = 0;
-    let start = -1;
-    for (let i = 0; i < raw.length; i++) {
-      if (raw[i] === "{") { if (depth === 0) start = i; depth++; }
-      else if (raw[i] === "}") { depth--; if (depth === 0 && start >= 0) { jsonStr = raw.slice(start, i + 1); break; } }
-    }
-  }
-  const jsonMatch = jsonStr;
-  if (!jsonMatch) throw new Error("LLM не вернул JSON");
+  const jsonStr = extractJson(raw);
+  if (!jsonStr) throw new Error("LLM не вернул JSON");
   try {
-    return JSON.parse(jsonMatch[0]) as T;
+    return JSON.parse(jsonStr) as T;
   } catch {
     throw new Error("LLM вернул невалидный JSON");
   }
@@ -545,23 +535,11 @@ Respond ONLY as JSON:
     { maxTokens: 400, temperature: 0.2, signal: opts.signal },
   );
 
-  // Balanced-brace JSON extractor — handles nested objects in LLM responses.
-  // Previous greedy regex /\{[\s\S]*\}/ matched from first { to last },
-  // including trailing prose, breaking JSON.parse. This counts brace depth.
-  let jsonStr: string | null = null;
-  {
-    let depth = 0;
-    let start = -1;
-    for (let i = 0; i < raw.length; i++) {
-      if (raw[i] === "{") { if (depth === 0) start = i; depth++; }
-      else if (raw[i] === "}") { depth--; if (depth === 0 && start >= 0) { jsonStr = raw.slice(start, i + 1); break; } }
-    }
-  }
-  const jsonMatch = jsonStr;
-  if (!jsonMatch) throw new Error("LLM не вернул JSON");
+  const jsonStr = extractJson(raw);
+  if (!jsonStr) throw new Error("LLM не вернул JSON");
   let parsed: any;
   try {
-    parsed = JSON.parse(jsonMatch[0]);
+    parsed = JSON.parse(jsonStr);
   } catch {
     throw new Error("LLM вернул невалидный JSON");
   }

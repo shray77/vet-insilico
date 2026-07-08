@@ -3,8 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
-import { DRUGS } from "@/data/drugs";
-import { PATHOGENS } from "@/data/pathogens";
+import { DRUG_COUNT, PATHOGEN_COUNT } from "@/data/stats";
 
 interface Tool {
   href: string;
@@ -40,7 +39,7 @@ const CATEGORIES: Category[] = [
         title: "Drug Repurposing",
         tagline: "Скрининг 200+ препаратов с LLM-анализом",
         desc: "In silico docking — выбираем патоген, считаем score сродства для всех препаратов. 3D визуализация белок-лиганд через 3Dmol.js + LLM-анализ кандидатов через Qwen 3B. Экспорт в CSV.",
-        stats: [`${DRUGS.length} препаратов`, `${PATHOGENS.length} патогенов`, "LLM + 3D"],
+        stats: [`${DRUG_COUNT} препаратов`, `${PATHOGEN_COUNT} патогенов`, "LLM + 3D"],
         accent: "teal",
         badge: "Главный тул",
         requiresML: true,
@@ -309,8 +308,8 @@ export default function HubPage() {
         {/* Quick stats */}
         <section className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-12">
           {[
-            { v: PATHOGENS.length, label: "Патогенов", icon: "🦠" },
-            { v: DRUGS.length, label: "Препаратов", icon: "💊" },
+            { v: PATHOGEN_COUNT, label: "Патогенов", icon: "🦠" },
+            { v: DRUG_COUNT, label: "Препаратов", icon: "💊" },
             { v: "17", label: "Инструментов", icon: "🛠" },
             { v: "137", label: "Тестов pass", icon: "✅" },
           ].map((s) => (

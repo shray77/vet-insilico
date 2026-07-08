@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
 import { chatComplete, getHfToken } from "@/lib/hf";
+import { extractJson, validateDiagnosisResult } from "@/lib/json-utils";
 
 interface DiagnosisResult {
   differentialDiagnoses: { name: string; probability: number; reasoning: string }[];
@@ -20,12 +21,15 @@ export default function AIVetPage() {
   const [result, setResult] = useState<DiagnosisResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const abortRef = useRef<AbortController | null>(null);
 
   const runDiagnosis = async () => {
     if (!getHfToken()) {
       setError("Задайте HF token — кнопка 🤖 в шапке");
       return;
     }
+    const ctrl = new AbortController();
+    abortRef.current = ctrl;
     setLoading(true);
     setError("");
     setResult(null);
@@ -54,18 +58,28 @@ export default function AIVetPage() {
           { role: "system", content: "Ты — ветеринарный диагност с опытом 20 лет. ОТВЕЧАЙ НА РУССКОМ. Respond ONLY with valid JSON, no markdown." },
           { role: "user", content: prompt },
         ],
-        { maxTokens: 600, temperature: 0.3 },
+        { maxTokens: 600, temperature: 0.3, signal: ctrl.signal },
       );
 
-      const jsonMatch = raw.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) throw new Error("LLM не вернул JSON");
-      const parsed = JSON.parse(jsonMatch[0]);
-      setResult(parsed);
-    } catch (e: any) {
-      setError(e.message || "Ошибка");
+      const jsonStr = extractJson(raw);
+      if (!jsonStr) throw new Error("LLM не вернул JSON");
+      const parsed = JSON.parse(jsonStr);
+      const validated = validateDiagnosisResult(parsed);
+      if (!validated) throw new Error("LLM вернул некорректный формат ответа");
+      setResult(validated);
+    } catch (e) {
+      if (e instanceof DOMException && e.name === "AbortError") return;
+      setError(e instanceof Error ? e.message : String(e));
     } finally {
       setLoading(false);
+      abortRef.current = null;
     }
+  };
+
+  const cancelDiagnosis = () => {
+    abortRef.current?.abort();
+    setLoading(false);
+    abortRef.current = null;
   };
 
   const urgencyColor = (u: string) => u === "critical" ? "#dc2626" : u === "high" ? "#ea580c" : u === "moderate" ? "#eab308" : "#16a34a";
@@ -114,10 +128,18 @@ export default function AIVetPage() {
                 <textarea value={history} onChange={(e) => setHistory(e.target.value)} rows={3}
                   className="w-full px-3 py-2 mt-1 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-sm" />
               </label>
-              <button onClick={runDiagnosis} disabled={loading}
-                className="w-full px-4 py-3 rounded-lg bg-rose-600 text-white font-medium hover:bg-rose-700 disabled:opacity-50 transition">
-                {loading ? "⏳ Анализ..." : "🩺 Запустить диагностику"}
-              </button>
+              <div className="flex gap-2">
+                <button onClick={runDiagnosis} disabled={loading}
+                  className="flex-1 px-4 py-3 rounded-lg bg-rose-600 text-white font-medium hover:bg-rose-700 disabled:opacity-50 transition">
+                  {loading ? "⏳ Анализ..." : "🩺 Запустить диагностику"}
+                </button>
+                {loading && (
+                  <button onClick={cancelDiagnosis}
+                    className="px-4 py-3 rounded-lg border border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 font-medium hover:bg-red-50 dark:hover:bg-red-950/30 transition">
+                    ✕ Отменить
+                  </button>
+                )}
+              </div>
               {error && <div className="text-xs text-red-500 p-2 rounded bg-red-50 dark:bg-red-950/30">{error}</div>}
             </div>
           </div>

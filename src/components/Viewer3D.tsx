@@ -64,9 +64,26 @@ export default function Viewer3D({
   const [errorMsg, setErrorMsg] = useState("");
   const [currentStyle, setCurrentStyle] = useState<ViewerStyle>(style);
 
-  // (Re)load when PDB ID or style changes — but only if user has activated it
+  // PDB data cache — module-level so switching styles doesn't re-fetch
+  const pdbCacheRef = useRef<Map<string, string>>(new Map());
+  const pdbDataRef = useRef<string | null>(null);
+
+  // (Re)load when PDB ID changes (fetch) OR when style changes (re-render only)
   useEffect(() => {
     if (status === "idle") return; // Don't auto-load
+
+    // If we already have PDB data cached for this ID, just re-apply style
+    const cached = pdbCacheRef.current.get(pdbId.toUpperCase());
+    if (cached && pdbDataRef.current === cached) {
+      // Style-only change — re-render without re-fetching
+      if (viewerRef.current && window.$3Dmol) {
+        viewerRef.current.setStyle({}, {});
+        applyStyle(viewerRef.current, window.$3Dmol, currentStyle, highlightLigand);
+        viewerRef.current.render();
+      }
+      return;
+    }
+
     let cancelled = false;
     setStatus("loading");
     setErrorMsg("");
@@ -90,15 +107,22 @@ export default function Viewer3D({
         const viewer = $3Dmol.createViewer(containerRef.current, config);
         viewerRef.current = viewer;
 
+        // Use cached PDB data if available
         const pdbUrl = `https://files.rcsb.org/download/${pdbId.toUpperCase()}.pdb`;
+        const fetchPromise = cached
+          ? Promise.resolve(cached)
+          : fetch(pdbUrl).then((r) => {
+              if (!r.ok) throw new Error(`PDB ${pdbId} не найден`);
+              return r.text();
+            });
 
-        fetch(pdbUrl)
-          .then((r) => {
-            if (!r.ok) throw new Error(`PDB ${pdbId} не найден`);
-            return r.text();
-          })
+        fetchPromise
           .then((pdbData) => {
             if (cancelled || !viewerRef.current) return;
+            // Cache the PDB data
+            pdbCacheRef.current.set(pdbId.toUpperCase(), pdbData);
+            pdbDataRef.current = pdbData;
+
             viewer.addModel(pdbData, "pdb");
 
             // Apply style based on selection
