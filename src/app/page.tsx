@@ -105,6 +105,17 @@ const CATEGORIES: Category[] = [
         requiresML: true,
       },
       {
+        href: "/vaccine-designer",
+        icon: "🧬",
+        title: "Vaccine Designer",
+        tagline: "Multi-epitope конструкт end-to-end",
+        desc: "Полный пайплайн: предсказание B+T эпитопов → сборка с GPGPG-линкерами → сигнальный пептид + His-tag → кодон-оптимизация → GenBank экспорт.",
+        stats: ["End-to-end", "GenBank экспорт", "Кодон-оптим."],
+        accent: "emerald",
+        badge: "NEW",
+        requiresML: false,
+      },
+      {
         href: "/primer-designer",
         icon: "🔬",
         title: "PCR Primer Designer",

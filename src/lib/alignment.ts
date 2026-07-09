@@ -24,72 +24,14 @@ export interface AlignmentResult {
   algorithm: "needleman-wunsch" | "smith-waterman";
 }
 
-// BLOSUM62 substitution matrix (selected, symmetric — only storing upper triangle)
-// Source: NCBI BLOSUM62, public domain
-const BLOSUM62_DATA: Record<string, Record<string, number>> = (() => {
-  const rows: Record<string, string> = {
-    A: "ARNDCQEGHILKMFPSTWYV",
-    R: "RNDCQEGHILKMFPSTWYV",
-    N: "NDCQEGHILKMFPSTWYV",
-    D: "DCQEGHILKMFPSTWYV",
-    C: "CQEGHILKMFPSTWYV",
-    Q: "QEGHILKMFPSTWYV",
-    E: "EGHILKMFPSTWYV",
-    G: "GHILKMFPSTWYV",
-    H: "HILKMFPSTWYV",
-    I: "ILKMFPSTWYV",
-    L: "LKMFPSTWYV",
-    K: "KMFPSTWYV",
-    M: "MFPSTWYV",
-    F: "FPSTWYV",
-    P: "PSTWYV",
-    S: "STWYV",
-    T: "TWYV",
-    W: "WYV",
-    Y: "YV",
-    V: "V",
-  };
-  // BLOSUM62 scores (Henikoff 1992)
-  const scores: string[] = [
-    "4,-1,-2,-2,0,-1,-1,0,-2,-1,-1,-1,-1,-2,-1,1,0,-3,-1,0", // A
-    "-1,5,0,-2,-3,1,0,-2,0,-3,-2,2,-1,-3,-2,-1,-1,-3,-2,-3", // R
-    "-2,0,6,1,-3,0,0,0,1,-3,-3,0,-2,-3,-2,1,0,-4,-2,-3", // N
-    "-2,-2,1,6,-3,0,2,-1,-1,-3,-4,-1,-3,-3,-1,0,-1,-4,-3,-3", // D
-    "0,-3,-3,-3,9,-3,-4,-3,-3,-1,-1,-3,-1,-2,-3,-1,-1,-2,-2,-1", // C
-    "-1,1,0,0,-3,5,2,-2,0,-3,-2,1,0,-3,-1,0,-1,-2,-1,-2", // Q
-    "-1,0,0,2,-4,2,5,-2,0,-3,-3,1,-2,-3,-1,0,-1,-3,-2,-2", // E
-    "0,-2,0,-1,-3,-2,-2,6,-2,-4,-4,-2,-3,-3,-2,0,-2,-2,-3,-3", // G
-    "-2,0,1,-1,-3,0,0,-2,8,-3,-3,-1,-2,-1,-2,-1,-2,-2,2,-3", // H
-    "-1,-3,-3,-3,-1,-3,-3,-4,-3,4,2,-3,1,0,-3,-2,-1,-3,-1,3", // I
-    "-1,-2,-3,-4,-1,-2,-3,-4,-3,2,4,-2,2,0,-3,-2,-1,-2,-1,1", // L
-    "-1,2,0,-1,-3,1,1,-2,-1,-3,-2,5,-1,-3,-1,0,-1,-3,-2,-2", // K
-    "-1,-1,-2,-3,-1,0,-2,-3,-2,1,2,-1,5,0,-2,-1,-1,-1,-1,1", // M
-    "-2,-3,-3,-3,-2,-3,-3,-3,-1,0,0,-3,0,6,-4,-2,-2,1,3,-1", // F
-    "-1,-2,-2,-1,-3,-1,-1,-2,-2,-3,-3,-1,-2,-4,7,-1,-1,-4,-3,-2", // P
-    "1,-1,1,0,-1,0,0,0,-1,-2,-2,0,-1,-2,-1,4,1,-3,-2,-2", // S
-    "0,-1,0,-1,-1,-1,-1,-2,-2,-1,-1,-1,-1,-2,-1,1,5,-2,-2,0", // T
-    "-3,-3,-4,-4,-2,-2,-3,-2,-2,-3,-2,-3,-1,1,-4,-3,-2,11,2,-3", // W
-    "-1,-2,-2,-3,-2,-1,-2,-3,2,-1,-1,-2,-1,3,-3,-2,-2,2,7,-1", // Y
-    "0,-3,-3,-3,-1,-2,-2,-3,-3,3,1,-2,1,-1,-2,-2,0,-3,-1,4", // V
-  ];
-  const matrix: Record<string, Record<string, number>> = {};
-  for (let i = 0; i < 20; i++) {
-    const a = "ARNDCQEGHILKMFPSTWYV"[i];
-    matrix[a] = {};
-    const rowScores = scores[i].split(",").map(Number);
-    for (let j = 0; j < rowScores.length; j++) {
-      const b = rows[a][j];
-      matrix[a][b] = rowScores[j];
-      matrix[b] = matrix[b] || {};
-      matrix[b][a] = rowScores[j];
-    }
-  }
-  return matrix;
-})();
+import { BLOSUM62 } from "./blosum62";
+
+// BLOSUM62 is now imported from blosum62.ts (single source of truth).
+// Previously duplicated here (~60 lines) and in hf.ts (~35 lines).
 
 function getScore(a: string, b: string, seqType: SeqType): number {
   if (seqType === "protein") {
-    return BLOSUM62_DATA[a]?.[b] ?? -4;
+    return BLOSUM62[a]?.[b] ?? -4;
   }
   // DNA: +2 match, -1 mismatch
   return a === b ? 2 : -1;
