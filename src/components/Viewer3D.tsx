@@ -41,7 +41,9 @@ export type ViewerStyle = "cartoon" | "stick" | "sphere" | "surface" | "lines";
 
 export interface Viewer3DProps {
   pdbId: string;
-  /** Optional ligand name to highlight (e.g. " inhibitors" or specific ligand ID). */
+  /** Direct PDB string (bypasses RCSB fetch — used by ESMFold). */
+  pdbString?: string;
+  /** Optional ligand name to highlight. */
   highlightLigand?: string;
   /** Initial style. */
   style?: ViewerStyle;
@@ -53,6 +55,7 @@ export interface Viewer3DProps {
 
 export default function Viewer3D({
   pdbId,
+  pdbString,
   highlightLigand,
   style = "cartoon",
   height = 400,
@@ -107,14 +110,15 @@ export default function Viewer3D({
         const viewer = $3Dmol.createViewer(containerRef.current, config);
         viewerRef.current = viewer;
 
-        // Use cached PDB data if available
-        const pdbUrl = `https://files.rcsb.org/download/${pdbId.toUpperCase()}.pdb`;
-        const fetchPromise = cached
-          ? Promise.resolve(cached)
-          : fetch(pdbUrl).then((r) => {
-              if (!r.ok) throw new Error(`PDB ${pdbId} не найден`);
-              return r.text();
-            });
+        // Use pdbString directly if provided (ESMFold), else fetch from RCSB
+        const fetchPromise = pdbString
+          ? Promise.resolve(pdbString)
+          : cached
+            ? Promise.resolve(cached)
+            : fetch(`https://files.rcsb.org/download/${pdbId.toUpperCase()}.pdb`).then((r) => {
+                if (!r.ok) throw new Error(`PDB ${pdbId} не найден`);
+                return r.text();
+              });
 
         fetchPromise
           .then((pdbData) => {
@@ -155,7 +159,7 @@ export default function Viewer3D({
       }
     };
     // deps intentionally limited — style change should re-render without re-fetch
-  }, [pdbId, currentStyle, highlightLigand]);
+  }, [pdbId, pdbString, currentStyle, highlightLigand]);
 
   function applyStyle(viewer: any, $3Dmol: any, style: ViewerStyle, ligand?: string) {
     const colorSchemes: Record<ViewerStyle, any> = {

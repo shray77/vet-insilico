@@ -29,6 +29,7 @@ const TOOL_CATEGORIES = [
     tools: [
       { href: "/sequence-id", label: "BLAST ID", icon: "🔍" },
       { href: "/variant-effect", label: "Variants", icon: "🧬" },
+      { href: "/structure-prediction", label: "ESMFold", icon: "🔬" },
       { href: "/primer-designer", label: "Праймеры", icon: "🔬" },
       { href: "/crispr", label: "CRISPR", icon: "✂️" },
       { href: "/codon-optimizer", label: "Кодоны", icon: "🔤" },

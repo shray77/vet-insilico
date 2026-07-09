@@ -160,6 +160,17 @@ const CATEGORIES: Category[] = [
         requiresML: true,
       },
       {
+        href: "/structure-prediction",
+        icon: "🔬",
+        title: "Structure Prediction",
+        tagline: "ESMFold — 3D структура из последовательности",
+        desc: "Предсказание 3D-структуры белка через ESMFold (Meta AI). PDB + pLDDT confidence. Визуализация в 3Dmol.js. Для любых последовательностей из поля.",
+        stats: ["ESMFold", "pLDDT heatmap", "Бесплатно"],
+        accent: "blue",
+        badge: "NEW",
+        requiresML: true,
+      },
+      {
         href: "/primer-designer",
         icon: "🔬",
         title: "PCR Primer Designer",
