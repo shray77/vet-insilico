@@ -127,6 +127,17 @@ const CATEGORIES: Category[] = [
         requiresML: false,
       },
       {
+        href: "/outbreak-surveillance",
+        icon: "🦠",
+        title: "Outbreak Surveillance",
+        tagline: "Филогения + часы + AMR в одном пайплайне",
+        desc: "Комбинированный анализ вспышки: филогенетическое дерево (UPGMA + Kimura 2P), молекулярные часы (TMRCA), AMR-сканирование. Для полевых изолятов ASFV/FMDV.",
+        stats: ["Дерево + TMRCA", "AMR-скан", "5+ изолятов"],
+        accent: "orange",
+        badge: "NEW",
+        requiresML: false,
+      },
+      {
         href: "/primer-designer",
         icon: "🔬",
         title: "PCR Primer Designer",

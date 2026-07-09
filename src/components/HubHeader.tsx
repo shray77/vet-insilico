@@ -41,6 +41,7 @@ const TOOL_CATEGORIES = [
   {
     title: "Диагностика",
     tools: [
+      { href: "/outbreak-surveillance", label: "Surveillance", icon: "🦠" },
       { href: "/elisa", label: "ELISA", icon: "📊" },
       { href: "/pdb-viewer", label: "3D Viewer", icon: "🔬" },
       { href: "/ai-vet", label: "AI Вет", icon: "🩺" },
