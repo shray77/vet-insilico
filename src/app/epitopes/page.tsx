@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
+import { SequenceSearch } from "@/components/SequenceSearch";
 import { analyzeSequence, SAMPLE_SEQUENCES } from "@/lib/epitopes";
 import {
   peptideNaturalness,
@@ -141,11 +142,12 @@ export default function EpitopesPage() {
             <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 mb-3">
               Последовательность (FASTA plain)
             </h3>
+            <SequenceSearch compact onSelect={(seq) => setSequence(seq)} />
             <textarea
               value={sequence}
               onChange={(e) => setSequence(e.target.value)}
               rows={10}
-              className="w-full px-3 py-2 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-mono"
+              className="w-full px-3 py-2 mt-2 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-mono"
               placeholder="MKNHKQYDHL..."
             />
             <div className="text-xs text-zinc-400 mt-1">

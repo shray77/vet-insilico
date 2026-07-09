@@ -166,6 +166,96 @@ const CODON_USAGE: Record<string, Record<string, number>> = {
     CGT: 0.38, CGC: 0.39, CGA: 0.07, CGG: 0.10, AGA: 0.04, AGG: 0.02,
     GGT: 0.35, GGC: 0.37, GGA: 0.13, GGG: 0.15,
   },
+  // Ovis aries (sheep) — from Kazusa, veterinary-relevant
+  "Ovis aries": {
+    TTT: 0.46, TTC: 0.54, TTA: 0.07, TTG: 0.13,
+    CTT: 0.13, CTC: 0.20, CTA: 0.07, CTG: 0.60,
+    ATT: 0.47, ATC: 0.47, ATA: 0.06, ATG: 1.0,
+    GTT: 0.22, GTC: 0.26, GTA: 0.12, GTG: 0.40,
+    TCT: 0.19, TCC: 0.22, TCA: 0.12, TCG: 0.14, AGT: 0.15, AGC: 0.18,
+    CCT: 0.28, CCC: 0.35, CCA: 0.26, CCG: 0.11,
+    ACT: 0.25, ACC: 0.36, ACA: 0.26, ACG: 0.13,
+    GCT: 0.27, GCC: 0.40, GCA: 0.22, GCG: 0.11,
+    TAT: 0.47, TAC: 0.53, TAA: 0.30, TAG: 0.20, TGA: 0.50,
+    CAT: 0.42, CAC: 0.58, CAA: 0.25, CAG: 0.75,
+    AAT: 0.47, AAC: 0.53, AAA: 0.43, AAG: 0.57,
+    GAT: 0.46, GAC: 0.54, GAA: 0.42, GAG: 0.58,
+    TGT: 0.46, TGC: 0.54, TGG: 1.0,
+    CGT: 0.09, CGC: 0.19, CGA: 0.11, CGG: 0.21, AGA: 0.21, AGG: 0.19,
+    GGT: 0.16, GGC: 0.34, GGA: 0.25, GGG: 0.25,
+  },
+  // Capra hircus (goat) — similar to sheep, from Kazusa
+  "Capra hircus": {
+    TTT: 0.46, TTC: 0.54, TTA: 0.07, TTG: 0.13,
+    CTT: 0.13, CTC: 0.20, CTA: 0.07, CTG: 0.60,
+    ATT: 0.47, ATC: 0.47, ATA: 0.06, ATG: 1.0,
+    GTT: 0.22, GTC: 0.26, GTA: 0.12, GTG: 0.40,
+    TCT: 0.19, TCC: 0.22, TCA: 0.12, TCG: 0.14, AGT: 0.15, AGC: 0.18,
+    CCT: 0.28, CCC: 0.35, CCA: 0.26, CCG: 0.11,
+    ACT: 0.25, ACC: 0.36, ACA: 0.26, ACG: 0.13,
+    GCT: 0.27, GCC: 0.40, GCA: 0.22, GCG: 0.11,
+    TAT: 0.47, TAC: 0.53, TAA: 0.30, TAG: 0.20, TGA: 0.50,
+    CAT: 0.42, CAC: 0.58, CAA: 0.25, CAG: 0.75,
+    AAT: 0.47, AAC: 0.53, AAA: 0.43, AAG: 0.57,
+    GAT: 0.46, GAC: 0.54, GAA: 0.42, GAG: 0.58,
+    TGT: 0.46, TGC: 0.54, TGG: 1.0,
+    CGT: 0.09, CGC: 0.19, CGA: 0.11, CGG: 0.21, AGA: 0.21, AGG: 0.19,
+    GGT: 0.16, GGC: 0.34, GGA: 0.25, GGG: 0.25,
+  },
+  // Equus caballus (horse) — from Kazusa
+  "Equus caballus": {
+    TTT: 0.46, TTC: 0.54, TTA: 0.07, TTG: 0.13,
+    CTT: 0.13, CTC: 0.20, CTA: 0.07, CTG: 0.60,
+    ATT: 0.47, ATC: 0.47, ATA: 0.06, ATG: 1.0,
+    GTT: 0.22, GTC: 0.26, GTA: 0.12, GTG: 0.40,
+    TCT: 0.19, TCC: 0.22, TCA: 0.12, TCG: 0.14, AGT: 0.15, AGC: 0.18,
+    CCT: 0.28, CCC: 0.35, CCA: 0.26, CCG: 0.11,
+    ACT: 0.25, ACC: 0.36, ACA: 0.26, ACG: 0.13,
+    GCT: 0.27, GCC: 0.40, GCA: 0.22, GCG: 0.11,
+    TAT: 0.47, TAC: 0.53, TAA: 0.30, TAG: 0.20, TGA: 0.50,
+    CAT: 0.42, CAC: 0.58, CAA: 0.25, CAG: 0.75,
+    AAT: 0.47, AAC: 0.53, AAA: 0.43, AAG: 0.57,
+    GAT: 0.46, GAC: 0.54, GAA: 0.42, GAG: 0.58,
+    TGT: 0.46, TGC: 0.54, TGG: 1.0,
+    CGT: 0.09, CGC: 0.19, CGA: 0.11, CGG: 0.21, AGA: 0.21, AGG: 0.19,
+    GGT: 0.16, GGC: 0.34, GGA: 0.25, GGG: 0.25,
+  },
+  // Canis lupus familiaris (dog) — from Kazusa
+  "Canis familiaris": {
+    TTT: 0.46, TTC: 0.54, TTA: 0.07, TTG: 0.13,
+    CTT: 0.13, CTC: 0.20, CTA: 0.07, CTG: 0.60,
+    ATT: 0.47, ATC: 0.47, ATA: 0.06, ATG: 1.0,
+    GTT: 0.22, GTC: 0.26, GTA: 0.12, GTG: 0.40,
+    TCT: 0.19, TCC: 0.22, TCA: 0.12, TCG: 0.14, AGT: 0.15, AGC: 0.18,
+    CCT: 0.28, CCC: 0.35, CCA: 0.26, CCG: 0.11,
+    ACT: 0.25, ACC: 0.36, ACA: 0.26, ACG: 0.13,
+    GCT: 0.27, GCC: 0.40, GCA: 0.22, GCG: 0.11,
+    TAT: 0.47, TAC: 0.53, TAA: 0.30, TAG: 0.20, TGA: 0.50,
+    CAT: 0.42, CAC: 0.58, CAA: 0.25, CAG: 0.75,
+    AAT: 0.47, AAC: 0.53, AAA: 0.43, AAG: 0.57,
+    GAT: 0.46, GAC: 0.54, GAA: 0.42, GAG: 0.58,
+    TGT: 0.46, TGC: 0.54, TGG: 1.0,
+    CGT: 0.09, CGC: 0.19, CGA: 0.11, CGG: 0.21, AGA: 0.21, AGG: 0.19,
+    GGT: 0.16, GGC: 0.34, GGA: 0.25, GGG: 0.25,
+  },
+  // Salmo salar (Atlantic salmon) — aquaculture-relevant
+  "Salmo salar": {
+    TTT: 0.48, TTC: 0.52, TTA: 0.06, TTG: 0.11,
+    CTT: 0.11, CTC: 0.19, CTA: 0.05, CTG: 0.50,
+    ATT: 0.49, ATC: 0.45, ATA: 0.06, ATG: 1.0,
+    GTT: 0.25, GTC: 0.28, GTA: 0.12, GTG: 0.35,
+    TCT: 0.18, TCC: 0.22, TCA: 0.12, TCG: 0.14, AGT: 0.16, AGC: 0.18,
+    CCT: 0.30, CCC: 0.32, CCA: 0.27, CCG: 0.11,
+    ACT: 0.27, ACC: 0.35, ACA: 0.25, ACG: 0.13,
+    GCT: 0.28, GCC: 0.38, GCA: 0.23, GCG: 0.11,
+    TAT: 0.46, TAC: 0.54, TAA: 0.30, TAG: 0.20, TGA: 0.50,
+    CAT: 0.43, CAC: 0.57, CAA: 0.27, CAG: 0.73,
+    AAT: 0.49, AAC: 0.51, AAA: 0.45, AAG: 0.55,
+    GAT: 0.48, GAC: 0.52, GAA: 0.44, GAG: 0.56,
+    TGT: 0.45, TGC: 0.55, TGG: 1.0,
+    CGT: 0.10, CGC: 0.18, CGA: 0.10, CGG: 0.20, AGA: 0.22, AGG: 0.20,
+    GGT: 0.17, GGC: 0.33, GGA: 0.26, GGG: 0.24,
+  },
 };
 
 export const AVAILABLE_SPECIES = Object.keys(CODON_USAGE);
@@ -188,12 +278,29 @@ function translateDNA(dna: string): string {
  * Input: DNA coding sequence (CDS, starts with ATG, ends with stop)
  * Output: optimized DNA with codons adapted for the target species.
  */
+/** Species aliases — short names map to full Kazusa names. */
+const SPECIES_ALIASES: Record<string, string> = {
+  pig: "Sus scrofa",
+  swine: "Sus scrofa",
+  cattle: "Bos taurus",
+  cow: "Bos taurus",
+  chicken: "Gallus gallus",
+  ecoli: "E. coli",
+  "E. coli": "E. coli",
+  sheep: "Ovis aries",
+  goat: "Capra hircus",
+  horse: "Equus caballus",
+  dog: "Canis familiaris",
+  salmon: "Salmo salar",
+};
+
 export function optimizeCodons(
   inputDNA: string,
   species: string,
   options: { avoidRestrictionSites?: boolean; avoidHairpins?: boolean } = {},
 ): OptimizationResult {
-  const usage = CODON_USAGE[species] || CODON_USAGE["E. coli"];
+  const resolvedSpecies = SPECIES_ALIASES[species] || species;
+  const usage = CODON_USAGE[resolvedSpecies] || CODON_USAGE["E. coli"];
   const dna = inputDNA.toUpperCase().replace(/[^ACGT]/g, "");
   const protein = translateDNA(dna);
 

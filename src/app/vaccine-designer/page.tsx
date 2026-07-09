@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { ToolPageLayout, EmptyPanel, ErrorAlert, CopyButton } from "@/components/ui";
+import { SequenceSearch } from "@/components/SequenceSearch";
 import { designVaccine, type VaccineConstruct } from "@/lib/vaccine-designer";
 import { SAMPLE_SEQUENCES } from "@/lib/epitopes";
 
@@ -10,6 +11,11 @@ const SPECIES = [
   { value: "pig", label: "Свинья (Sus scrofa)" },
   { value: "cattle", label: "КРС (Bos taurus)" },
   { value: "chicken", label: "Курица (Gallus gallus)" },
+  { value: "sheep", label: "Овца (Ovis aries)" },
+  { value: "goat", label: "Коза (Capra hircus)" },
+  { value: "horse", label: "Лошадь (Equus caballus)" },
+  { value: "dog", label: "Собака (Canis familiaris)" },
+  { value: "salmon", label: "Лосось (Salmo salar)" },
   { value: "ecoli", label: "E. coli (для наработки)" },
 ];
 
@@ -71,8 +77,9 @@ export default function VaccineDesignerPage() {
           </div>
           <label className="block mb-4">
             <span className="text-xs text-zinc-500">Белок патогена</span>
+            <SequenceSearch compact onSelect={(seq) => setSequence(seq)} />
             <textarea value={sequence} onChange={(e) => setSequence(e.target.value)} rows={6}
-              className="w-full px-3 py-2 mt-1 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-sm font-mono" />
+              className="w-full px-3 py-2 mt-2 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-sm font-mono" />
           </label>
           <div className="grid grid-cols-2 gap-3 mb-4">
             <label className="block">
