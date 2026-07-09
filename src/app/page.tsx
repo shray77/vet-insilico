@@ -116,6 +116,17 @@ const CATEGORIES: Category[] = [
         requiresML: false,
       },
       {
+        href: "/sequence-id",
+        icon: "🔍",
+        title: "Sequence ID",
+        tagline: "BLAST-идентификация последовательностей",
+        desc: "Что это за последовательность? BLAST против NCBI GenBank → топ-совпадения + рекомендация инструмента VetInSilico. Для неизвестных образцов из поля.",
+        stats: ["NCBI BLAST", "10-60 сек", "Авто-рекомендация"],
+        accent: "cyan",
+        badge: "NEW",
+        requiresML: false,
+      },
+      {
         href: "/primer-designer",
         icon: "🔬",
         title: "PCR Primer Designer",

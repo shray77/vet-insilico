@@ -26,6 +26,7 @@ const TOOL_CATEGORIES = [
   {
     title: "Геномика",
     tools: [
+      { href: "/sequence-id", label: "BLAST ID", icon: "🔍" },
       { href: "/primer-designer", label: "Праймеры", icon: "🔬" },
       { href: "/crispr", label: "CRISPR", icon: "✂️" },
       { href: "/codon-optimizer", label: "Кодоны", icon: "🔤" },
