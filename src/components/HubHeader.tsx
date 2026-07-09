@@ -12,6 +12,7 @@ const TOOL_CATEGORIES = [
     tools: [
       { href: "/drug-repurposing", label: "Docking", icon: "🧬" },
       { href: "/admet", label: "ADMET", icon: "💊" },
+      { href: "/toxicity-ml", label: "Toxicity ML", icon: "☠️" },
       { href: "/pkpd", label: "PK/PD", icon: "📊" },
       { href: "/dose-calculator", label: "Дозы", icon: "🧪" },
     ],
@@ -27,6 +28,7 @@ const TOOL_CATEGORIES = [
     title: "Геномика",
     tools: [
       { href: "/sequence-id", label: "BLAST ID", icon: "🔍" },
+      { href: "/variant-effect", label: "Variants", icon: "🧬" },
       { href: "/primer-designer", label: "Праймеры", icon: "🔬" },
       { href: "/crispr", label: "CRISPR", icon: "✂️" },
       { href: "/codon-optimizer", label: "Кодоны", icon: "🔤" },
