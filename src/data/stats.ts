@@ -9,8 +9,8 @@
 // These counts must match the actual arrays in src/data/drugs.ts and
 // src/data/pathogens.ts. If they drift, the homepage will show wrong numbers.
 // To verify: run `bun run test` — the stats test checks these.
-export const DRUG_COUNT = 204;
-export const DRUGS_WITH_SMILES = 197;
+export const DRUG_COUNT = 202;
+export const DRUGS_WITH_SMILES = 196;
 export const PATHOGEN_COUNT = 17;
 export const RESTRICTION_ENZYME_COUNT = 28;
 export const TOOL_COUNT = 17;

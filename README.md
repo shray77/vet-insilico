@@ -4,7 +4,7 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Live](https://img.shields.io/badge/Live-shray77.github.io%2Fvet--insilico-teal.svg)](https://shray77.github.io/vet-insilico/)
-[![Tests](https://img.shields.io/badge/Tests-121%20pass-green.svg)](#)
+[![Tests](https://img.shields.io/badge/Tests-148%20pass-green.svg)](#)
 [![Tools](https://img.shields.io/badge/Tools-17-purple.svg)](#)
 
 ## Tools (17)
@@ -50,14 +50,14 @@
 - **Molecular toolkit**: RDKit.js WASM (CDN, 4MB)
 - **ML**: HuggingFace Inference API (Qwen2.5-Coder-3B-Instruct via nscale, ESM-2 35M via hf-inference)
 - **Hosting**: GitHub Pages (static, no backend)
-- **Tests**: Vitest, 137 tests, 13 test files
+- **Tests**: Vitest, 148 tests, 15 test files
 
 ## Data
 
-- **12 pathogens** (ASFV, FMDV, Brucella, HPAI, Newcastle, Rabies, Salmonella, BVDV, Leptospira, PEDV, E. coli, Anaplasma)
-- **204 drugs** with molecular properties
-- **190 drugs with SMILES** (from PubChem)
-- **30+ restriction enzymes**
+- **17 pathogens** (ASFV, FMDV, Brucella, HPAI, Newcastle, Rabies, Salmonella, BVDV, Leptospira, PEDV, E. coli, Anaplasma, Clostridium, Campylobacter, Mycoplasma, H5N1, Corynebacterium)
+- **202 drugs** with molecular properties
+- **196 drugs with SMILES** (from PubChem)
+- **28 restriction enzymes**
 - **12 molecular clock rates** (published)
 - **36 antibiotic dose schemes** (Plumb's + РФ реестр)
 
@@ -76,7 +76,7 @@ ML features (LLM analysis, ESM-2 naturalness, RDKit descriptors) require a free 
 bun install
 bun run dev          # http://localhost:3000
 bun run build        # → out/ (static export)
-bun run test         # 137 tests
+bun run test         # 148 tests
 bun run test:coverage # with coverage report
 ```
 
