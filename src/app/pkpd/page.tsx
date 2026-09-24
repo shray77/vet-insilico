@@ -85,7 +85,6 @@ export default function PKPDPage() {
     } else if (parsed.data) {
       applyScenario(parsed.data);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleShare = async () => {
