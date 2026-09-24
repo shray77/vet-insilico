@@ -1,13 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getHfToken, setHfToken, validateHfToken } from "@/lib/hf";
+import { getHfToken, setHfToken, validateHfToken, getAiRoute, setAiRoute, type AiRoute } from "@/lib/hf";
+import { probeCloud, type CloudStatus } from "@/lib/cloud";
 
 export default function HfTokenModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [token, setToken] = useState("");
   const [status, setStatus] = useState<"idle" | "validating" | "ok" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [saved, setSaved] = useState(false);
+  const [cloud, setCloud] = useState<CloudStatus | null>(null);
+  const [route, setRoute] = useState<AiRoute>("auto");
 
   useEffect(() => {
     if (open) {
@@ -15,6 +18,8 @@ export default function HfTokenModal({ open, onClose }: { open: boolean; onClose
       setStatus("idle");
       setErrorMsg("");
       setSaved(false);
+      setRoute(getAiRoute());
+      probeCloud().then(setCloud);
     }
   }, [open]);
 
@@ -52,17 +57,57 @@ export default function HfTokenModal({ open, onClose }: { open: boolean; onClose
       <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 max-w-md w-full p-6" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-start justify-between mb-4">
           <div>
-            <h3 className="text-lg font-bold">🤖 ML-настройки</h3>
-            <p className="text-xs text-zinc-400 mt-1">HuggingFace Inference API token</p>
+            <h3 className="text-lg font-bold">⚙️ Настройки вычислений</h3>
+            <p className="text-xs text-zinc-400 mt-1">Облачный AI · HuggingFace token</p>
           </div>
           <button onClick={onClose} className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white text-xl">✕</button>
         </div>
 
         <div className="space-y-3">
+          {/* ─── Облако (vet-api) ─── */}
+          <div className="rounded-lg bg-zinc-100 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 p-3 text-xs">
+            <div className="flex items-center gap-2 mb-1.5">
+              <span
+                className={`inline-block h-2 w-2 rounded-full ${
+                  !cloud ? "bg-zinc-400 animate-pulse" : cloud.reachable ? "bg-green-500" : "bg-zinc-400"
+                }`}
+              ></span>
+              <span className="font-semibold">
+                Облако vet-api {cloud ? (cloud.reachable ? "— доступно" : "— недоступно") : "— проверка..."}
+              </span>
+              {cloud?.reachable && cloud.ms > 0 && <span className="ml-auto text-zinc-400">{cloud.ms} ms</span>}
+            </div>
+            <div className="text-zinc-500 dark:text-zinc-400">
+              {cloud?.reachable
+                ? cloud.ai
+                  ? "AI через облако работает без токена — LLM-анализ и ESM-2 доступны сразу."
+                  : "Данные доступны (вспышки, шаринг). AI-прокси пока не включён админом."
+                : "workers.dev недоступен из вашей сети (РФ-блокировка или оффлайн) — всё считается локально, ML только через свой токен."}
+            </div>
+            <div className="flex gap-1 mt-2">
+              {(["auto", "cloud", "token"] as AiRoute[]).map((r) => (
+                <button
+                  key={r}
+                  onClick={() => { setRoute(r); setAiRoute(r); }}
+                  className={`flex-1 px-2 py-1 rounded text-[11px] transition ${
+                    route === r
+                      ? "bg-teal-600 text-white"
+                      : "bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 hover:border-teal-400 text-zinc-600 dark:text-zinc-300"
+                  }`}
+                >
+                  {r === "auto" ? "Авто" : r === "cloud" ? "Только облако" : "Свой токен"}
+                </button>
+              ))}
+            </div>
+            <div className="mt-1 text-[10px] text-zinc-400">
+              Авто = облако → фолбэк на свой токен. Маршрут действует для LLM и ESM-2.
+            </div>
+          </div>
+
           <div className="rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 p-3 text-xs text-blue-800 dark:text-blue-200">
-            <div className="font-semibold mb-1">Зачем нужен токен?</div>
+            <div className="font-semibold mb-1">Зачем свой токен?</div>
             <div>
-              Для глубокого ML-анализа: Qwen2.5-Coder-3B-Instruct (LLM) и ESM-2 (protein language model).
+              Fallback, если облако недоступно: Qwen2.5-Coder-3B-Instruct (LLM) и ESM-2 (protein LM) напрямую через HuggingFace.
               Токен хранится только в localStorage вашего браузера, никуда не отправляется кроме HuggingFace.
             </div>
             <a

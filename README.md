@@ -49,8 +49,21 @@
 - **3D viewer**: 3Dmol.js (CDN)
 - **Molecular toolkit**: RDKit.js WASM (CDN, 4MB)
 - **ML**: HuggingFace Inference API (Qwen2.5-Coder-3B-Instruct via nscale, ESM-2 35M via hf-inference)
-- **Hosting**: GitHub Pages (static, no backend)
-- **Tests**: Vitest, 148 tests, 15 test files
+- **Hosting**: GitHub Pages (static) + **полу-динамика через [vet-api](https://github.com/shray77/vet-api)** (Cloudflare Worker)
+- **Tests**: Vitest, 158 tests, 16 test files
+
+## Полу-динамика (static + vet-api)
+
+Сайт остаётся статикой (GitHub Pages), но три слоя данных подтягиваются из CF Worker `vet-api`,
+всё с graceful fallback (РФ-блокировка workers.dev / оффлайн не ломают страницы):
+
+| Слой | Что даёт | Fallback |
+|---|---|---|
+| 🦠 **Live-сводка вспышек** | главная страница + `/v1/insilico/outbreaks` — зеркало heatmap-датасета (FAO/WOAH/ФСВПС, ~2.6k записей, мост обновляет каждые 6 ч) | панель просто не рендерится |
+| 🔗 **Share-ссылки сценариев** | «Поделиться сценарием» в PK/PD: payload в KV (TTL 90 дней, id в `#s=`) | автономная ссылка `#j=` — сценарий зашит в URL (base64url) |
+| ☁️ **Облачный AI без токена** | LLM (Qwen2.5-Coder-3B) и ESM-2 через прокси воркера — юзеру не нужен HF-токен | свой HF-токен → детерминированные алгоритмы |
+
+Маршрутизация AI настраивается в «⚙️ Настройки вычислений» (шапка): **Авто** (облако → токен) / **Только облако** / **Свой токен**.
 
 ## Data
 
@@ -76,7 +89,7 @@ ML features (LLM analysis, ESM-2 naturalness, RDKit descriptors) require a free 
 bun install
 bun run dev          # http://localhost:3000
 bun run build        # → out/ (static export)
-bun run test         # 148 tests
+bun run test         # 158 tests
 bun run test:coverage # with coverage report
 ```
 

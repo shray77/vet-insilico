@@ -1,9 +1,18 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
 import { simulatePK, computePD, DRUG_PK_PROFILES } from "@/lib/pkpd";
+import { cloudShare, cloudGetShare } from "@/lib/cloud";
+import {
+  parseShareHash,
+  buildCloudShareUrl,
+  buildAutonomousShareUrl,
+  normalizePkpd,
+  isPkpdScenario,
+  type PkpdScenario,
+} from "@/lib/share";
 
 export default function PKPDPage() {
   const [profileIdx, setProfileIdx] = useState(0);
@@ -51,6 +60,56 @@ export default function PKPDPage() {
     setPdTarget(DRUG_PK_PROFILES[idx].pdTarget || 100);
   };
 
+  /* ─── Share: облачный (KV, 90д) → фолбэк автономный (#j=... в URL) ─── */
+  const [shareInfo, setShareInfo] = useState("");
+
+  const applyScenario = (sc: PkpdScenario) => {
+    const idx = Math.min(sc.profileIdx, DRUG_PK_PROFILES.length - 1);
+    setProfileIdx(idx);
+    setDose(sc.dose);
+    setInterval(sc.interval);
+    setNDoses(sc.nDoses);
+    setMic(sc.mic);
+    setPdTarget(sc.pdTarget);
+  };
+
+  // Загрузка сценария из ссылки: #s=<id> (облако) или #j=<b64> (автономный)
+  useEffect(() => {
+    const parsed = parseShareHash(window.location.hash);
+    if (parsed.id) {
+      cloudGetShare(parsed.id)
+        .then((rec) => {
+          if (isPkpdScenario(rec.payload)) applyScenario(normalizePkpd(rec.payload));
+        })
+        .catch(() => {}); // облако недоступно — остаёмся на дефолтных параметрах
+    } else if (parsed.data) {
+      applyScenario(parsed.data);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleShare = async () => {
+    const sc: PkpdScenario = { v: 1, app: "pkpd", profileIdx, dose, interval, nDoses, mic, pdTarget };
+    const title = `${profile.name}: ${dose} мг/кг каждые ${interval} ч`;
+    let url = "";
+    let mode = "";
+    try {
+      const { id } = await cloudShare("pkpd", sc, title);
+      url = buildCloudShareUrl(id);
+      mode = "облачный (90 дней)";
+    } catch {
+      url = buildAutonomousShareUrl(sc);
+      mode = "автономный — сценарий зашит в URL";
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      setShareInfo(`🔗 Ссылка скопирована (${mode})`);
+    } catch {
+      setShareInfo(`🔗 ${url} (${mode})`);
+    }
+    setTimeout(() => setShareInfo(""), 8000);
+  };
+
   return (
     <div className="min-h-screen">
       <HubHeader />
@@ -63,14 +122,29 @@ export default function PKPDPage() {
         </div>
 
         <div className="rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 p-4 mb-6">
-          <h2 className="font-semibold text-rose-900 dark:text-rose-100 mb-1">
-            💉 PK/PD Simulator — фармакокинетика + фармакодинамика
-          </h2>
-          <p className="text-sm text-rose-800 dark:text-rose-200">
-            Однокомпартментная модель с first-order absorption. Считаем Cmax, AUC, t½, Css.
-            PD-индексы: AUC/MIC (фторхинолоны), Cmax/MIC (аминогликозиды), T&gt;MIC (β-лактамы).
-            Визуализация concentration-time графика + Emax dose-response.
-          </p>
+          <div className="flex items-start gap-3 flex-wrap">
+            <div className="flex-1 min-w-[260px]">
+              <h2 className="font-semibold text-rose-900 dark:text-rose-100 mb-1">
+                💉 PK/PD Simulator — фармакокинетика + фармакодинамика
+              </h2>
+              <p className="text-sm text-rose-800 dark:text-rose-200">
+                Однокомпартментная модель с first-order absorption. Считаем Cmax, AUC, t½, Css.
+                PD-индексы: AUC/MIC (фторхинолоны), Cmax/MIC (аминогликозиды), T&gt;MIC (β-лактамы).
+                Визуализация concentration-time графика + Emax dose-response.
+              </p>
+            </div>
+            <div className="flex flex-col items-stretch gap-1">
+              <button
+                onClick={handleShare}
+                className="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-medium transition whitespace-nowrap"
+              >
+                🔗 Поделиться сценарием
+              </button>
+              {shareInfo && (
+                <span className="text-[10px] text-rose-700 dark:text-rose-300 max-w-[240px] break-all">{shareInfo}</span>
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

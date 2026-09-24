@@ -17,6 +17,7 @@
 
 import { extractJson } from "./json-utils";
 import { blosum62Score } from "./blosum62";
+import { cloudChat, cloudEsm } from "./cloud";
 
 const HF_TOKEN_KEY = "vis-hf-token";
 const ROUTER_BASE = "https://router.huggingface.co";
@@ -41,16 +42,63 @@ export function setHfToken(token: string): void {
   } catch {}
 }
 
+/* ─── Маршрутизация AI: облако (vet-api) ↔ свой токен ─── */
+
+export type AiRoute = "auto" | "cloud" | "token";
+const AI_ROUTE_KEY = "vis:ai_route";
+
+/** auto = облако → свой токен; cloud = только облако; token = только свой токен. */
+export function getAiRoute(): AiRoute {
+  if (typeof window === "undefined") return "auto";
+  try {
+    const r = localStorage.getItem(AI_ROUTE_KEY);
+    return r === "cloud" || r === "token" ? r : "auto";
+  } catch {
+    return "auto";
+  }
+}
+
+export function setAiRoute(route: AiRoute): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(AI_ROUTE_KEY, route);
+  } catch {}
+}
+
 export interface ChatMessage {
   role: "system" | "user" | "assistant";
   content: string;
 }
 
 /**
- * Call Qwen2.5-Coder-3B-Instruct via OpenAI-compatible chat completions API.
- * Returns the assistant's text response.
+ * Call Qwen2.5-Coder-3B-Instruct. Маршрутизация:
+ *   auto  → облако (vet-api, без токена) → фолбэк на свой HF-токен;
+ *   cloud → только облако (честная ошибка, если недоступно);
+ *   token → сразу свой токен (как раньше).
  */
 export async function chatComplete(
+  messages: ChatMessage[],
+  opts: { maxTokens?: number; temperature?: number; signal?: AbortSignal } = {},
+): Promise<string> {
+  const route = getAiRoute();
+  if (route !== "token") {
+    try {
+      return await cloudChat(messages, opts);
+    } catch (cloudErr) {
+      if (route === "cloud") throw cloudErr;
+      if (!getHfToken()) {
+        throw new Error(
+          `Облачный AI недоступен (${String(cloudErr).slice(0, 80)}) и свой HF-токен не задан — откройте «Настройки ML» в шапке`,
+        );
+      }
+      // auto → пробуем токен юзера ниже
+    }
+  }
+  return chatCompleteDirect(messages, opts);
+}
+
+/** Прямой вызов HF router с токеном юзера (прежнее поведение). */
+async function chatCompleteDirect(
   messages: ChatMessage[],
   opts: { maxTokens?: number; temperature?: number; signal?: AbortSignal } = {},
 ): Promise<string> {
@@ -100,7 +148,50 @@ export async function chatComplete(
  * Example: predictMaskedResidue("MKT<mask>YIAK") → [{token_str:"A", score:0.31}, ...]
  * Multi-mask: predictMaskedResidue("MK<mask>AY<mask>AK") → [[...], [...]] (array of arrays)
  */
+/**
+ * Predict masked amino acid probabilities using ESM-2.
+ * Маршрутизация как у chatComplete: auto → облако → свой токен.
+ */
 export async function predictMaskedResidue(
+  sequence: string,
+  opts: { signal?: AbortSignal; model?: string } = {},
+): Promise<{ token_str: string; score: number; sequence: string }[]> {
+  const route = getAiRoute();
+  if (route !== "token") {
+    try {
+      const data = await cloudEsm(sequence, { model: opts.model, signal: opts.signal });
+      return normalizeEsm(data);
+    } catch (cloudErr) {
+      if (route === "cloud") throw cloudErr;
+      if (!getHfToken()) {
+        throw new Error(
+          `Облачный ESM-2 недоступен (${String(cloudErr).slice(0, 80)}) и свой HF-токен не задан — откройте «Настройки ML» в шапке`,
+        );
+      }
+    }
+  }
+  return predictMaskedResidueDirect(sequence, opts);
+}
+
+/** Нормализация ответа HF fill-mask: single-mask → массив, multi-mask → первый ряд. */
+function normalizeEsm(data: unknown): { token_str: string; score: number; sequence: string }[] {
+  if (Array.isArray(data) && data.length > 0 && Array.isArray(data[0])) {
+    return (data[0] as Record<string, unknown>[]).map((d) => ({
+      token_str: d.token_str as string,
+      score: d.score as number,
+      sequence: d.sequence as string,
+    }));
+  }
+  if (!Array.isArray(data)) throw new Error("ESM-2: неожиданный ответ");
+  return (data as Record<string, unknown>[]).map((d) => ({
+    token_str: d.token_str as string,
+    score: d.score as number,
+    sequence: d.sequence as string,
+  }));
+}
+
+/** Прямой вызов HF Inference API с токеном юзера (прежнее поведение). */
+async function predictMaskedResidueDirect(
   sequence: string,
   opts: { signal?: AbortSignal; model?: string } = {},
 ): Promise<{ token_str: string; score: number; sequence: string }[]> {
@@ -125,7 +216,7 @@ export async function predictMaskedResidue(
   if (!res.ok) {
     // Fallback to smaller model if 35M not available
     if (model !== "facebook/esm2_t6_8M_UR50D" && (res.status === 404 || res.status === 503)) {
-      return predictMaskedResidue(sequence, { ...opts, model: "facebook/esm2_t6_8M_UR50D" });
+      return predictMaskedResidueDirect(sequence, { ...opts, model: "facebook/esm2_t6_8M_UR50D" });
     }
     const errText = await res.text().catch(() => "");
     throw new Error(`ESM-2 API ${res.status}: ${errText.slice(0, 200)}`);

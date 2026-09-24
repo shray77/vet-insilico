@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
+import LiveOutbreaks from "@/components/LiveOutbreaks";
 import { DRUG_COUNT, PATHOGEN_COUNT } from "@/data/stats";
 
 interface Tool {
@@ -386,6 +387,9 @@ export default function HubPage() {
             </div>
           ))}
         </section>
+
+        {/* Live: сводка вспышек через vet-api (не рендерится, если облако недоступно) */}
+        <LiveOutbreaks limit={8} />
 
         {/* Search */}
         <div className="mb-6 relative">
