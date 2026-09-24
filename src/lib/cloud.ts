@@ -27,8 +27,10 @@ const CLOUD_URL = getCloudUrl();
 
 export interface CloudStatus {
   reachable: boolean;
-  /** Облачный AI включён на воркере (секрет HF_TOKEN задан). */
+  /** Облачный AI включён на воркере (эдж-биндинг Workers AI и/или секрет HF_TOKEN). */
   ai: boolean;
+  /** Канал AI: "workers-ai" (эдж) | "hf" | undefined. */
+  aiBackend?: string;
   /** Сколько вспышек сейчас в KV-зеркале (если засеяно). */
   outbreaks: number | null;
   outbreaksUpdated: string | null;
@@ -69,7 +71,12 @@ export async function probeCloud(force = false): Promise<CloudStatus> {
   }
   if (probeInFlight) return probeInFlight;
   const t0 = Date.now();
-  probeInFlight = fetchJson<{ ai: boolean; outbreaks: number | null; outbreaksUpdated: string | null }>(
+  probeInFlight = fetchJson<{
+    ai: boolean;
+    aiBackend?: string;
+    outbreaks: number | null;
+    outbreaksUpdated: string | null;
+  }>(
     "/v1/insilico/status",
     undefined,
     4500,
@@ -78,6 +85,7 @@ export async function probeCloud(force = false): Promise<CloudStatus> {
       probeCache = {
         reachable: true,
         ai: Boolean(d.ai),
+        aiBackend: d.aiBackend,
         outbreaks: d.outbreaks,
         outbreaksUpdated: d.outbreaksUpdated,
         ms: Date.now() - t0,

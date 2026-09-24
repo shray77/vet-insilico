@@ -58,7 +58,7 @@ export default function HfTokenModal({ open, onClose }: { open: boolean; onClose
         <div className="flex items-start justify-between mb-4">
           <div>
             <h3 className="text-lg font-bold">⚙️ Настройки вычислений</h3>
-            <p className="text-xs text-zinc-400 mt-1">Облачный AI · HuggingFace token</p>
+            <p className="text-xs text-zinc-400 mt-1">Облачный AI · Workers AI (эдж) + HF token</p>
           </div>
           <button onClick={onClose} className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white text-xl">✕</button>
         </div>
@@ -75,12 +75,19 @@ export default function HfTokenModal({ open, onClose }: { open: boolean; onClose
               <span className="font-semibold">
                 Облако vet-api {cloud ? (cloud.reachable ? "— доступно" : "— недоступно") : "— проверка..."}
               </span>
+              {cloud?.reachable && cloud.aiBackend === "workers-ai" && (
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300 font-medium">
+                  Workers AI · эдж
+                </span>
+              )}
               {cloud?.reachable && cloud.ms > 0 && <span className="ml-auto text-zinc-400">{cloud.ms} ms</span>}
             </div>
             <div className="text-zinc-500 dark:text-zinc-400">
               {cloud?.reachable
                 ? cloud.ai
-                  ? "AI через облако работает без токена — LLM-анализ и ESM-2 доступны сразу."
+                  ? cloud.aiBackend === "workers-ai"
+                    ? "LLM работает на эдже (Workers AI, llama-3.3-70b) без всяких токенов. ESM-2 на эдже нет — свой HF-токен или локальные эвристики."
+                    : "AI через облако работает без токена — LLM-анализ и ESM-2 доступны сразу."
                   : "Данные доступны (вспышки, шаринг). AI-прокси пока не включён админом."
                 : "workers.dev недоступен из вашей сети (РФ-блокировка или оффлайн) — всё считается локально, ML только через свой токен."}
             </div>
@@ -107,7 +114,7 @@ export default function HfTokenModal({ open, onClose }: { open: boolean; onClose
           <div className="rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 p-3 text-xs text-blue-800 dark:text-blue-200">
             <div className="font-semibold mb-1">Зачем свой токен?</div>
             <div>
-              Fallback, если облако недоступно: Qwen2.5-Coder-3B-Instruct (LLM) и ESM-2 (protein LM) напрямую через HuggingFace.
+              ESM-2 (protein LM) — всегда через HuggingFace (на эдже её нет). Плюс это fallback для LLM, если облако недоступно: Qwen2.5-Coder-3B-Instruct напрямую через HuggingFace.
               Токен хранится только в localStorage вашего браузера, никуда не отправляется кроме HuggingFace.
             </div>
             <a

@@ -32,7 +32,7 @@ describe("predictBCellEpitopes", () => {
 describe("predictTCellEpitopes", () => {
   it("returns MHC-I binding candidates (9-mers)", () => {
     const seq = "MKWVTFISLLFLFSSAYSRGVFRRDTHKSEIAHRFKDLGEEHFKGLV";
-    const results = predictTCellEpitopes(seq, ["HLA-A*02:01"]);
+    const results = predictTCellEpitopes(seq, "HLA-A*02:01");
     expect(results.length).toBeGreaterThan(0);
     results.forEach((r) => {
       expect(r.sequence.length).toBe(9); // MHC-I binds 9-mers
@@ -41,7 +41,7 @@ describe("predictTCellEpitopes", () => {
   });
 
   it("handles short sequences gracefully", () => {
-    const results = predictTCellEpitopes("ACD", ["HLA-A*02:01"]);
+    const results = predictTCellEpitopes("ACD", "HLA-A*02:01");
     expect(results).toEqual([]);
   });
 });
