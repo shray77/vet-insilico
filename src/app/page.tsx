@@ -367,7 +367,7 @@ export default function HubPage() {
           <div className="flex flex-wrap justify-center gap-2 mt-6 text-xs">
             <span className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-900">🇷🇺 Адаптация под РФ</span>
             <span className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-900">🤖 ML через HuggingFace</span>
-            <span className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-900">🔒 Без бэкенда</span>
+            <span className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-900">☁️ Статика + CF-динамика</span>
             <span className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-900">🧪 Apache 2.0</span>
           </div>
         </section>
