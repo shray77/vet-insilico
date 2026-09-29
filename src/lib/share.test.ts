@@ -3,8 +3,13 @@ import {
   toB64Url,
   fromB64Url,
   normalizePkpd,
+  normalizePrimer,
+  normalizeCrispr,
+  normalizeAlignment,
+  normalizeScenario,
   encodeAutonomousPayload,
   decodeAutonomousPayload,
+  autonomousPayloadSize,
   parseShareHash,
 } from "./share";
 
@@ -65,7 +70,7 @@ describe("parseShareHash", () => {
   it("парсит автономный #j=<b64>", () => {
     const sc = normalizePkpd({ profileIdx: 1, dose: 3 });
     const r = parseShareHash(`#j=${encodeAutonomousPayload(sc)}`);
-    expect(r.data?.profileIdx).toBe(1);
+    expect(r.data && r.data.app === "pkpd" && r.data.profileIdx).toBe(1);
     expect(r.id).toBeUndefined();
   });
 
@@ -73,5 +78,58 @@ describe("parseShareHash", () => {
     expect(parseShareHash("")).toEqual({});
     expect(parseShareHash("#s=!!")).toEqual({});
     expect(parseShareHash("#random=stuff")).toEqual({});
+  });
+});
+
+describe("scenario v2: primer / crispr / alignment", () => {
+  it("normalizePrimer: клампы параметров + санитизация последовательности", () => {
+    const sc = normalizePrimer({ seq: "acg tnry-k*m", targetTm: 999, minProduct: 10, maxProduct: 99999, minLen: 1, maxLen: 99 });
+    expect(sc).toMatchObject({
+      app: "primer",
+      seq: "ACGTNRY-KM", // uppercase, пробел/звёздочка выброшены
+      targetTm: 70,
+      minProduct: 50,
+      maxProduct: 2000,
+      minLen: 17,
+      maxLen: 35,
+    });
+  });
+
+  it("normalizeCrispr: кламп minScore + санитизация", () => {
+    const sc = normalizeCrispr({ seq: "ggggccaaaattttggggcc", minScore: 500 });
+    expect(sc).toMatchObject({ app: "crispr", seq: "GGGGCCAAAATTTTGGGGCC", minScore: 100 });
+    expect(normalizeCrispr({}).minScore).toBe(20);
+  });
+
+  it("normalizeAlignment: дискриминанты type/algo + кламп gap", () => {
+    const sc = normalizeAlignment({ a: "acgt", b: "CGT-", type: "rna", algo: "blast", gap: 0 });
+    expect(sc).toMatchObject({ app: "alignment", a: "ACGT", b: "CGT-", type: "dna", algo: "needleman-wunsch", gap: -2 });
+    expect(normalizeAlignment({ gap: -100 }).gap).toBe(-20);
+  });
+
+  it("normalizeScenario: диспетчер по app, чужие app → null", () => {
+    expect(normalizeScenario({ app: "crispr", seq: "ACGT" })?.app).toBe("crispr");
+    expect(normalizeScenario({ app: "alignment", a: "A", b: "T" })?.app).toBe("alignment");
+    expect(normalizeScenario({ app: "hacker" })).toBeNull();
+    expect(normalizeScenario(null)).toBeNull();
+  });
+
+  it("roundtrip primer через автономный payload", () => {
+    const sc = normalizePrimer({ seq: "ATGGCCTATTGG", targetTm: 60, minProduct: 120, maxProduct: 500, minLen: 19, maxLen: 24 });
+    expect(decodeAutonomousPayload(encodeAutonomousPayload(sc))).toEqual(sc);
+  });
+
+  it("roundtrip alignment + размер payload честный", () => {
+    const sc = normalizeAlignment({ a: "MKTAYIAKQRQISFVKSH", b: "MKTAYIAKQRQISFVKSH", type: "protein", algo: "smith-waterman", gap: -6 });
+    const enc = encodeAutonomousPayload(sc);
+    expect(decodeAutonomousPayload(enc)).toEqual(sc);
+    expect(autonomousPayloadSize(sc)).toBe(enc.length);
+  });
+
+  it("parseShareHash понимает #j нового формата (alignment)", () => {
+    const sc = normalizeAlignment({ a: "ACGTACGT", b: "ACGTACGT", type: "dna", algo: "needleman-wunsch", gap: -8 });
+    const enc = encodeAutonomousPayload(sc);
+    const parsed = parseShareHash(`#j=${enc}`);
+    expect(parsed.data?.app).toBe("alignment");
   });
 });

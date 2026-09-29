@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
+import ShareButton from "@/components/ShareButton";
+import { loadScenarioFromHash, normalizeAlignment } from "@/lib/share";
 import {
   needlemanWunsch,
   smithWaterman,
@@ -18,6 +20,20 @@ export default function AlignmentPage() {
   const [selectedSample, setSelectedSample] = useState(0);
   const [algorithm, setAlgorithm] = useState<"needleman-wunsch" | "smith-waterman">("needleman-wunsch");
   const [gapPenalty, setGapPenalty] = useState(-8);
+
+  /* ─── Загрузка сценария из ссылки: #s=<id> (облако) / #j=<b64> (автономный) ─── */
+  useEffect(() => {
+    loadScenarioFromHash(window.location.hash).then((sc) => {
+      if (!sc || sc.app !== "alignment") return;
+      const al = normalizeAlignment(sc);
+      setSeqA(al.a);
+      setSeqB(al.b);
+      setSeqType(al.type);
+      setAlgorithm(al.algo);
+      setGapPenalty(al.gap);
+      setSelectedSample(-1); // кастомная пара — ни один образец не подсвечен
+    });
+  }, []);
 
   const loadSample = (idx: number) => {
     setSelectedSample(idx);
@@ -66,14 +82,25 @@ export default function AlignmentPage() {
           <span>Sequence Alignment</span>
         </div>
 
-        <div className="rounded-xl bg-cyan-50 dark:bg-cyan-950/30 border border-cyan-200 dark:border-cyan-800 p-4 mb-6">
-          <h2 className="font-semibold text-cyan-900 dark:text-cyan-100 mb-1">
-            🔗 Sequence Alignment — Needleman-Wunsch + Smith-Waterman
-          </h2>
-          <p className="text-sm text-cyan-800 dark:text-cyan-200">
-            Попарное выравнивание последовательностей. Глобальное (NW, для гомологичных	seqов) или локальное (SW, для поиска консервативных доменов).
-            Скоринг: BLOSUM62 (белки) или match/mismatch (ДНК).
-          </p>
+        <div className="rounded-xl bg-cyan-50 dark:bg-cyan-950/30 border border-cyan-200 dark:border-cyan-800 p-4 mb-6 flex items-start gap-3 flex-wrap">
+          <div className="flex-1 min-w-[260px]">
+            <h2 className="font-semibold text-cyan-900 dark:text-cyan-100 mb-1">
+              🔗 Sequence Alignment — Needleman-Wunsch + Smith-Waterman
+            </h2>
+            <p className="text-sm text-cyan-800 dark:text-cyan-200">
+              Попарное выравнивание последовательностей. Глобальное (NW, для гомологичных       seqов) или локальное (SW, для поиска консервативных доменов).
+              Скоринг: BLOSUM62 (белки) или match/mismatch (ДНК).
+            </p>
+          </div>
+          <ShareButton
+            tone="cyan"
+            title="Sequence Alignment"
+            build={() =>
+              seqA && seqB
+                ? { v: 1, app: "alignment", a: seqA, b: seqB, type: seqType, algo: algorithm, gap: gapPenalty }
+                : null
+            }
+          />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

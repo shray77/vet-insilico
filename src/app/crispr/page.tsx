@@ -1,14 +1,27 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
+import ShareButton from "@/components/ShareButton";
+import { loadScenarioFromHash, normalizeCrispr } from "@/lib/share";
 import { findGuides, CRISPR_SAMPLES } from "@/lib/crispr";
 
 export default function CrisprPage() {
   const [sampleIdx, setSampleIdx] = useState(0);
   const [sequence, setSequence] = useState(CRISPR_SAMPLES[0].seq);
   const [minScore, setMinScore] = useState(20);
+
+  /* ─── Загрузка сценария из ссылки: #s=<id> (облако) / #j=<b64> (автономный) ─── */
+  useEffect(() => {
+    loadScenarioFromHash(window.location.hash).then((sc) => {
+      if (!sc || sc.app !== "crispr") return;
+      const cr = normalizeCrispr(sc);
+      setSequence(cr.seq);
+      setMinScore(cr.minScore);
+      setSampleIdx(-1); // кастомная мишень
+    });
+  }, []);
 
   const results = useMemo(() => {
     if (!sequence || sequence.length < 23) return [];
@@ -34,12 +47,19 @@ export default function CrisprPage() {
           <span className="mx-1">/</span>
           <span>CRISPR gRNA Designer</span>
         </div>
-        <div className="rounded-xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 p-4 mb-6">
-          <h2 className="font-semibold text-indigo-900 dark:text-indigo-100 mb-1">🧬 CRISPR gRNA Designer — SpCas9</h2>
-          <p className="text-sm text-indigo-800 dark:text-indigo-200">
-            Поиск guide RNA (20-mer + NGG PAM) на обеих цепях. On-target score (Doench 2016 упрощённо),
-            off-target проверка против геномов хозяев, GC content, hairpin ΔG.
-          </p>
+        <div className="rounded-xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 p-4 mb-6 flex items-start gap-3 flex-wrap">
+          <div className="flex-1 min-w-[260px]">
+            <h2 className="font-semibold text-indigo-900 dark:text-indigo-100 mb-1">🧬 CRISPR gRNA Designer — SpCas9</h2>
+            <p className="text-sm text-indigo-800 dark:text-indigo-200">
+              Поиск guide RNA (20-mer + NGG PAM) на обеих цепях. On-target score (Doench 2016 упрощённо),
+              off-target проверка против геномов хозяев, GC content, hairpin ΔG.
+            </p>
+          </div>
+          <ShareButton
+            tone="indigo"
+            title="CRISPR gRNA Designer"
+            build={() => (sequence ? { v: 1, app: "crispr", seq: sequence, minScore } : null)}
+          />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1">

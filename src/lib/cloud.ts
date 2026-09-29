@@ -112,6 +112,20 @@ export function cloudUrl(): string {
   return CLOUD_URL;
 }
 
+/* ─────────── Статистика использования (публичная, без IP) ─────────── */
+
+export interface CloudStats {
+  ok: boolean;
+  today: { aiChat: number; aiChatHits: number; aiEsm: number; shares: number };
+  week: { date: string; aiChat: number; aiChatHits: number; aiEsm: number; shares: number }[];
+  aiBackend?: string;
+}
+
+/** Агрегаты за 7 дней: AI-расчёты (эдж/HF), попадания в кеш, шары. Недоступность — не ошибка (null → strip скрыт). */
+export async function fetchCloudStats(timeoutMs = 5000): Promise<CloudStats> {
+  return fetchJson<CloudStats>("/v1/insilico/stats", undefined, timeoutMs);
+}
+
 /* ─────────── Live-вспышки (из heatmap-зеркала) ─────────── */
 
 export interface LiveOutbreak {

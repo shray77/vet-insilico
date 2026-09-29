@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
+import ShareButton from "@/components/ShareButton";
+import { loadScenarioFromHash, normalizePrimer } from "@/lib/share";
 import {
   designPrimers,
   analyzePairWithLLM,
@@ -30,6 +32,25 @@ export default function PrimerDesignerPage() {
   const [analyzing, setAnalyzing] = useState<number | null>(null);
   const [analyzeError, setAnalyzeError] = useState<string>("");
   const [hasHfToken, setHasHfToken] = useState(false);
+
+  /* ─── Загрузка сценария из ссылки: #s=<id> (облако) / #j=<b64> (автономный) ─── */
+  useEffect(() => {
+    loadScenarioFromHash(window.location.hash).then((sc) => {
+      if (!sc || sc.app !== "primer") return;
+      const pr = normalizePrimer(sc);
+      setSequence(pr.seq);
+      setParams({
+        targetTm: pr.targetTm,
+        minProduct: pr.minProduct,
+        maxProduct: pr.maxProduct,
+        minLen: pr.minLen,
+        maxLen: pr.maxLen,
+      });
+      setSelectedSample(-1); // кастомная мишень
+      setPairs([]); // результаты устарели — юзер перезапустит дизайн
+      setExpandedIdx(null);
+    });
+  }, []);
 
   // Re-check token whenever we expand or analyze
   const checkToken = () => setHasHfToken(!!getHfToken());
@@ -97,14 +118,25 @@ export default function PrimerDesignerPage() {
           <span>PCR Primer Designer</span>
         </div>
 
-        <div className="rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-4 mb-6">
-          <h2 className="font-semibold text-amber-900 dark:text-amber-100 mb-1">
-            🔬 PCR Primer Designer — ML-powered
-          </h2>
-          <p className="text-sm text-amber-800 dark:text-amber-200">
-            Дизайн пар праймеров с детальной термодинамикой (SantaLucia 1998 NN, hairpin DP, dimers) +
-            опциональный LLM-анализ специфичности и рисков через Qwen2.5-Coder-3B-Instruct (HuggingFace).
-          </p>
+        <div className="rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-4 mb-6 flex items-start gap-3 flex-wrap">
+          <div className="flex-1 min-w-[260px]">
+            <h2 className="font-semibold text-amber-900 dark:text-amber-100 mb-1">
+              🔬 PCR Primer Designer — ML-powered
+            </h2>
+            <p className="text-sm text-amber-800 dark:text-amber-200">
+              Дизайн пар праймеров с детальной термодинамикой (SantaLucia 1998 NN, hairpin DP, dimers) +
+              опциональный LLM-анализ специфичности и рисков через Qwen2.5-Coder-3B-Instruct (HuggingFace).
+            </p>
+          </div>
+          <ShareButton
+            tone="amber"
+            title="PCR Primer Designer"
+            build={() =>
+              sequence
+                ? { v: 1, app: "primer", seq: sequence, targetTm: params.targetTm, minProduct: params.minProduct, maxProduct: params.maxProduct, minLen: params.minLen, maxLen: params.maxLen }
+                : null
+            }
+          />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

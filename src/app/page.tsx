@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
 import LiveOutbreaks from "@/components/LiveOutbreaks";
+import CloudStatsStrip from "@/components/CloudStatsStrip";
 import { DRUG_COUNT, PATHOGEN_COUNT } from "@/data/stats";
 
 interface Tool {
@@ -390,6 +391,9 @@ export default function HubPage() {
 
         {/* Live: сводка вспышек через vet-api (не рендерится, если облако недоступно) */}
         <LiveOutbreaks limit={8} />
+
+        {/* Live: цифры использования облака (AI-расчёты, шары) — скрыта без воркера */}
+        <CloudStatsStrip />
 
         {/* Search */}
         <div className="mb-6 relative">

@@ -82,8 +82,8 @@ export default function PKPDPage() {
           if (isPkpdScenario(rec.payload)) applyScenario(normalizePkpd(rec.payload));
         })
         .catch(() => {}); // облако недоступно — остаёмся на дефолтных параметрах
-    } else if (parsed.data) {
-      applyScenario(parsed.data);
+    } else if (parsed.data && isPkpdScenario(parsed.data)) {
+      applyScenario(normalizePkpd(parsed.data));
     }
   }, []);
 
