@@ -4,7 +4,8 @@ export default tseslint.config(
   {
     // Ignore build artifacts — without this, lint scans .next/ and out/
     // producing 6000+ false positives from generated code.
-    ignores: [".next/**", "out/**", "node_modules/**", "bun.lock"],
+    // public/transformers-wasm — вендоренный ort-лоадер (минифицирован), не наш код.
+    ignores: [".next/**", "out/**", "node_modules/**", "bun.lock", "public/transformers-wasm/**"],
   },
   ...tseslint.configs.recommended,
   {
