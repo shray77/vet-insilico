@@ -6,50 +6,81 @@ import { fetchLiveOutbreaks, type LiveOutbreaksResult } from "@/lib/cloud";
 /**
  * Live-панель вспышек — полу-динамика на статическом сайте.
  *
- * Данные: зеркало heatmap-датасета в KV воркера vet-api (обновляется
- * Actions-мостом vet-heatmap каждые 6 ч). Если воркер недоступен
- * (в т.ч. РКН-блокировка workers.dev в РФ) — панель просто не рендерится:
- * страница остаётся статичной и полностью функциональной.
+ * Источники по цепочке (первый живой выигрывает):
+ *   1. vet-api (KV-зеркало, обновляется Actions-мостом vet-heatmap каждые 6 ч) — бейдж «live»;
+ *   2. статический снимок /data/outbreaks-snapshot.json (крон snapshot-data.yml,
+ *      тот же сайт — работает в РФ без VPN, где workers.dev заблокирован) — бейдж «снимок 6 ч».
+ *   Если недоступно всё — панель не рендерится: страница остаётся статичной.
  */
+
+/** basePath повторяет next.config.ts (статический экспорт в /vet-insilico). */
+const BASE_PATH = process.env.NODE_ENV === "production" ? "/vet-insilico" : "";
+
+async function fetchSnapshot(limit: number): Promise<LiveOutbreaksResult | null> {
+  try {
+    const res = await fetch(`${BASE_PATH}/data/outbreaks-snapshot.json`);
+    if (!res.ok) return null;
+    const d = (await res.json()) as LiveOutbreaksResult | null;
+    if (!d?.ok || !Array.isArray(d.outbreaks) || d.outbreaks.length === 0) return null;
+    return { ...d, outbreaks: d.outbreaks.slice(0, limit) };
+  } catch {
+    return null;
+  }
+}
+
 export default function LiveOutbreaks({ limit = 8 }: { limit?: number }) {
   const [data, setData] = useState<LiveOutbreaksResult | null>(null);
-  const [state, setState] = useState<"loading" | "ok" | "off">("loading");
+  const [state, setState] = useState<"loading" | "live" | "snapshot" | "off">("loading");
 
   useEffect(() => {
     let alive = true;
     fetchLiveOutbreaks({ limit }, 5000)
       .then((d) => {
         if (!alive) return;
-        if (d.outbreaks.length === 0) setState("off");
-        else {
-          setData(d);
-          setState("ok");
-        }
+        if (d.outbreaks.length === 0) throw new Error("пусто");
+        setData(d);
+        setState("live");
       })
-      .catch(() => alive && setState("off"));
+      .catch(async () => {
+        // облако недоступно (в т.ч. РКН в РФ) → статический снимок того же сайта
+        const snap = await fetchSnapshot(limit);
+        if (!alive) return;
+        if (snap) {
+          setData(snap);
+          setState("snapshot");
+        } else {
+          setState("off");
+        }
+      });
     return () => {
       alive = false;
     };
   }, [limit]);
 
-  if (state !== "ok" || !data) return null;
+  if (state === "off" || state === "loading" || !data) return null;
 
   return (
     <section className="mb-8 rounded-2xl border border-emerald-200 dark:border-emerald-900 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/20 dark:to-teal-950/20 p-4">
       <div className="flex items-center gap-2 mb-3">
         <span className="relative flex h-2.5 w-2.5">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60"></span>
-          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+          <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-60 ${state === "live" ? "bg-emerald-400" : "bg-amber-400"}`}></span>
+          <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${state === "live" ? "bg-emerald-500" : "bg-amber-500"}`}></span>
         </span>
         <h2 className="font-bold text-emerald-800 dark:text-emerald-200">
-          Сводка вспышек — live
+          Сводка вспышек — {state === "live" ? "live" : "снимок"}
         </h2>
-        <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-600 text-white font-bold uppercase tracking-wide">
-          live
+        <span
+          className={`text-[10px] px-1.5 py-0.5 rounded text-white font-bold uppercase tracking-wide ${
+            state === "live" ? "bg-emerald-600" : "bg-amber-600"
+          }`}
+        >
+          {state === "live" ? "live" : "снимок 6 ч"}
         </span>
         <div className="ml-auto text-xs text-zinc-500 dark:text-zinc-400">
           {data.totalInDataset} записей · обновлено {data.updated}
-          <span className="hidden sm:inline"> · via vet-api (CF Workers)</span>
+          <span className="hidden sm:inline">
+            {state === "live" ? " · via vet-api (CF Workers)" : " · офлайн-копия с этого же сайта"}
+          </span>
         </div>
       </div>
 
@@ -86,8 +117,10 @@ export default function LiveOutbreaks({ limit = 8 }: { limit?: number }) {
       </div>
 
       <p className="mt-2 text-[10px] text-zinc-400">
-        Источник: зеркала FAO/WOAH/ФСВПС, агрегатор vet-heatmap → CF KV. Отображается
-        автоматически только когда vet-api доступен из вашей сети.
+        Источник: зеркала FAO/WOAH/ФСВПС, агрегатор vet-heatmap → CF KV.
+        {state === "live"
+          ? " Отображается автоматически, когда vet-api доступен из вашей сети."
+          : " Показан офлайн-снимок: vet-api недоступен из вашей сети (в РФ workers.dev блокируется провайдером)."}
       </p>
     </section>
   );

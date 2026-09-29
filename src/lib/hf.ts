@@ -23,6 +23,34 @@ const HF_TOKEN_KEY = "vis-hf-token";
 const ROUTER_BASE = "https://router.huggingface.co";
 const LLM_MODEL = "Qwen/Qwen2.5-Coder-3B-Instruct";
 
+/* ─── Канал 3: публичный безключевой LLM (text.pollinations.ai) ───
+ * Зачем: работает из РФ без VPN (домен не под блокировкой РКН), без регистрации
+ * и токенов, CORS открыт. Минусы: best-effort (публичный сервис — лимиты частоты,
+ * модель/качество плавают), поэтому только как фолбэк после облака и только для
+ * chat — ESM-2 там нет (протеиновой LM в публичном доступе без ключа не существует). */
+const POLLINATIONS_URL = "https://text.pollinations.ai/";
+
+async function chatCompletePublic(
+  messages: ChatMessage[],
+  opts: { maxTokens?: number; temperature?: number; signal?: AbortSignal } = {},
+): Promise<string> {
+  const res = await fetch(POLLINATIONS_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "openai",
+      messages,
+      max_tokens: opts.maxTokens ?? 512,
+      temperature: opts.temperature ?? 0.3,
+    }),
+    signal: opts.signal,
+  });
+  if (!res.ok) throw new Error(`публичный LLM HTTP ${res.status}`);
+  const text = await res.text();
+  if (!text.trim()) throw new Error("пустой ответ публичного LLM");
+  return text.trim();
+}
+
 /** Get stored HF token (or empty if not set). */
 export function getHfToken(): string {
   if (typeof window === "undefined") return "";
@@ -84,8 +112,8 @@ export interface ChatMessage {
 }
 
 /**
- * Call Qwen2.5-Coder-3B-Instruct. Маршрутизация:
- *   auto  → облако (vet-api, без токена) → фолбэк на свой HF-токен;
+ * Call LLM. Маршрутизация:
+ *   auto  → облако (vet-api, без токена) → публичный безключевой LLM (работает в РФ без VPN) → свой HF-токен;
  *   cloud → только облако (честная ошибка, если недоступно);
  *   token → сразу свой токен (как раньше).
  */
@@ -99,12 +127,17 @@ export async function chatComplete(
       return await cloudChat(messages, opts);
     } catch (cloudErr) {
       if (route === "cloud") throw cloudErr;
-      if (!getHfToken()) {
-        throw new Error(
-          `Облачный AI недоступен (${cloudFailHint(cloudErr)}) и свой HF-токен не задан — откройте «Настройки ML» в шапке`,
-        );
+      // фолбэк 1: публичный безключевой LLM (главный путь для РФ без VPN)
+      try {
+        return await chatCompletePublic(messages, opts);
+      } catch (publicErr) {
+        if (!getHfToken()) {
+          throw new Error(
+            `Все облачные каналы недоступны — облако: ${cloudFailHint(cloudErr)}; публичный LLM: ${String(publicErr).slice(0, 60)}. Свой HF-токен не задан — откройте «Настройки ML» в шапке`,
+          );
+        }
+        // auto → пробуем токен юзера ниже
       }
-      // auto → пробуем токен юзера ниже
     }
   }
   return chatCompleteDirect(messages, opts);

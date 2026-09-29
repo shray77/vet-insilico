@@ -1,0 +1,61 @@
+name: Snapshot outbreak data (RF-friendly static mirror)
+
+# Зачем: РКН блокирует *.workers.dev в РФ → live-панель вспышек там мертва.
+# Этот крон раз в 6 ч забирает компактный срез из KV-зеркала vet-api и коммитит
+# его как статику того же сайта (github.io не заблокирован) → панель работает
+# без VPN с бейджем «снимок 6 ч».
+# Крон на 30 мин позже моста vet-heatmap (3,9,15,21 UTC), чтобы KV был свежий.
+
+on:
+  schedule:
+    - cron: "30 3,9,15,21 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: snapshot-data
+  cancel-in-progress: true
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch compact snapshot from vet-api KV mirror
+        run: |
+          set -e
+          code=$(curl -sS -o /tmp/snap.json -w "%{http_code}" --max-time 30 \
+            "https://vet-api.shray77.workers.dev/v1/insilico/outbreaks?limit=60")
+          echo "vet-api answered: HTTP $code"
+          # Мягкий отказ: воркер временно недоступен → старый снимок остаётся в сайте
+          [ "$code" = "200" ] || { echo "SKIP: vet-api недоступен"; exit 0; }
+          # Санити-чек формы (панель ждёт LiveOutbreaksResult)
+          node -e "
+            const d = JSON.parse(require('fs').readFileSync('/tmp/snap.json', 'utf8'));
+            if (!d.ok || !Array.isArray(d.outbreaks) || d.outbreaks.length === 0) {
+              console.error('bad snapshot shape'); process.exit(1);
+            }
+            console.log('snapshot ok:', d.outbreaks.length, 'rows, updated', d.updated);
+          "
+          mkdir -p public/data
+          cp /tmp/snap.json public/data/outbreaks-snapshot.json
+
+      - name: Commit (only if changed)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/outbreaks-snapshot.json
+          if git diff --cached --quiet; then
+            echo "Снимок не изменился — коммит не нужен"
+            exit 0
+          fi
+          git commit -m "chore(data): outbreaks snapshot for RF static fallback
+
+          Automated mirror of vet-api KV (FAO/WOAH/FSVPS via vet-heatmap bridge).
+          Updated: $(date -u +'%Y-%m-%d %H:%M UTC')"
+          # Пуш триггерит deploy.yml → снимок публикуется в статике сайта
+          git push

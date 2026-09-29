@@ -9,19 +9,27 @@
  * Эндпоинты воркера: см. https://github.com/shray77/vet-api
  */
 
-const DEFAULT_CLOUD_URL = "https://vet-api.shray77.workers.dev";
+const DEFAULT_CLOUD_URL = process.env.NEXT_PUBLIC_VET_API_URL || "https://vet-api.shray77.workers.dev";
 
-function getCloudUrl(): string {
+/**
+ * Зеркала vet-api — обход РКН-блокировки *.workers.dev в РФ (без VPN).
+ * Кандидаты перебираются по порядку до первого живого (кеш выбора 5 мин).
+ * Как завести зеркало: см. mirror/ в репо shray77/vet-api (Deno Deploy, 5 минут,
+ * бесплатно) или кастомный домен на воркере. Пустой список = живёт на дефолте.
+ */
+const CLOUD_MIRRORS: string[] = [
+  // "https://vet-api-mirror.deno.dev",
+];
+
+function getOverrideUrl(): string | null {
   if (typeof window !== "undefined") {
     try {
       const override = localStorage.getItem("vet:api_url");
       if (override) return override.replace(/\/+$/, "");
     } catch {}
   }
-  return process.env.NEXT_PUBLIC_VET_API_URL || DEFAULT_CLOUD_URL;
+  return null;
 }
-
-const CLOUD_URL = getCloudUrl();
 
 /* ─────────── статус облака (probe с кешем) ─────────── */
 
@@ -39,14 +47,74 @@ export interface CloudStatus {
 }
 
 const PROBE_TTL_MS = 5 * 60 * 1000;
-let probeCache: CloudStatus | null = null;
-let probeInFlight: Promise<CloudStatus> | null = null;
+let statusCache: CloudStatus | null = null;
 
-async function fetchJson<T>(path: string, init?: RequestInit, timeoutMs = 6000): Promise<T> {
+/* ─── Разрешение базового URL: дефолт → зеркала (обход РКН) ─── */
+
+let activeBase: string | null = null;
+let resolvedAt = 0;
+let resolveInFlight: Promise<string> | null = null;
+
+/** Синхронный доступ к текущему базовому URL (до первого resolve — дефолт). */
+export function cloudUrl(): string {
+  return getOverrideUrl() ?? activeBase ?? DEFAULT_CLOUD_URL;
+}
+
+/** Быстрый статус одного кандидата: GET /v1/insilico/status с таймаутом. */
+async function probeStatus(base: string, timeoutMs = 4500): Promise<{ ok: boolean; data?: Record<string, unknown> }> {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
-    const res = await fetch(`${CLOUD_URL}${path}`, {
+    const res = await fetch(`${base}/v1/insilico/status`, {
+      signal: ctrl.signal,
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!res.ok) return { ok: false };
+    const data = (await res.json().catch(() => null)) as Record<string, unknown> | null;
+    return data?.ok ? { ok: true, data } : { ok: false };
+  } catch {
+    return { ok: false };
+  } finally {
+    clearTimeout(t);
+  }
+}
+
+/**
+ * Выбирает рабочий базовый URL: override (localStorage) → зеркала → дефолт.
+ * Кеш 5 мин (в т.ч. негативный — если всё мертво, не долбим каждую попытку).
+ * Override имеет абсолютный приоритет (юзер сам знает, что вписал).
+ */
+export async function resolveCloudBase(force = false): Promise<string> {
+  const override = getOverrideUrl();
+  if (override) return override;
+  if (!force && activeBase && Date.now() - resolvedAt < PROBE_TTL_MS) return activeBase;
+  if (!force && resolvedAt && Date.now() - resolvedAt < PROBE_TTL_MS) return DEFAULT_CLOUD_URL;
+  if (resolveInFlight) return resolveInFlight;
+  resolveInFlight = (async () => {
+    const candidates = [...CLOUD_MIRRORS, DEFAULT_CLOUD_URL];
+    for (const base of candidates) {
+      const st = await probeStatus(base);
+      if (st.ok) {
+        activeBase = base;
+        resolvedAt = Date.now();
+        return base;
+      }
+    }
+    // всё мертво — 5 мин не трогаем, фетчи упадут быстро на дефолте
+    resolvedAt = Date.now();
+    return DEFAULT_CLOUD_URL;
+  })().finally(() => {
+    resolveInFlight = null;
+  });
+  return resolveInFlight;
+}
+
+async function fetchJson<T>(path: string, init?: RequestInit, timeoutMs = 6000): Promise<T> {
+  const base = await resolveCloudBase();
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const res = await fetch(`${base}${path}`, {
       ...init,
       signal: ctrl.signal,
       headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) },
@@ -64,52 +132,33 @@ async function fetchJson<T>(path: string, init?: RequestInit, timeoutMs = 6000):
   }
 }
 
-/** Быстрая диагностика воркера. Кеш 5 мин; недоступность — не ошибка, а статус. */
+/** Быстрая диагностика воркера (через выбранное зеркало). Кеш 5 мин; недоступность — не ошибка, а статус. */
 export async function probeCloud(force = false): Promise<CloudStatus> {
-  if (!force && probeCache && Date.now() - probeCache.checkedAt < PROBE_TTL_MS) {
-    return probeCache;
+  if (!force && statusCache && Date.now() - statusCache.checkedAt < PROBE_TTL_MS) {
+    return statusCache;
   }
-  if (probeInFlight) return probeInFlight;
   const t0 = Date.now();
-  probeInFlight = fetchJson<{
-    ai: boolean;
-    aiBackend?: string;
-    outbreaks: number | null;
-    outbreaksUpdated: string | null;
-  }>(
-    "/v1/insilico/status",
-    undefined,
-    4500,
-  )
-    .then((d) => {
-      probeCache = {
-        reachable: true,
-        ai: Boolean(d.ai),
-        aiBackend: d.aiBackend,
-        outbreaks: d.outbreaks,
-        outbreaksUpdated: d.outbreaksUpdated,
-        ms: Date.now() - t0,
-        checkedAt: Date.now(),
-      };
-      return probeCache;
-    })
-    .catch(() => {
-      probeCache = { reachable: false, ai: false, outbreaks: null, outbreaksUpdated: null, ms: Date.now() - t0, checkedAt: Date.now() };
-      return probeCache;
-    })
-    .finally(() => {
-      probeInFlight = null;
-    });
-  return probeInFlight;
+  const base = await resolveCloudBase(force);
+  const st = await probeStatus(base);
+  if (st.ok && st.data) {
+    statusCache = {
+      reachable: true,
+      ai: Boolean(st.data.ai),
+      aiBackend: typeof st.data.aiBackend === "string" ? st.data.aiBackend : undefined,
+      outbreaks: typeof st.data.outbreaks === "number" ? st.data.outbreaks : null,
+      outbreaksUpdated: typeof st.data.outbreaksUpdated === "string" ? st.data.outbreaksUpdated : null,
+      ms: Date.now() - t0,
+      checkedAt: Date.now(),
+    };
+  } else {
+    statusCache = { reachable: false, ai: false, outbreaks: null, outbreaksUpdated: null, ms: Date.now() - t0, checkedAt: Date.now() };
+  }
+  return statusCache;
 }
 
 /** Синхронный доступ к последнему probe (без запроса). */
 export function lastCloudStatus(): CloudStatus | null {
-  return probeCache;
-}
-
-export function cloudUrl(): string {
-  return CLOUD_URL;
+  return statusCache;
 }
 
 /* ─────────── Статистика использования (публичная, без IP) ─────────── */
@@ -236,5 +285,5 @@ export async function cloudEsm(
 
 /** Доступна ли облачная AI-маршрутизация (по последнему probe). */
 export function cloudAiAvailable(): boolean {
-  return Boolean(probeCache?.reachable && probeCache.ai);
+  return Boolean(statusCache?.reachable && statusCache.ai);
 }
