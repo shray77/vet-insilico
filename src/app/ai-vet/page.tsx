@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
-import { chatComplete, getHfToken } from "@/lib/hf";
+import { chatComplete } from "@/lib/hf";
 import { extractJson, validateDiagnosisResult } from "@/lib/json-utils";
 
 interface DiagnosisResult {
@@ -24,10 +24,7 @@ export default function AIVetPage() {
   const abortRef = useRef<AbortController | null>(null);
 
   const runDiagnosis = async () => {
-    if (!getHfToken()) {
-      setError("Задайте HF token — кнопка 🤖 в шапке");
-      return;
-    }
+    // Без токен-гейта: chatComplete сам маршрутизирует облако → публичный LLM → токен
     const ctrl = new AbortController();
     abortRef.current = ctrl;
     setLoading(true);

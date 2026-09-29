@@ -5,7 +5,7 @@ import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
 import { DRUGS } from "@/data/drugs";
 import { predictADMET, ADMET_LABELS_RU, LEVEL_COLOR, type AdmetLevel } from "@/lib/admet";
-import { predictADMETML, getHfToken, type ADMETMLResult } from "@/lib/hf";
+import { predictADMETML, type ADMETMLResult } from "@/lib/hf";
 
 export default function AdmetPage() {
   const [query, setQuery] = useState("");
@@ -40,10 +40,7 @@ export default function AdmetPage() {
       setMlError("У этого препарата нет SMILES — ML-анализ недоступен");
       return;
     }
-    if (!getHfToken()) {
-      setMlError("Задайте HF token — кнопка 🤖 в шапке");
-      return;
-    }
+    // Без токен-гейта: predictADMETML сам маршрутизирует облако → токен
     setMlLoading(true);
     setMlError("");
     setMlResult(null);

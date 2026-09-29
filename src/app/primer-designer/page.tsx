@@ -82,10 +82,7 @@ export default function PrimerDesignerPage() {
 
   const runLLMAnalysis = async (idx: number) => {
     checkToken();
-    if (!getHfToken()) {
-      setAnalyzeError("Сначала задайте HF token — кнопка 🤖 в шапке");
-      return;
-    }
+    // Без токен-гейта: analyzePairWithLLM сам маршрутизирует облако → публичный LLM → токен
     setAnalyzing(idx);
     setAnalyzeError("");
     try {
@@ -251,7 +248,7 @@ export default function PrimerDesignerPage() {
                     </div>
                     {!hasHfToken && (
                       <div className="ml-auto text-xs text-zinc-400 max-w-xs text-right">
-                        💡 Для ML-анализа задайте HF token — кнопка 🤖 в шапке
+                        💡 ML-анализ работает без токена (облако/публичный LLM). Свой HF-токен — опция: кнопка 🤖
                       </div>
                     )}
                   </div>

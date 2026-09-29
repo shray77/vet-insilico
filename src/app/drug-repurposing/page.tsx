@@ -7,7 +7,7 @@ import Viewer3D from "@/components/Viewer3D";
 import { PATHOGENS } from "@/data/pathogens";
 import { DRUGS } from "@/data/drugs";
 import { virtualScreening, getTopResults, type DockingResult } from "@/lib/docking";
-import { analyzeWithLLM, getHfToken } from "@/lib/hf";
+import { analyzeWithLLM } from "@/lib/hf";
 import { dockWithRDKit, type MolecularDescriptors } from "@/lib/rdkit-docking";
 import { apiDocking, apiVinaDocking, type DockingAPIResult, type VinaDockingResult } from "@/lib/api";
 
@@ -462,10 +462,7 @@ function DrugLLMAnalysis({ result }: { result: DockingResult }) {
   const abortRef = useRef<AbortController | null>(null);
 
   const run = async () => {
-    if (!getHfToken()) {
-      setError("Задайте HF token — кнопка 🤖 в шапке");
-      return;
-    }
+    // Без токен-гейта: analyzeWithLLM сам маршрутизирует облако → публичный LLM → токен
     const ctrl = new AbortController();
     abortRef.current = ctrl;
     setLoading(true);

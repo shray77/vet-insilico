@@ -9,7 +9,6 @@ import {
   peptideNaturalness,
   predictBEpitopesML,
   predictMHCBindingML,
-  getHfToken,
   type BEpitopeMLScore,
 } from "@/lib/hf";
 
@@ -48,7 +47,7 @@ export default function EpitopesPage() {
   };
 
   const runMLBScan = async () => {
-    if (!getHfToken()) { setMlError("Задайте HF token — кнопка 🤖 в шапке"); return; }
+    // Без токен-гейта: predictBEpitopesML сам маршрутизирует облако → браузер → токен
     if (sequence.length > 200) {
       setMlError("ML B-scan: обрежьте последовательность до ≤ 200 а.о. (cost limit)");
       return;
@@ -69,7 +68,7 @@ export default function EpitopesPage() {
   };
 
   const runMHCML = async (idx: number, peptide: string) => {
-    if (!getHfToken()) { setMlError("Задайте HF token — кнопка 🤖 в шапке"); return; }
+    // Без токен-гейта: predictMHCBindingML сам маршрутизирует облако → браузер → токен
     setMhcMLLoading(idx);
     setMlError("");
     try {
@@ -267,7 +266,7 @@ export default function EpitopesPage() {
                           {!naturalness[i] && e.sequence.length <= 12 && (
                             <button
                               onClick={async () => {
-                                if (!getHfToken()) { setMlError("Задайте HF token — кнопка 🤖 в шапке"); return; }
+                                // Без токен-гейта: peptideNaturalness маршрутизирует сама
                                 setAnalyzingIdx(i);
                                 setMlError("");
                                 try {

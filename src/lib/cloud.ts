@@ -31,6 +31,42 @@ function getOverrideUrl(): string | null {
   return null;
 }
 
+/* ─── Выученная база: запоминаем рабочий канал на 24 ч ───
+ * Без этого РФ-браузер платит таймаут workers.dev (~4.5 с) при каждой
+ * попытке после истечения 5-минутного кеша. С «выученной» базой — один
+ * раз в сутки; если она умерла — полный перебор и перезапись. */
+
+const LEARNED_KEY = "vet:api_resolved";
+const LEARNED_TTL_MS = 24 * 60 * 60 * 1000;
+
+function getLearnedBase(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(LEARNED_KEY);
+    if (!raw) return null;
+    const p = JSON.parse(raw) as { base?: unknown; at?: unknown };
+    if (
+      typeof p.base === "string" && p.base &&
+      typeof p.at === "number" && Date.now() - p.at < LEARNED_TTL_MS
+    ) {
+      return p.base;
+    }
+  } catch {}
+  return null;
+}
+
+function storeLearnedBase(base: string): void {
+  try {
+    localStorage.setItem(LEARNED_KEY, JSON.stringify({ base, at: Date.now() }));
+  } catch {}
+}
+
+function clearLearnedBase(): void {
+  try {
+    localStorage.removeItem(LEARNED_KEY);
+  } catch {}
+}
+
 /* ─────────── статус облака (probe с кешем) ─────────── */
 
 export interface CloudStatus {
@@ -91,19 +127,32 @@ export async function resolveCloudBase(force = false): Promise<string> {
   if (!force && resolvedAt && Date.now() - resolvedAt < PROBE_TTL_MS) return DEFAULT_CLOUD_URL;
   if (resolveInFlight) return resolveInFlight;
   resolveInFlight = (async () => {
+    // Быстрый старт: выученная база с прошлого раза — один проб вместо цепочки
+    const learned = !force ? getLearnedBase() : null;
+    if (learned) {
+      const st = await probeStatus(learned);
+      if (st.ok) {
+        activeBase = learned;
+        resolvedAt = Date.now();
+        return learned;
+      }
+    }
     // Порядок: дефолт первым — мир ходит напрямую на воркер, зеркало
     // нагружают только те, кто не смог достучаться (РФ: таймаут workers.dev
-    // ~4.5 с раз в 5 мин, затем зеркало). Зеркало = личный free-tier проект.
-    const candidates = [DEFAULT_CLOUD_URL, ...CLOUD_MIRRORS];
+    // ~4.5 с раз в сутки, затем зеркало). Зеркало = личный free-tier проект.
+    const candidates = [DEFAULT_CLOUD_URL, ...CLOUD_MIRRORS].filter((b) => b !== learned);
     for (const base of candidates) {
       const st = await probeStatus(base);
       if (st.ok) {
         activeBase = base;
         resolvedAt = Date.now();
+        storeLearnedBase(base);
         return base;
       }
     }
-    // всё мертво — 5 мин не трогаем, фетчи упадут быстро на дефолте
+    // всё мертво — 5 мин не трогаем, фетчи упадут быстро на дефолте;
+    // выученную базу сбрасываем, чтобы в следующий цикл переучиться
+    clearLearnedBase();
     resolvedAt = Date.now();
     return DEFAULT_CLOUD_URL;
   })().finally(() => {
