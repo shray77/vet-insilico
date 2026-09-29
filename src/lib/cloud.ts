@@ -14,11 +14,11 @@ const DEFAULT_CLOUD_URL = process.env.NEXT_PUBLIC_VET_API_URL || "https://vet-ap
 /**
  * Зеркала vet-api — обход РКН-блокировки *.workers.dev в РФ (без VPN).
  * Кандидаты перебираются по порядку до первого живого (кеш выбора 5 мин).
- * Как завести зеркало: см. mirror/ в репо shray77/vet-api (Deno Deploy, 5 минут,
- * бесплатно) или кастомный домен на воркере. Пустой список = живёт на дефолте.
+ * Как завести зеркало: см. mirror/ в репо shray77/vet-api (Supabase Edge
+ * Functions, 10 минут, бесплатно) или кастомный домен на воркере.
  */
 const CLOUD_MIRRORS: string[] = [
-  // "https://vet-api-mirror.deno.dev",
+  "https://dmehnabcnesuublbftli.supabase.co/functions/v1/vet-api",
 ];
 
 function getOverrideUrl(): string | null {
@@ -91,7 +91,10 @@ export async function resolveCloudBase(force = false): Promise<string> {
   if (!force && resolvedAt && Date.now() - resolvedAt < PROBE_TTL_MS) return DEFAULT_CLOUD_URL;
   if (resolveInFlight) return resolveInFlight;
   resolveInFlight = (async () => {
-    const candidates = [...CLOUD_MIRRORS, DEFAULT_CLOUD_URL];
+    // Порядок: дефолт первым — мир ходит напрямую на воркер, зеркало
+    // нагружают только те, кто не смог достучаться (РФ: таймаут workers.dev
+    // ~4.5 с раз в 5 мин, затем зеркало). Зеркало = личный free-tier проект.
+    const candidates = [DEFAULT_CLOUD_URL, ...CLOUD_MIRRORS];
     for (const base of candidates) {
       const st = await probeStatus(base);
       if (st.ok) {

@@ -26,6 +26,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Keep-alive зеркала РФ: free-проект Supabase паузится после недели
+      # неактивности → пингуем релей при каждом прогоне (4 р/сут — копейки
+      # против лимита 500K/мес). Ошибка пинга не должна ронять снапшот.
+      - name: Keep-alive Supabase relay (RF mirror)
+        run: |
+          code=$(curl -sS -o /tmp/relay.json -w "%{http_code}" --max-time 30 \
+            "https://dmehnabcnesuublbftli.supabase.co/functions/v1/vet-api/v1/health" 2>/dev/null || echo 000)
+          echo "supabase relay: HTTP $code $(head -c 120 /tmp/relay.json 2>/dev/null || true)"
+
       - name: Fetch compact snapshot from vet-api KV mirror
         run: |
           set -e
