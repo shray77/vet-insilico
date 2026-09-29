@@ -13,6 +13,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: snapshot-data
@@ -45,17 +46,33 @@ jobs:
           cp /tmp/snap.json public/data/outbreaks-snapshot.json
 
       - name: Commit (only if changed)
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add public/data/outbreaks-snapshot.json
           if git diff --cached --quiet; then
             echo "Снимок не изменился — коммит не нужен"
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git commit -m "chore(data): outbreaks snapshot for RF static fallback
 
           Automated mirror of vet-api KV (FAO/WOAH/FSVPS via vet-heatmap bridge).
           Updated: $(date -u +'%Y-%m-%d %H:%M UTC')"
-          # Пуш триггерит deploy.yml → снимок публикуется в статике сайта
           git push
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+
+      # ВАЖНО: пуш от GITHUB_TOKEN не триггерит другие воркфлоу (антирекурсия GitHub),
+      # поэтому деплой сайта запускаем явно — паттерн из vet-heatmap update-data.yml.
+      - name: Trigger site deploy
+        if: steps.commit.outputs.pushed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'deploy.yml',
+              ref: 'main'
+            });
