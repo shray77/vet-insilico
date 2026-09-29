@@ -86,10 +86,10 @@ export default function HfTokenModal({ open, onClose }: { open: boolean; onClose
               {cloud?.reachable
                 ? cloud.ai
                   ? cloud.aiBackend === "workers-ai"
-                    ? "LLM работает на эдже (Workers AI, llama-3.3-70b) без всяких токенов. ESM-2 на эдже нет — свой HF-токен или локальные эвристики."
+                    ? "LLM работает на эдже (Workers AI, llama-3.3-70b) без всяких токенов. ESM-2 на эдже нет — но он умеет работать локально в браузере (transformers.js, без токена) или через свой HF-токен."
                     : "AI через облако работает без токена — LLM-анализ и ESM-2 доступны сразу."
                   : "Данные доступны (вспышки, шаринг). AI-прокси пока не включён админом."
-                : "workers.dev недоступен из вашей сети (РФ-блокировка или оффлайн) — всё считается локально, ML только через свой токен."}
+                : "workers.dev недоступен из вашей сети (РФ-блокировка или оффлайн) — ESM-2 работает локально в браузере, LLM — публичный безключевой или свой токен."}
             </div>
             <div className="flex gap-1 mt-2">
               {(["auto", "cloud", "token"] as AiRoute[]).map((r) => (
@@ -107,14 +107,14 @@ export default function HfTokenModal({ open, onClose }: { open: boolean; onClose
               ))}
             </div>
             <div className="mt-1 text-[10px] text-zinc-400">
-              Авто = облако → фолбэк на свой токен. Маршрут действует для LLM и ESM-2.
+              Авто = облако → браузерный ESM-2 / безключевой LLM → свой токен. Маршрут действует для LLM и ESM-2.
             </div>
           </div>
 
           <div className="rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 p-3 text-xs text-blue-800 dark:text-blue-200">
             <div className="font-semibold mb-1">Зачем свой токен?</div>
             <div>
-              ESM-2 (protein LM) — всегда через HuggingFace (на эдже её нет). Плюс это fallback для LLM, если облако недоступно: Qwen2.5-Coder-3B-Instruct напрямую через HuggingFace.
+              ESM-2 (protein LM) теперь умеет работать целиком в браузере (transformers.js, первая загрузка весов ~34 МБ, дальше из кеша) — токен не обязателен. Свой HF-токен остаётся запасным облачным путём для ESM-2 и fallback для LLM: Qwen2.5-Coder-3B-Instruct напрямую через HuggingFace.
               Токен хранится только в localStorage вашего браузера, никуда не отправляется кроме HuggingFace.
             </div>
             <a

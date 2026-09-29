@@ -10,6 +10,7 @@
  * Models:
  *   - Qwen/Qwen2.5-Coder-3B-Instruct  (Apache 2.0, 3B params, multilingual, $0.01/1K in)
  *   - facebook/esm2_t6_8M_UR50D       (MIT, 8M params, protein language model, free)
+ *   - ESM-2 в браузере (transformers.js, int8) — канал без токена, работает в РФ (см. esm-browser.ts)
  *
  * Pricing note: HF gives free inference credits; Qwen-Coder-3B at $0.01/$0.03 per 1K tokens
  * means ~16M tokens per $0.50 credit — enough for thousands of analyses.
@@ -18,6 +19,7 @@
 import { extractJson } from "./json-utils";
 import { blosum62Score } from "./blosum62";
 import { cloudChat, cloudEsm } from "./cloud";
+import { predictMaskedResidueBrowser } from "./esm-browser";
 
 const HF_TOKEN_KEY = "vis-hf-token";
 const ROUTER_BASE = "https://router.huggingface.co";
@@ -84,7 +86,7 @@ function cloudFailHint(err: unknown): string {
   const msg = String(err);
   const netIssue = /failed to fetch|fetch failed|networkerror|load failed|abort|timeout/i.test(msg);
   return netIssue
-    ? `${msg.slice(0, 90)} — возможно, vet-api (workers.dev) блокируется провайдером (РКН в РФ) или недоступен; попробуйте VPN`
+    ? `${msg.slice(0, 90)} — возможно, vet-api (workers.dev) блокируется провайдером (РКН в РФ) или недоступен`
     : msg.slice(0, 90);
 }
 
@@ -196,7 +198,8 @@ async function chatCompleteDirect(
  */
 /**
  * Predict masked amino acid probabilities using ESM-2.
- * Маршрутизация как у chatComplete: auto → облако → свой токен.
+ * Маршрутизация: auto → облако (vet-api) → локально в браузере (transformers.js,
+ * работает в РФ без VPN и без токена, первая загрузка ~34 МБ) → свой HF-токен.
  */
 export async function predictMaskedResidue(
   sequence: string,
@@ -209,10 +212,16 @@ export async function predictMaskedResidue(
       return normalizeEsm(data);
     } catch (cloudErr) {
       if (route === "cloud") throw cloudErr;
-      if (!getHfToken()) {
-        throw new Error(
-          `Облачный ESM-2 недоступен (${cloudFailHint(cloudErr)}) и свой HF-токен не задан — откройте «Настройки ML» в шапке`,
-        );
+      // фолбэк 1: ESM-2 целиком в браузере (веса с huggingface.co — в РФ не заблокирован)
+      try {
+        return await predictMaskedResidueBrowser(sequence, opts);
+      } catch (browserErr) {
+        if (!getHfToken()) {
+          throw new Error(
+            `Облачный ESM-2 недоступен (${cloudFailHint(cloudErr)}), браузерный режим не запустился (${String(browserErr).slice(0, 60)}) и свой HF-токен не задан — откройте «Настройки ML» в шапке`,
+          );
+        }
+        // auto → пробуем токен юзера ниже
       }
     }
   }
