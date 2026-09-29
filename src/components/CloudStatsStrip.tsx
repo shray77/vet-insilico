@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { fetchCloudStats, type CloudStats } from "@/lib/cloud";
 
 /**
@@ -51,6 +52,9 @@ export default function CloudStatsStrip() {
             🔗 <b className="text-indigo-700 dark:text-indigo-300">{shares}</b> ссылок-сценариев
           </span>
           <span className="text-zinc-400 hidden sm:inline">считается на CF Workers ·vet-api</span>
+          <Link href="/stats" className="text-indigo-600 dark:text-indigo-300 hover:underline font-medium whitespace-nowrap">
+            вся статистика →
+          </Link>
         </div>
       </div>
     </section>

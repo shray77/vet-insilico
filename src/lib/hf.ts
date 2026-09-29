@@ -47,6 +47,19 @@ export function setHfToken(token: string): void {
 export type AiRoute = "auto" | "cloud" | "token";
 const AI_ROUTE_KEY = "vis:ai_route";
 
+/**
+ * Честная диагностика падения облака: вместо сухого "Failed to fetch"
+ * подсказываем частую причину — workers.dev блокируется провайдерами в РФ
+ * (РКН). Офлайн/рестарт воркера тоже попадают в подсказку.
+ */
+function cloudFailHint(err: unknown): string {
+  const msg = String(err);
+  const netIssue = /failed to fetch|fetch failed|networkerror|load failed|abort|timeout/i.test(msg);
+  return netIssue
+    ? `${msg.slice(0, 90)} — возможно, vet-api (workers.dev) блокируется провайдером (РКН в РФ) или недоступен; попробуйте VPN`
+    : msg.slice(0, 90);
+}
+
 /** auto = облако → свой токен; cloud = только облако; token = только свой токен. */
 export function getAiRoute(): AiRoute {
   if (typeof window === "undefined") return "auto";
@@ -88,7 +101,7 @@ export async function chatComplete(
       if (route === "cloud") throw cloudErr;
       if (!getHfToken()) {
         throw new Error(
-          `Облачный AI недоступен (${String(cloudErr).slice(0, 80)}) и свой HF-токен не задан — откройте «Настройки ML» в шапке`,
+          `Облачный AI недоступен (${cloudFailHint(cloudErr)}) и свой HF-токен не задан — откройте «Настройки ML» в шапке`,
         );
       }
       // auto → пробуем токен юзера ниже
@@ -165,7 +178,7 @@ export async function predictMaskedResidue(
       if (route === "cloud") throw cloudErr;
       if (!getHfToken()) {
         throw new Error(
-          `Облачный ESM-2 недоступен (${String(cloudErr).slice(0, 80)}) и свой HF-токен не задан — откройте «Настройки ML» в шапке`,
+          `Облачный ESM-2 недоступен (${cloudFailHint(cloudErr)}) и свой HF-токен не задан — откройте «Настройки ML» в шапке`,
         );
       }
     }

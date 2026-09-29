@@ -8,7 +8,8 @@
  *
  * Поддерживаемые приложения (дискриминант app):
  *   pkpd (PK/PD Simulator), primer (PCR Primer Designer),
- *   crispr (CRISPR gRNA Designer), alignment (Sequence Alignment).
+ *   crispr (CRISPR gRNA Designer), alignment (Sequence Alignment),
+ *   phylogeny (Phylogenetic Tree Builder).
  *
  * Функции чистые (кроме build*Url, использующих location) → тестируются.
  */
@@ -56,7 +57,16 @@ export interface AlignmentScenario {
   gap: number;
 }
 
-export type Scenario = PkpdScenario | PrimerScenario | CrisprScenario | AlignmentScenario;
+export interface PhyloScenario {
+  v: 1;
+  app: "phylogeny";
+  /** Многострочный текст textarea: "name<TAB>seq" (имена сохраняются как есть). */
+  seqs: string;
+  type: "protein" | "dna";
+  method: "upgma" | "neighbor-joining";
+}
+
+export type Scenario = PkpdScenario | PrimerScenario | CrisprScenario | AlignmentScenario | PhyloScenario;
 
 /** Лимит автономного payload (#j=) в символах base64url (URL до ~64k, берём запас). */
 export const AUTONOMOUS_LIMIT = 16000;
@@ -90,6 +100,17 @@ function clamp(n: unknown, min: number, max: number, dflt: number): number {
 /** Последовательность: A-Z, '-', '.'; uppercase; обрезка по лимиту. */
 function cleanSeq(s: unknown, max = 12000): string {
   return typeof s === "string" ? s.toUpperCase().replace(/[^A-Z\-.]/g, "").slice(0, max) : "";
+}
+
+/** Филогения: имена таксонов сохраняем (буквы/цифры, TAB-разделитель); всё прочее — вырезаем. */
+function cleanPhyloSeqs(s: unknown, max = 16000): string {
+  if (typeof s !== "string") return "";
+  return s
+    .split("\n")
+    .map((l) => l.trim().replace(/[^\p{L}\p{N}\t \-.|_]/gu, ""))
+    .filter(Boolean)
+    .join("\n")
+    .slice(0, max);
 }
 
 /** Строгая нормализация: доза/интервал/MIC внутри диапазонов UI-слайдеров. */
@@ -144,6 +165,17 @@ export function normalizeAlignment(raw: unknown): AlignmentScenario {
   };
 }
 
+export function normalizePhylo(raw: unknown): PhyloScenario {
+  const r = (raw ?? {}) as Record<string, unknown>;
+  return {
+    v: 1,
+    app: "phylogeny",
+    seqs: cleanPhyloSeqs(r.seqs),
+    type: r.type === "protein" ? "protein" : "dna",
+    method: r.method === "upgma" ? "upgma" : "neighbor-joining",
+  };
+}
+
 /** Единая точка входа: валидация пришедшего payload по дискриминанту app. */
 export function normalizeScenario(raw: unknown): Scenario | null {
   const app = (raw as { app?: unknown } | null | undefined)?.app;
@@ -151,6 +183,7 @@ export function normalizeScenario(raw: unknown): Scenario | null {
   if (app === "primer") return normalizePrimer(raw);
   if (app === "crispr") return normalizeCrispr(raw);
   if (app === "alignment") return normalizeAlignment(raw);
+  if (app === "phylogeny") return normalizePhylo(raw);
   return null;
 }
 

@@ -18,13 +18,14 @@ import {
   type Scenario,
 } from "@/lib/share";
 
-type Tone = "rose" | "cyan" | "indigo" | "amber";
+type Tone = "rose" | "cyan" | "indigo" | "amber" | "emerald";
 
 const BTN: Record<Tone, string> = {
   rose: "bg-rose-600 hover:bg-rose-700",
   cyan: "bg-cyan-600 hover:bg-cyan-700",
   indigo: "bg-indigo-600 hover:bg-indigo-700",
   amber: "bg-amber-600 hover:bg-amber-700",
+  emerald: "bg-emerald-600 hover:bg-emerald-700",
 };
 
 const INFO: Record<Tone, string> = {
@@ -32,6 +33,7 @@ const INFO: Record<Tone, string> = {
   cyan: "text-cyan-700 dark:text-cyan-300",
   indigo: "text-indigo-700 dark:text-indigo-300",
   amber: "text-amber-700 dark:text-amber-300",
+  emerald: "text-emerald-700 dark:text-emerald-300",
 };
 
 export default function ShareButton({

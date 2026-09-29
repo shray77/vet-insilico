@@ -6,6 +6,7 @@ import {
   normalizePrimer,
   normalizeCrispr,
   normalizeAlignment,
+  normalizePhylo,
   normalizeScenario,
   encodeAutonomousPayload,
   decodeAutonomousPayload,
@@ -131,5 +132,51 @@ describe("scenario v2: primer / crispr / alignment", () => {
     const enc = encodeAutonomousPayload(sc);
     const parsed = parseShareHash(`#j=${enc}`);
     expect(parsed.data?.app).toBe("alignment");
+  });
+});
+
+describe("scenario: phylogeny", () => {
+  it("normalizePhylo: сохраняет имена и TAB, чистит мусор, дискриминанты type/method", () => {
+    const raw = "Cow_H1\tMKTAYIAK\nDog H2* mktayitk\nКороваЛ5\tMKT??AYIAK";
+    const sc = normalizePhylo({ seqs: raw, type: "rna", method: "birch" });
+    expect(sc).toMatchObject({
+      app: "phylogeny",
+      type: "dna", // rna → дефолт dna
+      method: "neighbor-joining", // неизвестный метод → дефолт
+    });
+    // Имена сохранены (регистр не трогаем, кириллица ок), * и ? вырезаны
+    const lines = sc.seqs.split("\n");
+    expect(lines[0]).toBe("Cow_H1\tMKTAYIAK");
+    expect(lines[1]).toContain("Dog H2 mktayitk");
+    expect(lines[2]).toContain("КороваЛ5");
+    expect(sc.seqs).not.toContain("?");
+  });
+
+  it("normalizePhylo: пустой вход → пустая строка, метод upgma проходит", () => {
+    expect(normalizePhylo({}).seqs).toBe("");
+    expect(normalizePhylo({ seqs: "A\tMK", method: "upgma" }).method).toBe("upgma");
+    expect(normalizePhylo({ seqs: 42 }).seqs).toBe("");
+  });
+
+  it("normalizeScenario: диспетчер знает phylogeny", () => {
+    expect(normalizeScenario({ app: "phylogeny", seqs: "A\tMK" })?.app).toBe("phylogeny");
+  });
+
+  it("roundtrip phylogeny через автономный payload (кириллица в именах)", () => {
+    const sc = normalizePhylo({
+      seqs: "ШтаммА\tMKTAYIAKQR\nШтаммБ\tMKTAYIAKQS\nШтаммВ\tMKTAYITKQR",
+      type: "protein",
+      method: "neighbor-joining",
+    });
+    expect(decodeAutonomousPayload(encodeAutonomousPayload(sc))).toEqual(sc);
+  });
+
+  it("parseShareHash понимает #j формата phylogeny", () => {
+    const sc = normalizePhylo({ seqs: "A\tMKT\nB\tMKS\nC\tMKV", type: "protein", method: "upgma" });
+    const parsed = parseShareHash(`#j=${encodeAutonomousPayload(sc)}`);
+    expect(parsed.data?.app).toBe("phylogeny");
+    if (parsed.data?.app === "phylogeny") {
+      expect(parsed.data.method).toBe("upgma");
+    }
   });
 });

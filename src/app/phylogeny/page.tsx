@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
+import ShareButton from "@/components/ShareButton";
+import { loadScenarioFromHash, normalizePhylo } from "@/lib/share";
 import {
   upgma,
   neighborJoining,
@@ -20,6 +22,18 @@ export default function PhylogenyPage() {
   );
   const [type, setType] = useState<"protein" | "dna">(PHYLO_SAMPLES[0].type);
   const [error, setError] = useState("");
+
+  /* ─── Загрузка сценария из ссылки: #s=<id> (облако) / #j=<b64> (автономный) ─── */
+  useEffect(() => {
+    loadScenarioFromHash(window.location.hash).then((sc) => {
+      if (!sc || sc.app !== "phylogeny") return;
+      const ph = normalizePhylo(sc);
+      setCustomSeqs(ph.seqs);
+      setType(ph.type);
+      setMethod(ph.method);
+      setSampleIdx(-1); // кастомный набор — ни один образец не подсвечен
+    });
+  }, []);
 
   const loadSample = (idx: number) => {
     setSampleIdx(idx);
@@ -61,15 +75,26 @@ export default function PhylogenyPage() {
           <span>Phylogenetic Tree</span>
         </div>
 
-        <div className="rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 p-4 mb-6">
-          <h2 className="font-semibold text-emerald-900 dark:text-emerald-100 mb-1">
-            🌳 Phylogenetic Tree Builder — UPGMA + Neighbor-Joining
-          </h2>
-          <p className="text-sm text-emerald-800 dark:text-emerald-200">
-            Строит филогенетическое дерево из набора гомологичных последовательностей. Сначала считается попарная
-            distance matrix (Kimura 2-parameter для ДНК, p-distance для белков), затем — UPGMA (ultrametric)
-            или NJ (Saitou-Nei 1987). Вывод — Newick + визуализация dendrogram.
-          </p>
+        <div className="rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 p-4 mb-6 flex items-start gap-3 flex-wrap">
+          <div className="flex-1 min-w-[260px]">
+            <h2 className="font-semibold text-emerald-900 dark:text-emerald-100 mb-1">
+              🌳 Phylogenetic Tree Builder — UPGMA + Neighbor-Joining
+            </h2>
+            <p className="text-sm text-emerald-800 dark:text-emerald-200">
+              Строит филогенетическое дерево из набора гомологичных последовательностей. Сначала считается попарная
+              distance matrix (Kimura 2-parameter для ДНК, p-distance для белков), затем — UPGMA (ultrametric)
+              или NJ (Saitou-Nei 1987). Вывод — Newick + визуализация dendrogram.
+            </p>
+          </div>
+          <ShareButton
+            tone="emerald"
+            title="Phylogenetic Tree"
+            build={() =>
+              customSeqs.trim()
+                ? { v: 1, app: "phylogeny", seqs: customSeqs, type, method }
+                : null
+            }
+          />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
