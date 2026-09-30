@@ -18,7 +18,7 @@
  * Output: ranked primer pairs with full biophysical properties.
  */
 
-import { chatComplete, getHfToken } from "./hf";
+import { chatComplete } from "./hf";
 
 export interface Primer {
   sequence: string;
@@ -376,10 +376,7 @@ export async function analyzePairWithLLM(
   pair: PrimerPair,
   pathogenName?: string,
 ): Promise<PrimerLLMAnalysis> {
-  if (!getHfToken()) {
-    throw new Error("HF token не задан");
-  }
-
+  // Без гейта: chatComplete сам маршрутизирует облако → публичный LLM → свой токен.
   const prompt = `You are a molecular biology expert. Analyze this PCR primer pair${pathogenName ? ` for ${pathogenName} detection` : ""}.
 
 FORWARD: 5'-${pair.forward.sequence}-3' (Tm=${pair.forward.tm}°C, GC=${pair.forward.gc}%, hairpin ΔG=${pair.forward.hairpin}, GC-clamp=${pair.forward.gcClamp})
