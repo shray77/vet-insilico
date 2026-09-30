@@ -83,27 +83,31 @@ export interface CloudStatus {
 }
 
 const PROBE_TTL_MS = 5 * 60 * 1000;
+/** После неудачной пробы всех каналов раньше держали дефолт 5 мин — РФ-браузер
+ *  всё это время ловил мгновенный NetworkError. 60 с хватает. */
+const NEGATIVE_TTL_MS = 60 * 1000;
 let statusCache: CloudStatus | null = null;
 
 /* ─── Разрешение базового URL: дефолт → зеркала (обход РКН) ─── */
 
 let activeBase: string | null = null;
 let resolvedAt = 0;
-let resolveInFlight: Promise<string> | null = null;
+let resolveInFlight: Promise<string | null> | null = null;
 
 /** Синхронный доступ к текущему базовому URL (до первого resolve — дефолт). */
 export function cloudUrl(): string {
   return getOverrideUrl() ?? activeBase ?? DEFAULT_CLOUD_URL;
 }
 
-/** Быстрый статус одного кандидата: GET /v1/insilico/status с таймаутом. */
+/** Быстрый статус одного кандидата: GET /v1/insilico/status с таймаутом.
+ *  Без Content-Type: GET без тела и лишних заголовков — простой CORS-запрос,
+ *  браузер не делает OPTIONS-префлайт (при RTT 1-2.5 с он удваивал латентность). */
 async function probeStatus(base: string, timeoutMs = 4500): Promise<{ ok: boolean; data?: Record<string, unknown> }> {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
     const res = await fetch(`${base}/v1/insilico/status`, {
       signal: ctrl.signal,
-      headers: { "Content-Type": "application/json" },
     });
     if (!res.ok) return { ok: false };
     const data = (await res.json().catch(() => null)) as Record<string, unknown> | null;
@@ -117,19 +121,23 @@ async function probeStatus(base: string, timeoutMs = 4500): Promise<{ ok: boolea
 
 /**
  * Выбирает рабочий базовый URL: override (localStorage) → зеркала → дефолт.
- * Кеш 5 мин (в т.ч. негативный — если всё мертво, не долбим каждую попытку).
- * Override имеет абсолютный приоритет (юзер сам знает, что вписал).
+ * Кеш 5 мин (негативный — 60 с). Override приоритетен, но exclude-хедж может
+ * перепрыгнуть и его: мёртвый override хуже живого зеркала.
+ * exclude — база, только что словившая сетевой фейл (вызов перебирает каналы).
  */
-export async function resolveCloudBase(force = false): Promise<string> {
+export async function resolveCloudBase(force = false, exclude?: string): Promise<string | null> {
+  const pick = (b: string): string | null => (exclude && b === exclude ? null : b);
   const override = getOverrideUrl();
-  if (override) return override;
-  if (!force && activeBase && Date.now() - resolvedAt < PROBE_TTL_MS) return activeBase;
-  if (!force && resolvedAt && Date.now() - resolvedAt < PROBE_TTL_MS) return DEFAULT_CLOUD_URL;
+  if (override && pick(override)) return override;
+  if (!exclude) {
+    if (!force && activeBase && Date.now() - resolvedAt < PROBE_TTL_MS) return activeBase;
+    if (!force && resolvedAt && Date.now() - resolvedAt < NEGATIVE_TTL_MS) return DEFAULT_CLOUD_URL;
+  }
   if (resolveInFlight) return resolveInFlight;
   resolveInFlight = (async () => {
     // Быстрый старт: выученная база с прошлого раза — один проб вместо цепочки
     const learned = !force ? getLearnedBase() : null;
-    if (learned) {
+    if (learned && pick(learned)) {
       const st = await probeStatus(learned);
       if (st.ok) {
         activeBase = learned;
@@ -140,7 +148,7 @@ export async function resolveCloudBase(force = false): Promise<string> {
     // Порядок: дефолт первым — мир ходит напрямую на воркер, зеркало
     // нагружают только те, кто не смог достучаться (РФ: таймаут workers.dev
     // ~4.5 с раз в сутки, затем зеркало). Зеркало = личный free-tier проект.
-    const candidates = [DEFAULT_CLOUD_URL, ...CLOUD_MIRRORS].filter((b) => b !== learned);
+    const candidates = [DEFAULT_CLOUD_URL, ...CLOUD_MIRRORS].filter((b) => b !== learned && pick(b));
     for (const base of candidates) {
       const st = await probeStatus(base);
       if (st.ok) {
@@ -150,26 +158,30 @@ export async function resolveCloudBase(force = false): Promise<string> {
         return base;
       }
     }
-    // всё мертво — 5 мин не трогаем, фетчи упадут быстро на дефолте;
-    // выученную базу сбрасываем, чтобы в следующий цикл переучиться
+    // всё мертво — негатив-кеш 60 с; выученную базу сбрасываем, чтобы
+    // в следующий цикл переучиться. exclude-вызов получает null и
+    // просто ретроит исходную ошибку, а не молча бьётся в труп.
     clearLearnedBase();
     resolvedAt = Date.now();
-    return DEFAULT_CLOUD_URL;
+    return exclude ? null : DEFAULT_CLOUD_URL;
   })().finally(() => {
     resolveInFlight = null;
   });
   return resolveInFlight;
 }
 
-async function fetchJson<T>(path: string, init?: RequestInit, timeoutMs = 6000): Promise<T> {
-  const base = await resolveCloudBase();
+async function fetchJsonBase<T>(base: string, path: string, init?: RequestInit, timeoutMs = 6000): Promise<T> {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
     const res = await fetch(`${base}${path}`, {
       ...init,
       signal: ctrl.signal,
-      headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) },
+      // Content-Type шлём только с телом: GET без него — простой CORS-запрос
+      // без OPTIONS-префлайта (при RTT 1-2.5 с префлайт удваивал латентность).
+      headers: init?.body
+        ? { "Content-Type": "application/json", ...(init?.headers ?? {}) }
+        : init?.headers,
     });
     const data = await res.json().catch(() => null);
     if (!res.ok) {
@@ -184,6 +196,29 @@ async function fetchJson<T>(path: string, init?: RequestInit, timeoutMs = 6000):
   }
 }
 
+/** Сетевой фейл канала (РКН-ресет/офлайн/наш таймаут), а не ответ воркера. */
+function isNetworkDead(e: unknown, signal?: AbortSignal | null): boolean {
+  if (signal?.aborted) return false; // отмена/initiator — перебор не нужен
+  if (e instanceof TypeError) return true; // NetworkError / Failed to fetch / Load failed
+  return (e as { name?: string })?.name === "AbortError"; // наш таймаут
+}
+
+/** Хедж: если база по сети мертва, один раз перепрыгиваем на другой канал.
+ *  HTTP-ошибки воркера (429/502…) не хеджируем — каналы ведут к одному воркеру. */
+async function fetchJson<T>(path: string, init?: RequestInit, timeoutMs = 6000): Promise<T> {
+  const signal = init?.signal;
+  const primary = await resolveCloudBase();
+  if (!primary) throw new Error("ни один облачный канал не доступен");
+  try {
+    return await fetchJsonBase<T>(primary, path, init, timeoutMs);
+  } catch (e) {
+    if (!isNetworkDead(e, signal)) throw e;
+    const alt = await resolveCloudBase(true, primary);
+    if (!alt || alt === primary) throw e;
+    return await fetchJsonBase<T>(alt, path, init, timeoutMs);
+  }
+}
+
 /** Быстрая диагностика воркера (через выбранное зеркало). Кеш 5 мин; недоступность — не ошибка, а статус. */
 export async function probeCloud(force = false): Promise<CloudStatus> {
   if (!force && statusCache && Date.now() - statusCache.checkedAt < PROBE_TTL_MS) {
@@ -191,6 +226,10 @@ export async function probeCloud(force = false): Promise<CloudStatus> {
   }
   const t0 = Date.now();
   const base = await resolveCloudBase(force);
+  if (!base) {
+    statusCache = { reachable: false, ai: false, outbreaks: null, outbreaksUpdated: null, ms: Date.now() - t0, checkedAt: Date.now() };
+    return statusCache;
+  }
   const st = await probeStatus(base);
   if (st.ok && st.data) {
     statusCache = {

@@ -16,6 +16,11 @@
  */
 
 const MODEL_ID = "shrayyyy/esm2-t12-35M-onnx-js";
+/** Локальная копия модели: вендорена в public/ (GitHub Pages, same-origin) —
+ *  качается с того же хоста, что и сайт, в РФ не блокируется. HF оставлен
+ *  фолбэком: у части провайдеров cdn-lfs.huggingface.co рвётся на 34 МБ
+ *  (NetworkError при пинге 1200-2500 мс). */
+const LOCAL_MODEL_DIR = "esm2-t12-35m-onnx-js";
 const TOP_K = 20;
 
 export interface EsmPrediction {
@@ -34,7 +39,6 @@ let loadPercent = 0;
 
 async function loadPipe(): Promise<FillMaskPipe> {
   const { pipeline, env } = await import("@huggingface/transformers");
-  env.allowLocalModels = false;
   const base = (process.env.NEXT_PUBLIC_BASE_PATH ?? "").replace(/\/+$/, "");
   const wasm = env.backends?.onnx?.wasm;
   // ort-web (1.31-dev, сборка webgpu.bundle) в браузере запрашивает СТРОГО
@@ -54,14 +58,29 @@ async function loadPipe(): Promise<FillMaskPipe> {
     wasm.numThreads = 1;
     wasm.proxy = false;
   }
-  const pipe = await pipeline("fill-mask", MODEL_ID, {
-    dtype: "q8",
+  const opts = {
+    dtype: "q8" as const,
     progress_callback: (p: { status?: string; progress?: number }) => {
       if (p?.status === "progress" && typeof p.progress === "number") {
         loadPercent = Math.max(loadPercent, Math.round(p.progress));
       }
     },
-  });
+  };
+  // Приоритет — локальная копия с Pages (same-origin, РФ-доступен без сюрпризов).
+  if (base) {
+    try {
+      env.allowLocalModels = true;
+      env.useBrowserCache = true;
+      const pipe = await pipeline("fill-mask", `${base}/models/${LOCAL_MODEL_DIR}`, opts);
+      loadPercent = 100;
+      return pipe as unknown as FillMaskPipe;
+    } catch {
+      loadPercent = 0;
+    }
+  }
+  // Фолбэк: репо на huggingface.co (как раньше).
+  env.allowLocalModels = false;
+  const pipe = await pipeline("fill-mask", MODEL_ID, opts);
   loadPercent = 100;
   return pipe as unknown as FillMaskPipe;
 }
