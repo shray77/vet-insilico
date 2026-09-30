@@ -37,8 +37,22 @@ async function loadPipe(): Promise<FillMaskPipe> {
   env.allowLocalModels = false;
   const base = (process.env.NEXT_PUBLIC_BASE_PATH ?? "").replace(/\/+$/, "");
   const wasm = env.backends?.onnx?.wasm;
+  // ort-web (1.31-dev, сборка webgpu.bundle) в браузере запрашивает СТРОГО
+  // ort-wasm-simd-threaded.asyncify.{mjs,wasm} (jsep-вариант этой сборкой не
+  // используется вовсе). Раньше wasmPaths был префиксом-строкой + в public
+  // лежали только .jsep-файлы → dynamic import 404 → "no available backend
+  // found. ERR: [wasm] TypeError" → эпитопы падали во ВСЕХ браузерах
+  // (Node-тесты этого не видели: там ort-node). Явно пинним оба файла —
+  // та же форма {mjs, wasm}, что transformers.js использует по умолчанию.
+  // GitHub Pages не отдаёт COOP/COEP → SAB нет → однопоточный режим явный
+  // (модель 35M, fill-mask за ~100-300 мс и так).
   if (base && wasm) {
-    wasm.wasmPaths = `${base}/transformers-wasm/`;
+    wasm.wasmPaths = {
+      mjs: `${base}/transformers-wasm/ort-wasm-simd-threaded.asyncify.mjs`,
+      wasm: `${base}/transformers-wasm/ort-wasm-simd-threaded.asyncify.wasm`,
+    };
+    wasm.numThreads = 1;
+    wasm.proxy = false;
   }
   const pipe = await pipeline("fill-mask", MODEL_ID, {
     dtype: "q8",
