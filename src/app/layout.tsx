@@ -45,7 +45,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <footer className="border-t border-white/10 py-5 text-center text-xs text-zinc-500">
+          Информационный сервис · не ветеринарная консультация ·{" "}
+          <a className="underline underline-offset-2 hover:text-zinc-300" href={`${basePath}/terms/`}>
+            условия использования и дисклеймер
+          </a>{" "}
+          ·{" "}
+          <a className="underline underline-offset-2 hover:text-zinc-300" href="https://shray77.github.io/terms.html">
+            условия экосистемы
+          </a>
+        </footer>
+      </body>
     </html>
   );
 }
