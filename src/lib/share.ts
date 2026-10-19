@@ -207,11 +207,6 @@ export function decodeAutonomousPayload(b64: string): Scenario | null {
   }
 }
 
-/** Размер автономной части URL (для проверки лимита до копирования). */
-export function autonomousPayloadSize(sc: Scenario): number {
-  return encodeAutonomousPayload(sc).length;
-}
-
 /** Разбор location.hash: "#s=ID" → {id}, "#j=b64" → {data}, иначе null. */
 export function parseShareHash(hash: string): { id?: string; data?: Scenario } {
   const h = hash.replace(/^#/, "").trim();

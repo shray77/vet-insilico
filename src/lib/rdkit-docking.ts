@@ -299,9 +299,3 @@ export async function dockWithRDKit(
   };
 }
 
-/**
- * Check if RDKit.js is available (loaded).
- */
-export function isRDKitLoaded(): boolean {
-  return rdkitInstance !== null;
-}

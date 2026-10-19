@@ -98,26 +98,3 @@ export function validateDiagnosisResult(obj: unknown): {
   };
 }
 
-/**
- * Validate that an unknown object has the shape of a DrugRepurposingAnalysis
- * (from the drug-repurposing page). Returns the typed object or null.
- */
-export function validateDrugAnalysis(obj: unknown): Record<string, unknown> | null {
-  if (typeof obj !== "object" || obj === null) return null;
-  const o = obj as Record<string, unknown>;
-
-  // Must have at least one of the expected fields
-  const hasField = o.repurposingPotential || o.confidenceScore || o.rationale;
-  if (!hasField) return null;
-
-  // Coerce types
-  const result: Record<string, unknown> = {
-    repurposingPotential: typeof o.repurposingPotential === "string" ? o.repurposingPotential : "unknown",
-    confidenceScore: typeof o.confidenceScore === "number" ? o.confidenceScore : 0,
-    rationale: typeof o.rationale === "string" ? o.rationale : "",
-    keyRisks: Array.isArray(o.keyRisks) ? o.keyRisks.filter((r: unknown) => typeof r === "string") : [],
-    nextSteps: Array.isArray(o.nextSteps) ? o.nextSteps.filter((s: unknown) => typeof s === "string") : [],
-  };
-
-  return result;
-}

@@ -15,9 +15,8 @@
  * currently they use 3-4 separate tools (MEGA, BEAST, ResFinder).
  */
 
-import { needlemanWunsch } from "./alignment";
 import { upgma, computeDistanceMatrix, type PhyloResult } from "./phylo";
-import { calculateDivergenceTime, CLOCK_RATES } from "./molecular-clock";
+import { CLOCK_RATES } from "./molecular-clock";
 import { predictAMR, type AMRResult } from "./amr";
 
 export interface OutbreakIsolate {

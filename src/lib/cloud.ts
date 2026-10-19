@@ -247,11 +247,6 @@ export async function probeCloud(force = false): Promise<CloudStatus> {
   return statusCache;
 }
 
-/** Синхронный доступ к последнему probe (без запроса). */
-export function lastCloudStatus(): CloudStatus | null {
-  return statusCache;
-}
-
 /* ─────────── Статистика использования (публичная, без IP) ─────────── */
 
 export interface CloudStats {
@@ -374,7 +369,3 @@ export async function cloudEsm(
   return data.data;
 }
 
-/** Доступна ли облачная AI-маршрутизация (по последнему probe). */
-export function cloudAiAvailable(): boolean {
-  return Boolean(statusCache?.reachable && statusCache.ai);
-}

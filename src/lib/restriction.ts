@@ -197,17 +197,6 @@ export function computeFragments(sequence: string, enzymes: RestrictionEnzyme[])
 }
 
 /**
- * Get a list of "frequent cutters" (4-5 bp recognition) for a given sequence.
- */
-export function getFrequentCutters(): RestrictionEnzyme[] {
-  return RESTRICTION_ENZYMES.filter((e) => e.recognition.length <= 5);
-}
-
-export function getRareCutters(): RestrictionEnzyme[] {
-  return RESTRICTION_ENZYMES.filter((e) => e.recognition.length >= 6);
-}
-
-/**
  * Find which enzymes actually cut the given sequence.
  * Returns enzymes sorted by number of cut sites (descending).
  */

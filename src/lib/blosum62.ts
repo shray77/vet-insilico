@@ -60,19 +60,3 @@ export function blosum62Score(a: string, b: string): number {
   return BLOSUM62[a]?.[b] ?? -4;
 }
 
-/**
- * Compute BLOSUM62 similarity score between a peptide and a reference peptide.
- * Returns a normalized score 0-1 (1 = identical).
- */
-export function peptideSimilarity(peptide: string, reference: string): number {
-  if (peptide.length !== reference.length || peptide.length === 0) return 0;
-  let score = 0;
-  let maxPossible = 0;
-  for (let i = 0; i < peptide.length; i++) {
-    const a = peptide[i].toUpperCase();
-    const b = reference[i].toUpperCase();
-    score += blosum62Score(a, b);
-    maxPossible += blosum62Score(a, a);
-  }
-  return maxPossible > 0 ? Math.max(0, score / maxPossible) : 0;
-}

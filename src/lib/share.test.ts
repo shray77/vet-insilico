@@ -10,7 +10,6 @@ import {
   normalizeScenario,
   encodeAutonomousPayload,
   decodeAutonomousPayload,
-  autonomousPayloadSize,
   parseShareHash,
 } from "./share";
 
@@ -118,13 +117,6 @@ describe("scenario v2: primer / crispr / alignment", () => {
   it("roundtrip primer через автономный payload", () => {
     const sc = normalizePrimer({ seq: "ATGGCCTATTGG", targetTm: 60, minProduct: 120, maxProduct: 500, minLen: 19, maxLen: 24 });
     expect(decodeAutonomousPayload(encodeAutonomousPayload(sc))).toEqual(sc);
-  });
-
-  it("roundtrip alignment + размер payload честный", () => {
-    const sc = normalizeAlignment({ a: "MKTAYIAKQRQISFVKSH", b: "MKTAYIAKQRQISFVKSH", type: "protein", algo: "smith-waterman", gap: -6 });
-    const enc = encodeAutonomousPayload(sc);
-    expect(decodeAutonomousPayload(enc)).toEqual(sc);
-    expect(autonomousPayloadSize(sc)).toBe(enc.length);
   });
 
   it("parseShareHash понимает #j нового формата (alignment)", () => {
