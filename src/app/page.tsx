@@ -362,7 +362,7 @@ export default function HubPage() {
             VetInSilico Hub
           </h1>
           <p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
-            17 инструментов для in silico исследований ветеринарии — от drug repurposing до CRISPR, филогении и AI-диагностики.
+            23 инструмента для in silico исследований ветеринарии — от drug repurposing до CRISPR, филогении, ESM-2 и AI-диагностики.
             Гибрид: эвристики в браузере + FOSS ML через HuggingFace + RDKit.js WASM.
           </p>
           <div className="flex flex-wrap justify-center gap-2 mt-6 text-xs">
@@ -378,7 +378,7 @@ export default function HubPage() {
           {[
             { v: PATHOGEN_COUNT, label: "Патогенов", icon: "🦠" },
             { v: DRUG_COUNT, label: "Препаратов", icon: "💊" },
-            { v: "17", label: "Инструментов", icon: "🛠" },
+            { v: "23", label: "Инструментов", icon: "🛠" },
             { v: "137", label: "Тестов pass", icon: "✅" },
           ].map((s) => (
             <div key={s.label} className="rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 text-center">
