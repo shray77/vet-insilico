@@ -1,20 +1,20 @@
 # VetInSilico Hub
 
-**Open-source in silico toolkit for veterinary pathogen research** — 17 browser-based tools, hybrid computation (deterministic algorithms + FOSS ML via HuggingFace + RDKit.js WASM), zero backend.
+**Open-source in silico toolkit for veterinary pathogen research** — 23 browser-based tools, hybrid computation (deterministic algorithms + FOSS ML via HuggingFace + RDKit.js WASM), zero backend.
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Live](https://img.shields.io/badge/Live-shray77.github.io%2Fvet--insilico-teal.svg)](https://shray77.github.io/vet-insilico/)
-[![Tests](https://img.shields.io/badge/Tests-148%20pass-green.svg)](#)
-[![Tools](https://img.shields.io/badge/Tools-17-purple.svg)](#)
+[![Tests](https://img.shields.io/badge/Tests-170%20pass-green.svg)](#)
+[![Tools](https://img.shields.io/badge/Tools-23-purple.svg)](#)
 
-## Tools (17)
+## Tools (23)
 
 ### 💊 Фармакология (5)
 | # | Tool | Algorithm | ML layer |
 |---|------|-----------|----------|
 | 🧬 1 | **Drug Repurposing** | 3-factor docking + Lipinski + RDKit.js descriptors | Qwen-Coder-3B LLM + RDKit WASM |
 | 💊 2 | **ADMET Predictor** | 12-parameter rule-based (Lipinski, Veber, Egan, Dsouza) | Qwen LLM on SMILES |
-| 📊 3 | **PK/PD Simulator** | 1-compartment PK + Emax PD (AUC/MIC, Cmax/MIC, T>MIC) | — |
+| 📊 3 | **PK/PD Simulator** | 1-compartment PK + Emax PD (AUC24/MIC, Cmax/MIC, T>MIC) | — |
 | 🧪 4 | **Dose Calculator** | 36 dose schemes, 6 species, weight/age adjustment | — |
 | 🔬 5 | **Protein Structure Viewer** | 3Dmol.js, 5 styles, PDB search | — |
 
@@ -41,6 +41,16 @@
 |---|------|-----------|----------|
 | 📊 16 | **ELISA Cut-off Calculator** | Mean + 2SD/3SD, ROC curve, AUC | — |
 | 🦠 17 | **AMR Predictor** | CARD/ResFinder context-based mutation detection | — |
+
+### 🧬 ML и пайплайны (6)
+| # | Tool | Algorithm | ML layer |
+|---|------|-----------|----------|
+| 🧬 18 | **Vaccine Designer** | Multi-epitope конструкт: B+T эпитопы → GPGPG-линкеры → His-tag → кодон-оптимизация → GenBank | опц. |
+| 🔍 19 | **Sequence ID** | NCBI BLAST идентификация_unknown последовательностей + авто-рекомендация инструмента | — |
+| 🦠 20 | **Outbreak Surveillance** | UPGMA + Kimura 2P дерево + молекулярные часы TMRCA + AMR-скан в одном пайплайне | — |
+| ☠️ 21 | **ML Toxicity** | ChemBERTa классификаторы: Ames, hERG, DILI, ClinTox, сенсибилизация | ✅ |
+| 🧬 22 | **Variant Effect** | ESM-2 650M Δ-log-likelihood аминокислотных замен (антигенный дрейф, вакцинный эскейп) | ✅ |
+| 🔬 23 | **Structure Prediction** | ESMFold (Meta AI) 3D-структура из последовательности, pLDDT + 3Dmol.js | ✅ |
 
 ## Stack
 
