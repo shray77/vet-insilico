@@ -54,6 +54,14 @@ describe("simulatePK", () => {
     const result = simulatePK({ ...profile.params, dose: 10, interval: 24, nDoses: 3 });
     expect(result.auc).toBeGreaterThan(0);
   });
+
+  it("auc24 = total AUC / days (AUIC must use the 24 h AUC)", () => {
+    const profile = DRUG_PK_PROFILES[0]; // duration = 72 h
+    const result = simulatePK({ ...profile.params, dose: 10, interval: 24, nDoses: 3 });
+    const days = profile.params.duration / 24;
+    expect(result.auc24).toBeCloseTo(Number((result.auc / days).toFixed(2)), 1);
+    expect(result.auc24).toBeLessThan(result.auc); // 3-day profile: auc24 = auc/3
+  });
 });
 
 describe("computePD", () => {
@@ -68,13 +76,13 @@ describe("computePD", () => {
     expect(pd.curve[50].effect).toBeGreaterThan(95);
   });
 
-  it("AUC/MIC index is calculated correctly", () => {
+  it("AUC24/MIC index is calculated correctly", () => {
     const pk = simulatePK({ ...DRUG_PK_PROFILES[0].params, dose: 10, interval: 24, nDoses: 3 });
     const pd = computePD(pk, {
       emax: 100, ec50: 1, hill: 1.5, mic: 1,
       targetType: "auc_mic", targetValue: 125,
     });
-    expect(pd.pdIndex).toBeCloseTo(pk.auc / 1, 1);
+    expect(pd.pdIndex).toBeCloseTo(pk.auc24 / 1, 1);
   });
 
   it("T>MIC calculates percentage of time above MIC", () => {

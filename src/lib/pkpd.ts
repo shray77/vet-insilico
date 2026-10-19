@@ -4,7 +4,7 @@
  * Models:
  *   - One-compartment PK with first-order absorption + IV bolus
  *   - Multiple dosing (steady state)
- *   - MIC-based pharmacodynamic indices: AUC/MIC, Cmax/MIC, T>MIC
+ *   - MIC-based pharmacodynamic indices: AUC24/MIC (AUIC), Cmax/MIC, T>MIC
  *   - Emax dose-response curve
  *
  * All in browser, deterministic ODE via Euler method.
@@ -48,6 +48,8 @@ export interface PKResult {
   tmax: number;
   /** Area under curve (mg·h/L). */
   auc: number;
+  /** Average 24-hour AUC (total AUC / days): the AUIC denominator, AUC24/MIC. */
+  auc24: number;
   /** Half-life (h). */
   halfLife: number;
   /** Clearance (L/h/kg). */
@@ -149,6 +151,7 @@ export function simulatePK(params: PKParams): PKResult {
     cmin: Number(concentrations[concentrations.length - 1].toFixed(3)),
     tmax: Number(tmax.toFixed(2)),
     auc: Number(auc.toFixed(2)),
+    auc24: Number((duration > 0 ? auc / (duration / 24) : auc).toFixed(2)),
     halfLife: Number(halfLife.toFixed(2)),
     clearance: Number(clearance.toFixed(3)),
     cssAvg: Number(cssAvg.toFixed(3)),
@@ -208,7 +211,9 @@ export function computePD(
   let timeAboveMIC = 0;
   if (mic && mic > 0) {
     if (targetType === "auc_mic") {
-      pdIndex = pk.auc / mic;
+      // AUIC = AUC24/MIC: PD targets (125 / 40) are defined per 24 h.
+      // Using the total AUC of a 72-96 h profile would inflate the index 3-4x.
+      pdIndex = pk.auc24 / mic;
     } else if (targetType === "cmax_mic") {
       pdIndex = pk.cmax / mic;
     } else if (targetType === "t_above_mic") {
@@ -227,9 +232,9 @@ export function computePD(
   let recommendation = "";
   if (mic && targetType) {
     if (targetType === "auc_mic") {
-      if (pdIndex >= 125) recommendation = "Отличный бактериологический ответ (AUC/MIC ≥ 125). Высокая вероятность эрадикации.";
-      else if (pdIndex >= 40) recommendation = "Умеренный ответ (AUC/MIC 40-125). Бактериостатический эффект.";
-      else recommendation = "Недостаточный ответ (AUC/MIC < 40). Рассмотреть увеличение дозы или смену препарата.";
+      if (pdIndex >= 125) recommendation = "Отличный бактериологический ответ (AUC24/MIC ≥ 125). Высокая вероятность эрадикации.";
+      else if (pdIndex >= 40) recommendation = "Умеренный ответ (AUC24/MIC 40-125). Бактериостатический эффект.";
+      else recommendation = "Недостаточный ответ (AUC24/MIC < 40). Рассмотреть увеличение дозы или смену препарата.";
     } else if (targetType === "cmax_mic") {
       if (pdIndex >= 10) recommendation = "Высокий пик (Cmax/MIC ≥ 10). Хорошо для аминогликозидов.";
       else if (pdIndex >= 4) recommendation = "Умеренный пик (Cmax/MIC 4-10).";

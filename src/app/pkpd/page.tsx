@@ -128,7 +128,7 @@ export default function PKPDPage() {
               </h2>
               <p className="text-sm text-rose-800 dark:text-rose-200">
                 Однокомпартментная модель с first-order absorption. Считаем Cmax, AUC, t½, Css.
-                PD-индексы: AUC/MIC (фторхинолоны), Cmax/MIC (аминогликозиды), T&gt;MIC (β-лактамы).
+                PD-индексы: AUC₂₄/MIC (фторхинолоны), Cmax/MIC (аминогликозиды), T&gt;MIC (β-лактамы).
                 Визуализация concentration-time графика + Emax dose-response.
               </p>
             </div>
@@ -250,9 +250,9 @@ export default function PKPDPage() {
                 <div className="text-[10px] text-zinc-400">мг/л</div>
               </div>
               <div className="rounded-lg bg-zinc-100 dark:bg-zinc-900 p-3 text-center">
-                <div className="text-xs text-zinc-400">AUC</div>
-                <div className="text-lg font-bold text-rose-600">{pk.auc}</div>
-                <div className="text-[10px] text-zinc-400">мг·ч/л</div>
+                <div className="text-xs text-zinc-400">AUC₂₄</div>
+                <div className="text-lg font-bold text-rose-600">{pk.auc24}</div>
+                <div className="text-[10px] text-zinc-400">мг·ч/л · среднесут.</div>
               </div>
               <div className="rounded-lg bg-zinc-100 dark:bg-zinc-900 p-3 text-center">
                 <div className="text-xs text-zinc-400">t½</div>
@@ -309,7 +309,7 @@ export default function PKPDPage() {
                   <div className="flex justify-between">
                     <span className="text-zinc-500">Тип:</span>
                     <span className="font-mono text-xs">
-                      {profile.pdType === "auc_mic" ? "AUC/MIC" : profile.pdType === "cmax_mic" ? "Cmax/MIC" : "T>MIC (%)"}
+                      {profile.pdType === "auc_mic" ? "AUC₂₄/MIC" : profile.pdType === "cmax_mic" ? "Cmax/MIC" : "T>MIC (%)"}
                     </span>
                   </div>
                   <div className="flex justify-between">
@@ -332,7 +332,7 @@ export default function PKPDPage() {
             <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 text-xs text-zinc-500 dark:text-zinc-400">
               <b>Модель:</b> Однокомпартментная с first-order absorption (для oral) или IV bolus.
               <b> PD-таргеты</b> (Mouton & Ambrose 2007):
-              β-лактамы — T&gt;MIC ≥ 40% интервала; фторхинолоны (грам-) — AUC/MIC ≥ 125;
+              β-лактамы — T&gt;MIC ≥ 40% интервала; фторхинолоны (грам-) — AUC₂₄/MIC ≥ 125;
               аминогликозиды — Cmax/MIC ≥ 10.<br/>
               <b>⚠️</b> Упрощённая модель. Реальная PK зависит от вида, возраста, болезни, взаимодействия.
             </div>
