@@ -21,8 +21,8 @@ import {
 } from "@/lib/cloud";
 
 const METRICS = [
-  { key: "aiChat", label: "AI-расчёты (LLM)", color: "#6366f1" },
-  { key: "aiChatHits", label: "Попадания в кеш", color: "#8b5cf6" },
+  { key: "aiChat", label: "AI-расчёты (LLM)", color: "#0f766e" },
+  { key: "aiChatHits", label: "Попадания в кеш", color: "#d97706" },
   { key: "aiEsm", label: "ESM-2", color: "#0ea5e9" },
   { key: "shares", label: "Ссылки-сценарии", color: "#14b8a6" },
 ] as const;
@@ -82,7 +82,7 @@ export default function StatsPage() {
         <div className="rounded-xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 p-4 mb-6 flex items-start gap-3 flex-wrap">
           <div className="flex-1 min-w-[240px]">
             <h1 className="font-semibold text-indigo-900 dark:text-indigo-100 mb-1">
-              📊 Облако VetInSilico — статистика использования
+              Облако VetInSilico — статистика использования
             </h1>
             <p className="text-sm text-indigo-800 dark:text-indigo-200">
               Живые цифры воркера <code className="text-xs">vet-api</code>: AI-расчёты, кеш, облачные ссылки.

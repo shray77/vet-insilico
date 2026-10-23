@@ -43,7 +43,7 @@ export default function AMRPage() {
 
         <div className="rounded-xl bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800 p-4 mb-6">
           <h2 className="font-semibold text-orange-900 dark:text-orange-100 mb-1">
-            🦠 Antimicrobial Resistance Predictor
+            Antimicrobial Resistance Predictor
           </h2>
           <p className="text-sm text-orange-800 dark:text-orange-200">
             По последовательности гена-мишени (GyrA, RpoB, PBP, 16S rRNA) предсказываем резистентность к классам антибиотиков.
@@ -128,7 +128,7 @@ export default function AMRPage() {
                   </h3>
                   {result.classScores.length === 0 ? (
                     <div className="rounded-lg border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950/30 p-3 text-xs text-green-700 dark:text-green-300">
-                      ✅ Классы с известной резистентностью не обнаружены
+                      ✓ Классы с известной резистентностью не обнаружены
                     </div>
                   ) : (
                     <div className="space-y-2">
@@ -153,7 +153,7 @@ export default function AMRPage() {
                 {result.hits.length > 0 && (
                   <div>
                     <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 mb-3">
-                      🔬 Детектированные детерминанты ({result.hits.length})
+                      Детектированные детерминанты ({result.hits.length})
                     </h3>
                     <div className="space-y-2">
                       {result.hits.map((h, i) => (
@@ -183,7 +183,7 @@ export default function AMRPage() {
                 {affectedDrugs.length > 0 && (
                   <div>
                     <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 mb-3">
-                      💊 Препараты из базы VetInSilico ({affectedDrugs.length})
+                      Препараты из базы VetInSilico ({affectedDrugs.length})
                     </h3>
                     <div className="flex flex-wrap gap-1.5">
                       {affectedDrugs.slice(0, 30).map((d) => (
@@ -200,7 +200,7 @@ export default function AMRPage() {
 
                 {/* Recommendation */}
                 <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-900">
-                  <h3 className="font-semibold mb-2">📋 Рекомендация</h3>
+                  <h3 className="font-semibold mb-2">Рекомендация</h3>
                   <p className="text-sm text-zinc-700 dark:text-zinc-300">{result.recommendation}</p>
                 </div>
 
@@ -209,7 +209,7 @@ export default function AMRPage() {
                   • Rule-based поиск известных мутаций (CARD/ResFinder subset) — для GyrA, RpoB, PBP, 23S rRNA, FolP.<br/>
                   • Motif search для резистентных генов: blaTEM, blaSHV, blaCTX-M, tetM, ermB, aac(3)-IV, qnrA.<br/>
                   • Confidence 75-95% для каноничных мутаций.<br/>
-                  <b>⚠️</b> Упрощённая база (~10 генов + ~7 motifs). Реальная AMR-прогнозизация требует WGS + CARD/ResFinder + фенотипическую валидацию.
+                  <b>⚠</b> Упрощённая база (~10 генов + ~7 motifs). Реальная AMR-прогнозизация требует WGS + CARD/ResFinder + фенотипическую валидацию.
                 </div>
               </>
             )}

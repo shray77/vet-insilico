@@ -39,7 +39,7 @@ interface ToolPageLayoutProps {
  * per page (breadcrumb + hero + main wrapper).
  *
  * Usage:
- *   <ToolPageLayout name="Codon Optimization" icon="🔤" description="..." color="fuchsia">
+ *   <ToolPageLayout name="Codon Optimization" icon="Tr" description="..." color="fuchsia">
  *     {/* page content * /}
  *   </ToolPageLayout>
  */
@@ -80,7 +80,7 @@ export function LoadingPanel({ message = "Загрузка..." }: { message?: st
 export function EmptyPanel({ message = "Заполните параметры для расчёта..." }: { message?: string }) {
   return (
     <div className="rounded-xl border border-dashed border-zinc-300 dark:border-zinc-700 p-8 text-center text-zinc-400">
-      <div className="text-3xl mb-2">📋</div>
+      <div className="font-mono text-2xl font-bold tracking-widest text-zinc-400 mb-2">⧉</div>
       <div className="text-sm">{message}</div>
     </div>
   );
@@ -90,7 +90,7 @@ export function EmptyPanel({ message = "Заполните параметры д
 export function ErrorAlert({ message }: { message: string }) {
   return (
     <div className="text-xs text-red-500 p-2 rounded bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
-      ⚠️ {message}
+      ⚠ {message}
     </div>
   );
 }
@@ -207,7 +207,7 @@ export function CopyButton({ text, label = "Копировать" }: { text: str
       onClick={handleCopy}
       className="px-2 py-1 rounded-md text-xs border border-zinc-200 dark:border-zinc-700 hover:bg-accent transition-colors"
     >
-      📋 {label}
+      {label}
     </button>
   );
 }

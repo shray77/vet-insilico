@@ -90,7 +90,7 @@ export default function AdmetPage() {
 
         <div className="rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 p-4 mb-6">
           <h2 className="font-semibold text-blue-900 dark:text-blue-100 mb-1">
-            💊 ADMET Predictor — фармакокинетика и токсичность
+            ADMET Predictor — фармакокинетика и токсичность
           </h2>
           <p className="text-sm text-blue-800 dark:text-blue-200">
             Выбираем препарат → получаем 12 параметров: всасывание, распределение, метаболизм,
@@ -189,7 +189,7 @@ export default function AdmetPage() {
             {result.alerts.length > 0 && (
               <div className="rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/30 p-4">
                 <div className="font-semibold text-amber-700 dark:text-amber-300 text-sm mb-2">
-                  ⚠️ Алерты ({result.alerts.length})
+                  Алерты ({result.alerts.length})
                 </div>
                 <ul className="text-xs space-y-1 list-disc list-inside text-amber-800 dark:text-amber-200">
                   {result.alerts.map((a, i) => <li key={i}>{a}</li>)}
@@ -234,7 +234,7 @@ export default function AdmetPage() {
 
             {/* Metabolism / clearance */}
             <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-900">
-              <h3 className="text-sm font-semibold mb-3">⚗️ Метаболизм и клиренс</h3>
+              <h3 className="text-sm font-semibold mb-3">Метаболизм и клиренс</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <div className="text-xs text-zinc-400 mb-1">Печёночный клиренс</div>
@@ -279,7 +279,7 @@ export default function AdmetPage() {
             <div className="rounded-xl border-2 border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-950/20 p-4">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-semibold text-purple-700 dark:text-purple-300">
-                  🧬 ML ADMET (Path B, Qwen-Coder-3B через SMILES)
+                  ML ADMET (Path B, Qwen-Coder-3B через SMILES)
                 </h3>
                 {drug.smiles ? (
                   <code className="text-[10px] font-mono text-purple-600 dark:text-purple-400 break-all max-w-[200px]">
@@ -302,11 +302,11 @@ export default function AdmetPage() {
                     disabled={!drug.smiles}
                     className="px-4 py-2 rounded-lg bg-purple-600 text-white text-sm font-medium hover:bg-purple-700 disabled:opacity-50 transition"
                   >
-                    🧬 ML анализ через SMILES
+                    ML анализ через SMILES
                   </button>
                   {!drug.smiles && (
                     <div className="text-xs text-amber-500 mt-2">
-                      ⚠️ Для этого препарата нет SMILES в базе (только {DRUGS.filter(d => d.smiles).length} из {DRUGS.length} препаратов имеют SMILES)
+                      Для этого препарата нет SMILES в базе (только {DRUGS.filter(d => d.smiles).length} из {DRUGS.length} препаратов имеют SMILES)
                     </div>
                   )}
                 </div>
@@ -314,13 +314,13 @@ export default function AdmetPage() {
 
               {mlLoading && (
                 <div className="text-sm text-purple-700 dark:text-purple-300">
-                  ⏳ LLM анализирует SMILES...
+                  LLM анализирует SMILES...
                 </div>
               )}
 
               {mlError && (
                 <div className="text-xs text-red-500 mt-2 p-2 rounded bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
-                  ⚠️ {mlError}
+                  {mlError}
                 </div>
               )}
 
@@ -343,7 +343,7 @@ export default function AdmetPage() {
                   </div>
 
                   <div className="text-xs italic text-zinc-600 dark:text-zinc-300 p-2 rounded bg-white dark:bg-zinc-900">
-                    💭 {mlResult.rationale}
+                    {mlResult.rationale}
                   </div>
 
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
@@ -359,7 +359,7 @@ export default function AdmetPage() {
                         <div className="text-[10px] text-zinc-500">{item.label}</div>
                         <div className="flex items-center gap-1">
                           <span className={`text-sm font-bold ${item.v ? "text-red-500" : "text-green-500"}`}>
-                            {item.v ? "⚠️ Да" : "✓ Нет"}
+                            {item.v ? "Да" : "✓ Нет"}
                           </span>
                         </div>
                         <div className="text-[9px] text-zinc-400">conf: {(item.conf * 100).toFixed(0)}%</div>
@@ -384,7 +384,7 @@ export default function AdmetPage() {
 
                   {mlResult.alerts.length > 0 && (
                     <div>
-                      <div className="text-[10px] text-amber-600 dark:text-amber-400 font-medium mb-1">⚠️ Структурные алерты:</div>
+                      <div className="text-[10px] text-amber-600 dark:text-amber-400 font-medium mb-1">Структурные алерты:</div>
                       <ul className="text-xs list-disc list-inside space-y-0.5 text-zinc-700 dark:text-zinc-300">
                         {mlResult.alerts.map((a, i) => <li key={i}>{a}</li>)}
                       </ul>
@@ -405,7 +405,7 @@ export default function AdmetPage() {
               <b>Источники правил:</b> Lipinski 2004 (Rule of Five), Veber 2002 (PSA/RB),
               Egan & Lauri 2002 (BBB), Hughes 2008 (oral bioavailability), Dsouza 2011 (hERG),
               Wang 1999 (logS), BIMAS-derived PSSM (MHC).<br/>
-              <b>⚠️ Не для клинического применения</b> — упрощённая оценка для генерации гипотез.
+              <b>Не для клинического применения</b> — упрощённая оценка для генерации гипотез.
             </div>
           </div>
         </div>

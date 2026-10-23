@@ -35,7 +35,7 @@ export default function MolecularClockPage() {
           <span>Molecular Clock Calculator</span>
         </div>
         <div className="rounded-xl bg-slate-50 dark:bg-slate-950/30 border border-slate-200 dark:border-slate-800 p-4 mb-6">
-          <h2 className="font-semibold text-slate-900 dark:text-slate-100 mb-1">⏱️ Molecular Clock Calculator</h2>
+          <h2 className="font-semibold text-slate-900 dark:text-slate-100 mb-1">Molecular Clock Calculator</h2>
           <p className="text-sm text-slate-800 dark:text-slate-200">
             Оценка времени расхождения по генетическому расстоянию. Формула: T = d / (2r).
             12 опубликованных clock rates для ветеринарии (ASFV, Influenza, Rabies, FMDV, BVDV, Brucella, mtDNA...).
@@ -143,7 +143,7 @@ export default function MolecularClockPage() {
               • Фактор 2: обе линии накапливают мутации независимо<br/>
               • Clock rates варьируются на порядки: mtDNA (10⁻⁸) → HIV (10⁻²)<br/>
               • 95% CI: ±1.96 × SE / (2r)<br/>
-              <b>⚠️</b> Молекулярные часы приблизительны. Реальная скорость может зависеть от давления отбора, поколения времени,environmental factors.
+              <b>⚠</b> Молекулярные часы приблизительны. Реальная скорость может зависеть от давления отбора, поколения времени,environmental factors.
             </div>
           </div>
         </div>

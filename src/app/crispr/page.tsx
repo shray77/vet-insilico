@@ -49,7 +49,7 @@ export default function CrisprPage() {
         </div>
         <div className="rounded-xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 p-4 mb-6 flex items-start gap-3 flex-wrap">
           <div className="flex-1 min-w-[260px]">
-            <h2 className="font-semibold text-indigo-900 dark:text-indigo-100 mb-1">🧬 CRISPR gRNA Designer — SpCas9</h2>
+            <h2 className="font-semibold text-indigo-900 dark:text-indigo-100 mb-1">CRISPR gRNA Designer — SpCas9</h2>
             <p className="text-sm text-indigo-800 dark:text-indigo-200">
               Поиск guide RNA (20-mer + NGG PAM) на обеих цепях. On-target score (Doench 2016 упрощённо),
               off-target проверка против геномов хозяев, GC content, hairpin ΔG.
@@ -154,7 +154,7 @@ export default function CrisprPage() {
                   • On-target score: упрощённый Doench 2016 (позиционные веса + GC + poly-T check)<br/>
                   • Off-target: 12-mer seed (PAM-проксимальный) против геномов свинья/КРС/человек<br/>
                   • Hairpin: DP self-complementarity, ΔG ≤ -3 = проблема<br/>
-                  <b>⚠️</b> Перед экспериментом — проверьте через CRISPOR или Cas-OFFinder.
+                  <b>⚠</b> Перед экспериментом — проверьте через CRISPOR или Cas-OFFinder.
                 </div>
               </>
             )}

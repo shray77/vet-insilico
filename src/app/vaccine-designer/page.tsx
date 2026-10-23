@@ -57,7 +57,7 @@ export default function VaccineDesignerPage() {
   return (
     <ToolPageLayout
       name="Vaccine Designer"
-      icon="💉"
+      icon="Vac"
       color="emerald"
       description="Multi-epitope vaccine construct designer: B+T epitope prediction, linker assembly, codon optimization, GenBank export."
     >
@@ -157,7 +157,7 @@ function ConstructView({ construct }: { construct: VaccineConstruct }) {
           {construct.epitopes.map((ep, i) => (
             <div key={i} className="flex items-center gap-0.5">
               <div className="text-[8px] font-mono px-1 py-0.5 rounded text-white"
-                style={{ backgroundColor: ep.type === "B-cell" ? "#3b82f6" : "#a855f7" }}
+                style={{ backgroundColor: ep.type === "B-cell" ? "#3b82f6" : "#db2777" }}
                 title={`${ep.type}, score=${ep.score.toFixed(1)}`}>
                 {ep.sequence.length > 6 ? ep.sequence.slice(0, 4) + ".." : ep.sequence}
               </div>
@@ -184,7 +184,7 @@ function ConstructView({ construct }: { construct: VaccineConstruct }) {
               <tr key={i} className="border-b border-zinc-100 dark:border-zinc-900">
                 <td className="py-1 text-zinc-400">{i + 1}</td>
                 <td className="py-1"><span className="px-1.5 py-0.5 rounded text-[9px] text-white"
-                  style={{ backgroundColor: ep.type === "B-cell" ? "#3b82f6" : "#a855f7" }}>
+                  style={{ backgroundColor: ep.type === "B-cell" ? "#3b82f6" : "#db2777" }}>
                   {ep.type === "B-cell" ? "B" : "T"}</span></td>
                 <td className="py-1 font-mono">{ep.sequence}</td>
                 <td className="py-1 text-center tabular-nums">{ep.score.toFixed(1)}</td>

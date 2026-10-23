@@ -27,7 +27,7 @@ export default function ELISAPage() {
           <span>ELISA Cut-off Calculator</span>
         </div>
         <div className="rounded-xl bg-teal-50 dark:bg-teal-950/30 border border-teal-200 dark:border-teal-800 p-4 mb-6">
-          <h2 className="font-semibold text-teal-900 dark:text-teal-100 mb-1">📊 ELISA Cut-off Calculator</h2>
+          <h2 className="font-semibold text-teal-900 dark:text-teal-100 mb-1">ELISA Cut-off Calculator</h2>
           <p className="text-sm text-teal-800 dark:text-teal-200">
             Статистический анализ OD значений ELISA. Cut-off = mean + 2SD (или 3SD).
             ROC curve, AUC, sensitivity/specificity если есть positive controls.
@@ -137,7 +137,7 @@ export default function ELISAPage() {
                   • CV% (Coefficient of Variation) = SD/mean × 100. Хорошо если &lt; 15%<br/>
                   • ROC: sweep через все возможные cut-off → sensitivity vs 1-specificity<br/>
                   • AUC: trapezoidal rule. 0.5 = random, 1.0 = perfect. &gt;0.9 = отличный тест<br/>
-                  <b>⚠️</b> Минимум 8-10 negative controls для надёжной оценки. Для публикации — подтвердить на независимой выборке.
+                  <b>⚠</b> Минимум 8-10 negative controls для надёжной оценки. Для публикации — подтвердить на независимой выборке.
                 </div>
               </>
             )}

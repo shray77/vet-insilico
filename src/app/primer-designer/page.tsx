@@ -118,7 +118,7 @@ export default function PrimerDesignerPage() {
         <div className="rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-4 mb-6 flex items-start gap-3 flex-wrap">
           <div className="flex-1 min-w-[260px]">
             <h2 className="font-semibold text-amber-900 dark:text-amber-100 mb-1">
-              🔬 PCR Primer Designer — ML-powered
+              PCR Primer Designer — ML-powered
             </h2>
             <p className="text-sm text-amber-800 dark:text-amber-200">
               Дизайн пар праймеров с детальной термодинамикой (SantaLucia 1998 NN, hairpin DP, dimers) +
@@ -224,7 +224,7 @@ export default function PrimerDesignerPage() {
                 disabled={running || sequence.length < 100}
                 className="w-full px-4 py-2 rounded-lg bg-amber-600 text-white font-medium disabled:opacity-50 hover:bg-amber-700 transition"
               >
-                {running ? "⏳ Расчёт..." : "🧪 Подобрать праймеры"}
+                {running ? "Расчёт..." : "Подобрать праймеры"}
               </button>
             </div>
           </div>
@@ -248,7 +248,7 @@ export default function PrimerDesignerPage() {
                     </div>
                     {!hasHfToken && (
                       <div className="ml-auto text-xs text-zinc-400 max-w-xs text-right">
-                        💡 ML-анализ работает без токена (облако/публичный LLM). Свой HF-токен — опция: кнопка 🤖
+                        ML-анализ работает без токена (облако/публичный LLM). Свой HF-токен — опция: кнопка ИИ
                       </div>
                     )}
                   </div>
@@ -349,7 +349,7 @@ export default function PrimerDesignerPage() {
                               disabled={analyzing === i}
                               className="px-3 py-2 rounded-lg bg-purple-100 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 text-xs font-medium hover:bg-purple-200 dark:hover:bg-purple-900/60 transition disabled:opacity-50"
                             >
-                              {analyzing === i ? "⏳ LLM анализирует..." : "🤖 ML-анализ (Qwen 3B)"}
+                              {analyzing === i ? "LLM анализирует..." : "ML-анализ (Qwen 3B)"}
                             </button>
                           )}
                         </div>
@@ -369,7 +369,7 @@ export default function PrimerDesignerPage() {
                   • <b>3'-end stability</b> — NN ΔG last 5 bp (must be moderate, not too strong).<br/>
                   • <b>GC-clamp</b> — 1-3 G/C в последних 5 nt 3'-конца (важно для специфичности).<br/>
                   • <b>ML-анализ</b> — Qwen2.5-Coder-3B-Instruct (Apache 2.0) через HuggingFace Inference API.<br/>
-                  <b>⚠️</b> Перед использованием в ПЦР — проверьте специфичность BLAST'ом.
+                  <b>⚠</b> Перед использованием в ПЦР — проверьте специфичность BLAST'ом.
                 </div>
               </>
             )}
@@ -384,7 +384,7 @@ function LLMAnalysisView({ analysis }: { analysis: PrimerLLMAnalysis }) {
   return (
     <div className="rounded-lg bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 p-3">
       <div className="flex items-center justify-between mb-2">
-        <div className="text-xs font-bold text-purple-700 dark:text-purple-300">🤖 ML-анализ (Qwen 3B)</div>
+        <div className="text-xs font-bold text-purple-700 dark:text-purple-300">ML-анализ (Qwen 3B)</div>
         <div className="flex items-center gap-3 text-xs">
           <div>
             <span className="text-zinc-500">Специфичность:</span>{" "}
@@ -403,7 +403,7 @@ function LLMAnalysisView({ analysis }: { analysis: PrimerLLMAnalysis }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
         {analysis.strengths.length > 0 && (
           <div>
-            <div className="text-green-600 dark:text-green-400 font-medium mb-1">✅ Сильные стороны:</div>
+            <div className="text-green-600 dark:text-green-400 font-medium mb-1">✓ Сильные стороны:</div>
             <ul className="list-disc list-inside space-y-0.5 text-zinc-700 dark:text-zinc-300">
               {analysis.strengths.map((s, i) => <li key={i}>{s}</li>)}
             </ul>
@@ -411,7 +411,7 @@ function LLMAnalysisView({ analysis }: { analysis: PrimerLLMAnalysis }) {
         )}
         {analysis.concerns.length > 0 && (
           <div>
-            <div className="text-amber-600 dark:text-amber-400 font-medium mb-1">⚠️ Замечания:</div>
+            <div className="text-amber-600 dark:text-amber-400 font-medium mb-1">⚠ Замечания:</div>
             <ul className="list-disc list-inside space-y-0.5 text-zinc-700 dark:text-zinc-300">
               {analysis.concerns.map((c, i) => <li key={i}>{c}</li>)}
             </ul>
@@ -442,7 +442,7 @@ function MisprimingCheck({ forward, reverse }: { forward: string; reverse: strin
           onClick={run}
           className="px-3 py-2 rounded-lg bg-orange-100 dark:bg-orange-950/40 text-orange-700 dark:text-orange-300 text-xs font-medium hover:bg-orange-200 dark:hover:bg-orange-900/60 transition"
         >
-          🔬 Mispriming check (Path B)
+          Mispriming check (Path B)
         </button>
         <div className="text-[10px] text-zinc-400 mt-1">
           Проверка праймеров против геномов: свинья, КРС, человек (GAPDH, 18S rRNA, Alu)
@@ -460,7 +460,7 @@ function MisprimingCheck({ forward, reverse }: { forward: string; reverse: strin
     <div className="mt-3 pt-3 border-t border-zinc-200 dark:border-zinc-800">
       <div className="rounded-lg border border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-950/20 p-3">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-bold text-orange-700 dark:text-orange-300">🔬 Mispriming check</span>
+          <span className="text-xs font-bold text-orange-700 dark:text-orange-300">Mispriming check</span>
           <span className="text-xs">
             Специфичность:{" "}
             <b style={{ color: specColor }}>{result.specificityScore}/100</b>
@@ -469,13 +469,13 @@ function MisprimingCheck({ forward, reverse }: { forward: string; reverse: strin
 
         {result.warning && (
           <div className="text-xs text-red-600 dark:text-red-400 p-2 rounded bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 mb-2">
-            ⚠️ {result.warning}
+            ⚠ {result.warning}
           </div>
         )}
 
         {allHits.length === 0 ? (
           <div className="text-xs text-green-600 dark:text-green-400">
-            ✅ Mispriming не обнаружен — праймеры специфичны к геномам хозяев
+            ✓ Mispriming не обнаружен — праймеры специфичны к геномам хозяев
           </div>
         ) : (
           <div>

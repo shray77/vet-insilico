@@ -63,7 +63,7 @@ export default function SequenceIDPage() {
   return (
     <ToolPageLayout
       name="Sequence ID"
-      icon="🔍"
+      icon="⌕"
       color="cyan"
       description="Идентификация последовательности через NCBI BLAST. Вставьте белок или ДНК — получите топ-совпадений + рекомендацию инструмента VetInSilico."
     >
@@ -130,7 +130,7 @@ export default function SequenceIDPage() {
           {error && <div className="mt-3"><ErrorAlert message={error} /></div>}
 
           <div className="mt-4 text-[10px] text-zinc-400 bg-zinc-50 dark:bg-zinc-900 rounded p-2">
-            💡 BLAST ищет по базе NCBI GenBank (миллионы последовательностей).
+            BLAST ищет по базе NCBI GenBank (миллионы последовательностей).
             Запрос идёт напрямую с вашего браузера на серверы NCBI.
             Время выполнения: 10-60 секунд.
           </div>
@@ -156,7 +156,7 @@ export default function SequenceIDPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="text-xs text-cyan-600 dark:text-cyan-400 font-semibold mb-1">
-                      💡 Рекомендуемый инструмент
+                      Рекомендуемый инструмент
                     </div>
                     <div className="text-sm font-bold text-cyan-900 dark:text-cyan-100">
                       {result.suggestion.tool}

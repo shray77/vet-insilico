@@ -78,7 +78,7 @@ export default function PhylogenyPage() {
         <div className="rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 p-4 mb-6 flex items-start gap-3 flex-wrap">
           <div className="flex-1 min-w-[260px]">
             <h2 className="font-semibold text-emerald-900 dark:text-emerald-100 mb-1">
-              🌳 Phylogenetic Tree Builder — UPGMA + Neighbor-Joining
+              Phylogenetic Tree Builder — UPGMA + Neighbor-Joining
             </h2>
             <p className="text-sm text-emerald-800 dark:text-emerald-200">
               Строит филогенетическое дерево из набора гомологичных последовательностей. Сначала считается попарная
@@ -134,7 +134,7 @@ export default function PhylogenyPage() {
                     : "bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200"
                 }`}
               >
-                🌳 Neighbor-Joining<br/><span className="text-[10px] opacity-75">Saitou-Nei 1987</span>
+                Neighbor-Joining<br/><span className="text-[10px] opacity-75">Saitou-Nei 1987</span>
               </button>
               <button
                 onClick={() => setMethod("upgma")}
@@ -144,7 +144,7 @@ export default function PhylogenyPage() {
                     : "bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200"
                 }`}
               >
-                📐 UPGMA<br/><span className="text-[10px] opacity-75">ultrametric</span>
+                UPGMA<br/><span className="text-[10px] opacity-75">ultrametric</span>
               </button>
             </div>
 
@@ -188,7 +188,7 @@ export default function PhylogenyPage() {
             </label>
             {error && (
               <div className="mt-2 text-xs text-red-500 p-2 rounded bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
-                ⚠️ {error}
+                ⚠ {error}
               </div>
             )}
           </div>
@@ -225,7 +225,7 @@ export default function PhylogenyPage() {
                         onClick={() => navigator.clipboard?.writeText(result.phylo!.newick)}
                         className="ml-2 text-xs px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 shrink-0"
                       >
-                        📋
+                        ⧉
                       </button>
                     </div>
                     <p className="text-[10px] text-zinc-400">
@@ -293,7 +293,7 @@ export default function PhylogenyPage() {
                   • <b>UPGMA</b> — предполагает ультраметричность (равные скорости эволюции). Хорош для коротко-дивергировавших последовательностей.<br/>
                   • <b>Kimura 2-parameter</b> (Kimura 1980) — для ДНК, раздельно учитывает transitions и transversions.<br/>
                   • <b>p-distance</b> — для белков, доля различающихся сайтов.<br/>
-                  <b>⚠️</b> Для серьёзной филогении используйте <a href="https://iqtree.org/" target="_blank" rel="noopener" className="text-blue-500 hover:underline">IQ-TREE</a> или <a href="https://raxml-ng.vital-it.ch/" target="_blank" rel="noopener" className="text-blue-500 hover:underline">RAxML</a> (maximum likelihood + bootstrap).
+                  <b>⚠</b> Для серьёзной филогении используйте <a href="https://iqtree.org/" target="_blank" rel="noopener" className="text-blue-500 hover:underline">IQ-TREE</a> или <a href="https://raxml-ng.vital-it.ch/" target="_blank" rel="noopener" className="text-blue-500 hover:underline">RAxML</a> (maximum likelihood + bootstrap).
                 </div>
               </>
             )}

@@ -71,7 +71,7 @@ export default function RestrictionMapPage() {
 
         <div className="rounded-xl bg-lime-50 dark:bg-lime-950/30 border border-lime-200 dark:border-lime-800 p-4 mb-6">
           <h2 className="font-semibold text-lime-900 dark:text-lime-100 mb-1">
-            ✂️ Restriction Map — карта сайтов рестриктаз
+            Restriction Map — карта сайтов рестриктаз
           </h2>
           <p className="text-sm text-lime-800 dark:text-lime-200">
             Находим сайты разрезания для 30+ рестриктаз (EcoRI, BamHI, HindIII, SmaI...) в ДНК-последовательности.
@@ -120,13 +120,13 @@ export default function RestrictionMapPage() {
               Ферменты ({selectedEnzymes.length}/{availableEnzymes.length})
               {cuttingEnzymes.length > 0 && (
                 <span className="ml-2 text-[10px] text-lime-600 dark:text-lime-400">
-                  🔪 {cuttingEnzymes.length} режут эту последовательность
+                  {cuttingEnzymes.length} режут эту последовательность
                 </span>
               )}
             </h3>
             <div className="flex flex-wrap gap-1 mb-2 text-xs">
               <button onClick={loadCutting} className="px-2 py-1 rounded bg-lime-100 dark:bg-lime-950/40 text-lime-700 dark:text-lime-300 hover:bg-lime-200 font-medium">
-                ✂️ Только режущие ({cuttingEnzymes.length})
+                Только режущие ({cuttingEnzymes.length})
               </button>
               <button onClick={loadAll} className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200">Все</button>
               <button onClick={loadNone} className="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200">Очистить</button>
@@ -204,7 +204,7 @@ export default function RestrictionMapPage() {
                       {/* Cut sites */}
                       {result.cutSites.map((site, i) => {
                         const x = 20 + (site.position / result.length) * 960;
-                        const color = ["#dc2626", "#0ea5e9", "#16a34a", "#a855f7", "#f97316", "#eab308"][i % 6];
+                        const color = ["#dc2626", "#0ea5e9", "#16a34a", "#db2777", "#f97316", "#eab308"][i % 6];
                         return (
                           <g key={i}>
                             <line x1={x} y1={20} x2={x} y2={60} stroke={color} strokeWidth={1.5} />
@@ -268,7 +268,7 @@ export default function RestrictionMapPage() {
                 {result.fragments.length > 0 && (
                   <div>
                     <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 mb-3">
-                      🧪 Виртуальный гель-электрофорез
+                      Виртуальный гель-электрофорез
                     </h3>
                     <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 bg-zinc-900 overflow-x-auto">
                       <div className="flex gap-3 min-w-max">
@@ -322,7 +322,7 @@ export default function RestrictionMapPage() {
                   • Палиндрные сайты — только top strand. Не-палиндромные (SfiI, HinfI, DdeI) — оба направления.<br/>
                   • Фрагменты: расстояние между последовательными top-strand разрезами.<br/>
                   • Гель-электрофорез: log-scale, фрагменты мигрируют сверху вниз.<br/>
-                  <b>⚠️</b> Метилирование (Dam, Dcm) НЕ учитывается. Реальные эксперименты требуют проверки метилирования.
+                  <b>⚠</b> Метилирование (Dam, Dcm) НЕ учитывается. Реальные эксперименты требуют проверки метилирования.
                 </div>
               </>
             )}

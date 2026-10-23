@@ -52,7 +52,7 @@ export default function OutbreakSurveillancePage() {
   return (
     <ToolPageLayout
       name="Outbreak Surveillance"
-      icon="🦠"
+      icon="Pt"
       color="orange"
       description="Комбинированный анализ вспышки: филогения + молекулярные часы + AMR. Загрузите полевые изоляты → получите дерево, оценку TMRCA, статус резистентности."
     >
@@ -163,7 +163,7 @@ export default function OutbreakSurveillancePage() {
                     {report.newickTree}
                   </pre>
                   <div className="text-[10px] text-zinc-400 mt-1">
-                    💡 Вставьте в iTOL (https://itol.embl.de) или FigTree для визуализации
+                    Вставьте в iTOL (https://itol.embl.de) или FigTree для визуализации
                   </div>
                 </div>
               )}

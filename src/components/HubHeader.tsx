@@ -10,54 +10,54 @@ const TOOL_CATEGORIES = [
   {
     title: "Фармакология",
     tools: [
-      { href: "/drug-repurposing", label: "Docking", icon: "🧬" },
-      { href: "/admet", label: "ADMET", icon: "💊" },
-      { href: "/toxicity-ml", label: "Toxicity ML", icon: "☠️" },
-      { href: "/pkpd", label: "PK/PD", icon: "📊" },
-      { href: "/dose-calculator", label: "Дозы", icon: "🧪" },
+      { href: "/drug-repurposing", label: "Docking", icon: "DNA" },
+      { href: "/admet", label: "ADMET", icon: "Rx" },
+      { href: "/toxicity-ml", label: "Toxicity ML", icon: "Tx" },
+      { href: "/pkpd", label: "PK/PD", icon: "St" },
+      { href: "/dose-calculator", label: "Дозы", icon: "Ch" },
     ],
   },
   {
     title: "Вакцины",
     tools: [
-      { href: "/epitopes", label: "Эпитопы", icon: "💉" },
-      { href: "/vaccine-designer", label: "Designer", icon: "🧬" },
+      { href: "/epitopes", label: "Эпитопы", icon: "Vac" },
+      { href: "/vaccine-designer", label: "Designer", icon: "DNA" },
     ],
   },
   {
     title: "Геномика",
     tools: [
-      { href: "/sequence-id", label: "BLAST ID", icon: "🔍" },
-      { href: "/variant-effect", label: "Variants", icon: "🧬" },
-      { href: "/structure-prediction", label: "ESMFold", icon: "🔬" },
-      { href: "/primer-designer", label: "Праймеры", icon: "🔬" },
-      { href: "/crispr", label: "CRISPR", icon: "✂️" },
-      { href: "/codon-optimizer", label: "Кодоны", icon: "🔤" },
-      { href: "/alignment", label: "Align", icon: "🔗" },
-      { href: "/phylogeny", label: "Филогения", icon: "🌳" },
-      { href: "/molecular-clock", label: "Часы", icon: "⏱️" },
-      { href: "/amr", label: "AMR", icon: "🦠" },
-      { href: "/restriction-map", label: "Рестрикция", icon: "✂️" },
-      { href: "/plasmid-map", label: "Плазмида", icon: "🧫" },
+      { href: "/sequence-id", label: "BLAST ID", icon: "⌕" },
+      { href: "/variant-effect", label: "Variants", icon: "DNA" },
+      { href: "/structure-prediction", label: "ESMFold", icon: "Lab" },
+      { href: "/primer-designer", label: "Праймеры", icon: "Lab" },
+      { href: "/crispr", label: "CRISPR", icon: "RE" },
+      { href: "/codon-optimizer", label: "Кодоны", icon: "Tr" },
+      { href: "/alignment", label: "Align", icon: "↗" },
+      { href: "/phylogeny", label: "Филогения", icon: "Ph" },
+      { href: "/molecular-clock", label: "Часы", icon: "PK" },
+      { href: "/amr", label: "AMR", icon: "Pt" },
+      { href: "/restriction-map", label: "Рестрикция", icon: "RE" },
+      { href: "/plasmid-map", label: "Плазмида", icon: "Cx" },
     ],
   },
   {
     title: "Диагностика",
     tools: [
-      { href: "/outbreak-surveillance", label: "Surveillance", icon: "🦠" },
-      { href: "/elisa", label: "ELISA", icon: "📊" },
-      { href: "/pdb-viewer", label: "3D Viewer", icon: "🔬" },
-      { href: "/ai-vet", label: "AI Вет", icon: "🩺" },
+      { href: "/outbreak-surveillance", label: "Surveillance", icon: "Pt" },
+      { href: "/elisa", label: "ELISA", icon: "St" },
+      { href: "/pdb-viewer", label: "3D Viewer", icon: "Lab" },
+      { href: "/ai-vet", label: "AI Вет", icon: "" },
     ],
   },
 ];
 
 // Top 4 most-used tools shown as direct icons on all screens
 const TOP_TOOLS = [
-  { href: "/drug-repurposing", label: "Docking", icon: "🧬" },
-  { href: "/epitopes", label: "Эпитопы", icon: "💉" },
-  { href: "/vaccine-designer", label: "Designer", icon: "🧬" },
-  { href: "/ai-vet", label: "AI Вет", icon: "🩺" },
+  { href: "/drug-repurposing", label: "Docking", icon: "DNA" },
+  { href: "/epitopes", label: "Эпитопы", icon: "Vac" },
+  { href: "/vaccine-designer", label: "Designer", icon: "DNA" },
+  { href: "/ai-vet", label: "AI Вет", icon: "" },
 ];
 
 export default function HubHeader() {
@@ -103,7 +103,10 @@ export default function HubHeader() {
     setTheme(theme === "dark" ? "light" : theme === "light" ? "system" : "dark");
   };
 
-  const themeIcon = theme === "dark" ? "🌙" : theme === "light" ? "☀️" : "🖥️";
+  const themeIcon =
+    theme === "dark"
+      ? '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>'
+      : '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
   const themeLabel = theme === "dark" ? "Тёмная" : theme === "light" ? "Светлая" : "Системная";
 
   return (
@@ -111,7 +114,7 @@ export default function HubHeader() {
       <header className="sticky top-0 z-40 backdrop-blur-lg bg-white/80 dark:bg-zinc-950/80 border-b border-zinc-200 dark:border-zinc-800">
         <div className="max-w-7xl mx-auto px-3 h-12 flex items-center gap-2">
           <Link href="/" className="flex items-center gap-1.5 font-bold text-base shrink-0">
-            🧬 <span className="hidden sm:inline">VetInSilico <span className="text-teal-500">Hub</span></span>
+            <span className="hidden sm:inline">VetInSilico <span className="text-teal-500">Hub</span></span>
           </Link>
 
           {/* Desktop: top 4 tools as direct icons + all tools dropdown */}
@@ -180,7 +183,7 @@ export default function HubHeader() {
                 <div className="absolute right-0 top-full mt-1 w-56 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-xl p-2 max-h-[70vh] overflow-y-auto thin-scroll z-50">
                   <Link href="/" onClick={() => setMenuOpen(false)}
                     className={`flex items-center gap-2 px-2 py-1 rounded-md text-xs mb-1 ${isActive("/") ? "bg-teal-500/10 text-teal-600 dark:text-teal-400" : "hover:bg-zinc-100 dark:hover:bg-zinc-800"}`}>
-                    🏠 <span>Хаб</span>
+                    <span>Хаб</span>
                   </Link>
                   {TOOL_CATEGORIES.map((cat) => (
                     <div key={cat.title} className="mb-1">
@@ -211,7 +214,7 @@ export default function HubHeader() {
             aria-label="ML настройки"
             title={hasToken ? "ML: настроен" : "ML: токен не задан"}
           >
-            🤖
+            AI
             {hasToken && (
               <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-green-500 rounded-full" />
             )}

@@ -34,7 +34,7 @@ export default function PlasmidMapPage() {
           <span>Plasmid Map Designer</span>
         </div>
         <div className="rounded-xl bg-stone-50 dark:bg-stone-950/30 border border-stone-200 dark:border-stone-800 p-4 mb-6">
-          <h2 className="font-semibold text-stone-900 dark:text-stone-100 mb-1">🧫 Plasmid Map Designer — ORF + restriction sites</h2>
+          <h2 className="font-semibold text-stone-900 dark:text-stone-100 mb-1">Plasmid Map Designer — ORF + restriction sites</h2>
           <p className="text-sm text-stone-800 dark:text-stone-200">
             Анализ плазмидных последовательностей: поиск ORF (ATG/GTG/TTG → stop на обеих цепях),
             сайты рестриктаз, GC content. Визуализация circular map.
@@ -110,7 +110,7 @@ export default function PlasmidMapPage() {
                         const y2 = 200 + 175 * Math.sin(rad);
                         const labelX = 200 + 190 * Math.cos(rad);
                         const labelY = 200 + 190 * Math.sin(rad);
-                        const color = ["#dc2626", "#0ea5e9", "#16a34a", "#a855f7", "#f97316", "#eab308"][i % 6];
+                        const color = ["#dc2626", "#0ea5e9", "#16a34a", "#db2777", "#f97316", "#eab308"][i % 6];
                         return (
                           <g key={i}>
                             <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={color} strokeWidth="2" />

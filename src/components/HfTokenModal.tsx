@@ -57,7 +57,7 @@ export default function HfTokenModal({ open, onClose }: { open: boolean; onClose
       <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 max-w-md w-full p-6" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-start justify-between mb-4">
           <div>
-            <h3 className="text-lg font-bold">⚙️ Настройки вычислений</h3>
+            <h3 className="text-lg font-bold">Настройки вычислений</h3>
             <p className="text-xs text-zinc-400 mt-1">Облачный AI · Workers AI (эдж) + HF token</p>
           </div>
           <button onClick={onClose} className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white text-xl">✕</button>
@@ -141,17 +141,17 @@ export default function HfTokenModal({ open, onClose }: { open: boolean; onClose
 
           {status === "ok" && (
             <div className="rounded-lg bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 p-2 text-xs text-green-700 dark:text-green-300">
-              ✅ Токен валиден
+              ✓ Токен валиден
             </div>
           )}
           {status === "error" && (
             <div className="rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 p-2 text-xs text-red-700 dark:text-red-300">
-              ❌ {errorMsg}
+              ✗ {errorMsg}
             </div>
           )}
           {saved && status !== "ok" && status !== "error" && (
             <div className="rounded-lg bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 p-2 text-xs text-green-700 dark:text-green-300">
-              ✅ Сохранено
+              ✓ Сохранено
             </div>
           )}
 
@@ -161,7 +161,7 @@ export default function HfTokenModal({ open, onClose }: { open: boolean; onClose
               disabled={!token.trim() || status === "validating"}
               className="flex-1 px-3 py-2 rounded-lg bg-zinc-200 dark:bg-zinc-800 text-sm font-medium disabled:opacity-50 hover:bg-zinc-300 dark:hover:bg-zinc-700 transition"
             >
-              {status === "validating" ? "⏳ Проверка..." : "Проверить"}
+              {status === "validating" ? "Проверка..." : "Проверить"}
             </button>
             <button
               onClick={handleSave}

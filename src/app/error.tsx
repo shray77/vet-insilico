@@ -17,7 +17,7 @@ export default function Error({
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-background text-foreground">
       <div className="max-w-md w-full space-y-4 text-center">
-        <div className="text-5xl">🧬</div>
+        <div className="font-mono text-5xl font-bold tracking-widest text-zinc-300 dark:text-zinc-600">DNA</div>
         <h2 className="text-xl font-bold">Что-то пошло не так</h2>
         <p className="text-sm text-muted-foreground">
           Произошла ошибка при обработке вашего запроса. Это может быть из-за

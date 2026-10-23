@@ -37,7 +37,7 @@ export default function CodonOptimizerPage() {
           <span>Codon Optimization</span>
         </div>
         <div className="rounded-xl bg-fuchsia-50 dark:bg-fuchsia-950/30 border border-fuchsia-200 dark:border-fuchsia-800 p-4 mb-6">
-          <h2 className="font-semibold text-fuchsia-900 dark:text-fuchsia-100 mb-1">🔤 Codon Optimization Tool</h2>
+          <h2 className="font-semibold text-fuchsia-900 dark:text-fuchsia-100 mb-1">Codon Optimization Tool</h2>
           <p className="text-sm text-fuchsia-800 dark:text-fuchsia-200">
             Оптимизация кодонов под экспрессию в организме-хозяине. Таблицы Kazusa для свиньи, КРС, курицы, E. coli.
             CAI (Codon Adaptation Index), избегание сайтов рестриктаз и шпилек.
@@ -110,7 +110,7 @@ export default function CodonOptimizerPage() {
                   </div>
                   <button onClick={() => navigator.clipboard?.writeText(result.optimizedDNA)}
                     className="mt-2 px-3 py-1.5 rounded-lg bg-fuchsia-100 dark:bg-fuchsia-950/40 text-fuchsia-700 dark:text-fuchsia-300 text-xs font-medium hover:bg-fuchsia-200 transition">
-                    📋 Копировать
+                    Копировать
                   </button>
                 </div>
                 {result.restrictionSitesAvoided.length > 0 && (
@@ -130,7 +130,7 @@ export default function CodonOptimizerPage() {
                   • Если создаёт сайт рестриктазы — берётся следующий по частоте<br/>
                   • CAI = геометрическое среднее относительных частот, 1.0 = идеально<br/>
                   • GC 40-60% оптимально для стабильности и экспрессии<br/>
-                  <b>⚠️</b> Проверьте результат in silico (BLAST, Bauccle) перед синтезом.
+                  <b>⚠</b> Проверьте результат in silico (BLAST, Bauccle) перед синтезом.
                 </div>
               </>
             )}

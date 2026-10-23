@@ -46,7 +46,7 @@ export default function ToxicityMLPage() {
   return (
     <ToolPageLayout
       name="ML Toxicity"
-      icon="☠️"
+      icon="Tx"
       color="rose"
       description="Реальные ML-классификаторы токсичности (ChemBERTa fine-tunes на MoleculeNet). Ames, hERG, DILI, ClinTox, сенсибилизация кожи. 5 эндпоинтов, бесплатный HF API."
     >
@@ -75,7 +75,7 @@ export default function ToxicityMLPage() {
           <div className="flex gap-2">
             <button onClick={run} disabled={loading || smiles.length < 5}
               className="flex-1 px-4 py-2.5 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 disabled:opacity-50 transition">
-              {loading ? "⏳ Анализ..." : "☠️ Анализ токсичности"}
+              {loading ? "Анализ…" : "Анализ токсичности"}
             </button>
             {loading && <button onClick={cancel}
               className="px-3 py-2.5 rounded-lg border border-red-300 dark:border-red-800 text-red-600">
@@ -90,7 +90,7 @@ export default function ToxicityMLPage() {
             {endpoints.map((e) => (
               <div key={e.endpoint}>• <b>{e.endpoint}</b>: {e.description}</div>
             ))}
-            <div className="mt-1">💡 Требуется HF token (🤖 в шапке)</div>
+            <div className="mt-1">Требуется HF token (кнопка ИИ в шапке)</div>
           </div>
         </div>
 

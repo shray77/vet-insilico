@@ -92,10 +92,10 @@ export default function AIVetPage() {
           <span>AI Veterinarian</span>
         </div>
         <div className="rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 p-4 mb-6">
-          <h2 className="font-semibold text-rose-900 dark:text-rose-100 mb-1">🩺 AI Veterinarian — Diagnostic Assistant</h2>
+          <h2 className="font-semibold text-rose-900 dark:text-rose-100 mb-1">AI Veterinarian — Diagnostic Assistant</h2>
           <p className="text-sm text-rose-800 dark:text-rose-200">
             Дифференциальный диагноз на основе симптомов. LLM (Qwen-Coder-3B) анализирует ввод и предлагает
-            вероятные диагнозы, рекомендуемые тесты, уровень срочности. 🤖 требует ИИ.
+            вероятные диагнозы, рекомендуемые тесты, уровень срочности. требует ИИ.
           </p>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -128,7 +128,7 @@ export default function AIVetPage() {
               <div className="flex gap-2">
                 <button onClick={runDiagnosis} disabled={loading}
                   className="flex-1 px-4 py-3 rounded-lg bg-rose-600 text-white font-medium hover:bg-rose-700 disabled:opacity-50 transition">
-                  {loading ? "⏳ Анализ..." : "🩺 Запустить диагностику"}
+                  {loading ? "Анализ..." : "Запустить диагностику"}
                 </button>
                 {loading && (
                   <button onClick={cancelDiagnosis}
@@ -143,7 +143,7 @@ export default function AIVetPage() {
           <div>
             {loading && (
               <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-8 text-center text-zinc-400">
-                ⏳ LLM анализирует симптомы...
+                LLM анализирует симптомы...
               </div>
             )}
             {!loading && !result && !error && (
@@ -193,7 +193,7 @@ export default function AIVetPage() {
                 )}
 
                 <div className="rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-3 text-xs text-amber-800 dark:text-amber-200">
-                  ⚠️ Это образовательный инструмент, не замена ветеринарной консультации.
+                  ⚠ Это образовательный инструмент, не замена ветеринарной консультации.
                   Обратитесь к ветврачу для подтверждения диагноза и назначения лечения.
                 </div>
               </div>

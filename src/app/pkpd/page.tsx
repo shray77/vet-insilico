@@ -102,9 +102,9 @@ export default function PKPDPage() {
     }
     try {
       await navigator.clipboard.writeText(url);
-      setShareInfo(`🔗 Ссылка скопирована (${mode})`);
+      setShareInfo(`Ссылка скопирована (${mode})`);
     } catch {
-      setShareInfo(`🔗 ${url} (${mode})`);
+      setShareInfo(`${url} (${mode})`);
     }
     setTimeout(() => setShareInfo(""), 8000);
   };
@@ -124,7 +124,7 @@ export default function PKPDPage() {
           <div className="flex items-start gap-3 flex-wrap">
             <div className="flex-1 min-w-[260px]">
               <h2 className="font-semibold text-rose-900 dark:text-rose-100 mb-1">
-                💉 PK/PD Simulator — фармакокинетика + фармакодинамика
+                PK/PD Simulator — фармакокинетика + фармакодинамика
               </h2>
               <p className="text-sm text-rose-800 dark:text-rose-200">
                 Однокомпартментная модель с first-order absorption. Считаем Cmax, AUC, t½, Css.
@@ -137,7 +137,7 @@ export default function PKPDPage() {
                 onClick={handleShare}
                 className="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-medium transition whitespace-nowrap"
               >
-                🔗 Поделиться сценарием
+                Поделиться сценарием
               </button>
               {shareInfo && (
                 <span className="text-[10px] text-rose-700 dark:text-rose-300 max-w-[240px] break-all">{shareInfo}</span>
@@ -288,7 +288,7 @@ export default function PKPDPage() {
 
             {/* PD analysis */}
             <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-900">
-              <h3 className="font-semibold mb-3">🎯 Фармакодинамический анализ</h3>
+              <h3 className="font-semibold mb-3">Фармакодинамический анализ</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Emax curve */}
                 <svg width={eW} height={eH}>
@@ -319,7 +319,7 @@ export default function PKPDPage() {
                   <div className="flex justify-between">
                     <span className="text-zinc-500">Достигнута:</span>
                     <span className={`font-bold ${pd.targetAttained ? "text-green-600" : "text-red-600"}`}>
-                      {pd.targetAttained ? "✅ Да" : "❌ Нет"}
+                      {pd.targetAttained ? "✓ Да" : "✗ Нет"}
                     </span>
                   </div>
                   <div className="mt-3 p-2 rounded text-xs bg-zinc-100 dark:bg-zinc-800">
@@ -334,7 +334,7 @@ export default function PKPDPage() {
               <b> PD-таргеты</b> (Mouton & Ambrose 2007):
               β-лактамы — T&gt;MIC ≥ 40% интервала; фторхинолоны (грам-) — AUC₂₄/MIC ≥ 125;
               аминогликозиды — Cmax/MIC ≥ 10.<br/>
-              <b>⚠️</b> Упрощённая модель. Реальная PK зависит от вида, возраста, болезни, взаимодействия.
+              <b>⚠</b> Упрощённая модель. Реальная PK зависит от вида, возраста, болезни, взаимодействия.
             </div>
           </div>
         </div>

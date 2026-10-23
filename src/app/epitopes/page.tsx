@@ -105,7 +105,7 @@ export default function EpitopesPage() {
 
         <div className="rounded-xl bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 p-4 mb-6">
           <h2 className="font-semibold text-purple-900 dark:text-purple-100 mb-1">
-            💉 Vaccine Epitope Predictor
+            Vaccine Epitope Predictor
           </h2>
           <p className="text-sm text-purple-800 dark:text-purple-200">
             Из аминокислотной последовательности белка находим B-клеточные (линейные) и T-клеточные (MHC-I) эпитопы.
@@ -241,7 +241,7 @@ export default function EpitopesPage() {
                           {naturalness[i] && (
                             <div className="mt-3 pt-3 border-t border-zinc-200 dark:border-zinc-800">
                               <div className="flex items-center justify-between mb-1">
-                                <span className="text-xs font-medium text-purple-700 dark:text-purple-300">🤖 ESM-2 Naturalness (ML)</span>
+                                <span className="text-xs font-medium text-purple-700 dark:text-purple-300">ESM-2 Naturalness (ML)</span>
                                 <span className="text-xs font-bold" style={{ color: naturalness[i].score >= 0.3 ? "#16a34a" : naturalness[i].score >= 0.15 ? "#eab308" : "#dc2626" }}>
                                   {(naturalness[i].score * 100).toFixed(1)}%
                                 </span>
@@ -281,7 +281,7 @@ export default function EpitopesPage() {
                               disabled={analyzingIdx === i}
                               className="mt-3 px-2 py-1 rounded text-xs bg-purple-100 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-900/60 transition disabled:opacity-50"
                             >
-                              {analyzingIdx === i ? "⏳ ESM-2..." : "🤖 ESM-2 naturalness"}
+                              {analyzingIdx === i ? "ESM-2..." : "ESM-2 naturalness"}
                             </button>
                           )}
                         </div>
@@ -293,7 +293,7 @@ export default function EpitopesPage() {
                     )}
                     {mlError && (
                       <div className="text-xs text-red-500 mt-2 p-2 rounded bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
-                        ⚠️ {mlError}
+                        ⚠ {mlError}
                       </div>
                     )}
                   </div>
@@ -302,7 +302,7 @@ export default function EpitopesPage() {
                 {/* Path B: ML B-epitope scan */}
                 <div>
                   <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 mb-3">
-                    🧬 ML B-эпитоп scan (BepiPred-3-style, ESM-2 35M)
+                    ML B-эпитоп scan (BepiPred-3-style, ESM-2 35M)
                   </h3>
                   <div className="rounded-xl border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-950/20 p-4">
                     {!mlBScan && !mlBScanLoading && (
@@ -318,11 +318,11 @@ export default function EpitopesPage() {
                           disabled={sequence.length > 200}
                           className="px-4 py-2 rounded-lg bg-purple-600 text-white text-sm font-medium hover:bg-purple-700 disabled:opacity-50 transition"
                         >
-                          🧬 Запустить ML scan ({sequence.length} остатков)
+                          Запустить ML scan ({sequence.length} остатков)
                         </button>
                         {sequence.length > 200 && (
                           <div className="text-xs text-red-500 mt-2">
-                            ⚠️ Обрежьте до ≤ 200 а.о. (cost limit)
+                            ⚠ Обрежьте до ≤ 200 а.о. (cost limit)
                           </div>
                         )}
                       </div>
@@ -331,7 +331,7 @@ export default function EpitopesPage() {
                       <div>
                         <div className="flex items-center gap-2 mb-2">
                           <span className="text-xs text-purple-700 dark:text-purple-300">
-                            ⏳ ESM-2 анализирует {mlBScanProgress.done}/{mlBScanProgress.total} остатков...
+                            ESM-2 анализирует {mlBScanProgress.done}/{mlBScanProgress.total} остатков...
                           </span>
                         </div>
                         <div className="h-2 rounded-full bg-purple-100 dark:bg-purple-900 overflow-hidden">
@@ -346,7 +346,7 @@ export default function EpitopesPage() {
                       <div>
                         <div className="flex items-center justify-between mb-3">
                           <span className="text-xs font-medium text-purple-700 dark:text-purple-300">
-                            ✅ ML scan завершён. Mean propensity: <b>{(mlBScan.meanPropensity * 100).toFixed(1)}%</b>
+                            ✓ ML scan завершён. Mean propensity: <b>{(mlBScan.meanPropensity * 100).toFixed(1)}%</b>
                           </span>
                           <button
                             onClick={() => setMlBScan(null)}
@@ -366,7 +366,7 @@ export default function EpitopesPage() {
                                 className="w-5 h-5 flex items-center justify-center rounded-sm font-bold text-white"
                                 style={{
                                   backgroundColor: `rgba(168, 85, 247, ${Math.max(0.1, s.propensity)})`,
-                                  color: s.propensity > 0.5 ? "white" : "#a855f7",
+                                  color: s.propensity > 0.5 ? "white" : "#0e7490",
                                 }}
                               >
                                 {s.residue}
@@ -413,7 +413,7 @@ export default function EpitopesPage() {
                 {/* T-cell epitopes */}
                 <div>
                   <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 mb-3">
-                    🔵 T-клеточные эпитопы (MHC-I, HLA-A*02:01) — топ {result.tCellEpitopes.length}
+                    T-клеточные эпитопы (MHC-I, HLA-A*02:01) — топ {result.tCellEpitopes.length}
                   </h3>
                   <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
                     <div className="overflow-x-auto">
@@ -427,7 +427,7 @@ export default function EpitopesPage() {
                             <th className="px-3 py-2 text-center hidden md:table-cell">Качество</th>
                             <th className="px-3 py-2 text-center hidden md:table-cell">Анкоры</th>
                             <th className="px-3 py-2 text-center">Score</th>
-                            <th className="px-3 py-2 text-center">🧬 ML</th>
+                            <th className="px-3 py-2 text-center">ML</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -447,7 +447,7 @@ export default function EpitopesPage() {
                                 <td className="px-3 py-2 text-center font-mono" style={{ color: q.color }}>{e.ic50_estimate}</td>
                                 <td className="px-3 py-2 text-center text-xs hidden md:table-cell" style={{ color: q.color }}>{q.label}</td>
                                 <td className="px-3 py-2 text-center text-xs hidden md:table-cell">
-                                  {e.anchorMatch === 2 ? "✅ P2+P9" : e.anchorMatch === 1 ? "⚠️ 1/2" : "❌ 0/2"}
+                                  {e.anchorMatch === 2 ? "✓ P2+P9" : e.anchorMatch === 1 ? "⚠ 1/2" : "✗ 0/2"}
                                 </td>
                                 <td className="px-3 py-2 text-center">
                                   <span className="inline-flex items-center justify-center w-10 h-6 rounded-full text-xs font-bold text-white" style={{ backgroundColor: scoreColor(e.score) }}>
@@ -469,7 +469,7 @@ export default function EpitopesPage() {
                                       disabled={mhcMLLoading === i}
                                       className="text-[10px] px-2 py-1 rounded bg-purple-100 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 hover:bg-purple-200 transition disabled:opacity-50"
                                     >
-                                      {mhcMLLoading === i ? "⏳" : "🧬"}
+                                      {mhcMLLoading === i ? "" : ""}
                                     </button>
                                   )}
                                 </td>
@@ -483,7 +483,7 @@ export default function EpitopesPage() {
                   <div className="text-xs text-zinc-400 mt-2">
                     <b>Анкоры</b> выделены жёлтым в последовательности (P2 и P9 для HLA-A*02:01).
                     <b> IC50 &lt; 50 nM</b> = высокий аффинитет, &lt; 500 nM = умеренный.
-                    <b> 🧬 ML</b> — NetMHCpan-стиль: anchor score + ESM-2 naturalness + similarity к known binders.
+                    <b> ML</b> — NetMHCpan-стиль: anchor score + ESM-2 naturalness + similarity к known binders.
                   </div>
                   {Object.keys(mhcML).length > 0 && (
                     <div className="mt-3 rounded-lg border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-950/20 p-3 text-xs">
@@ -517,7 +517,7 @@ export default function EpitopesPage() {
                   • <b>T-эпитопы (rule-based)</b> — 9-меры с P2/P9 анкорами для HLA-A*02:01 (BIMAS PSSM approximation).<br/>
                   • <b>T-эпитопы (ML Path B)</b> — NetMHCpan-стиль: anchor score (BIMAS) + ESM-2 naturalness + BLOSUM62 similarity
                   к known HLA-A*02:01 binders (8 reference peptides из литературы).<br/>
-                  • <b>⚠️</b> Real BepiPred-3.0 и NetMHCpan-4.1 fine-tune'ят модели на 30k+ и 180k+ измерений соответственно.
+                  • <b>⚠</b> Real BepiPred-3.0 и NetMHCpan-4.1 fine-tune'ят модели на 30k+ и 180k+ измерений соответственно.
                   Здесь — pre-trained ESM-2 как proxy. Для публикации требуется валидация (binding assay, T-cell assay in vitro).
                 </div>
               </>

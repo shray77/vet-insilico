@@ -197,11 +197,11 @@ export default function Viewer3D({
   }
 
   const styleButtons: { label: string; val: ViewerStyle; icon: string }[] = [
-    { label: "Картинки", val: "cartoon", icon: "🧬" },
-    { label: "Палочки", val: "stick", icon: "📏" },
-    { label: "Сферы", val: "sphere", icon: "⚪" },
-    { label: "Поверхность", val: "surface", icon: "🌐" },
-    { label: "Линии", val: "lines", icon: "📐" },
+    { label: "Картинки", val: "cartoon", icon: "DNA" },
+    { label: "Палочки", val: "stick", icon: "—" },
+    { label: "Сферы", val: "sphere", icon: "—" },
+    { label: "Поверхность", val: "surface", icon: "—" },
+    { label: "Линии", val: "lines", icon: "—" },
   ];
 
   return (
@@ -243,7 +243,7 @@ export default function Viewer3D({
                 onClick={() => setStatus("loading")}
                 className="px-4 py-2 rounded-lg bg-teal-600 text-white text-sm font-medium hover:bg-teal-700 transition"
               >
-                🧬 Загрузить 3D структуру {pdbId.toUpperCase()}
+                Загрузить 3D структуру {pdbId.toUpperCase()}
               </button>
               <div className="text-xs mt-2 text-zinc-500">
                 Загрузит ~200KB PDB + 3Dmol.js (WebGL)
@@ -263,7 +263,7 @@ export default function Viewer3D({
         {status === "error" && (
           <div className="absolute inset-0 flex items-center justify-center text-red-400 text-sm p-4">
             <div className="text-center">
-              <div className="text-3xl mb-2">⚠️</div>
+              <div className="text-3xl mb-2">⚠</div>
               <div className="font-medium mb-1">Не удалось загрузить 3D структуру</div>
               <div className="text-xs text-zinc-500">{errorMsg}</div>
               <a

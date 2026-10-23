@@ -40,7 +40,7 @@ export default function ShareButton({
   build,
   title,
   tone = "rose",
-  label = "🔗 Поделиться сценарием",
+  label = "Поделиться сценарием",
 }: {
   build: () => Scenario | null;
   title: string;
@@ -71,9 +71,9 @@ export default function ShareButton({
     }
     try {
       await navigator.clipboard.writeText(url);
-      setInfo(`🔗 Ссылка скопирована (${mode})`);
+      setInfo(`Ссылка скопирована (${mode})`);
     } catch {
-      setInfo(`🔗 ${url} (${mode})`);
+      setInfo(`${url} (${mode})`);
     }
     setTimeout(() => setInfo(""), 8000);
   };

@@ -62,7 +62,7 @@ export default function VariantEffectPage() {
   return (
     <ToolPageLayout
       name="Variant Effect"
-      icon="🧬"
+      icon="DNA"
       color="blue"
       description="Предсказание эффекта аминокислотных замен через ESM-2 Δ-log-likelihood. Антигенный дрейф, лекарственная резистентность, эскейп-мутации вакцины."
     >
@@ -92,7 +92,7 @@ export default function VariantEffectPage() {
           <div className="flex gap-2">
             <button onClick={run} disabled={loading || sequence.length < 20}
               className="flex-1 px-4 py-2.5 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 disabled:opacity-50 transition">
-              {loading ? `⏳ ${progress.done}/${progress.total}...` : "🧬 Анализ вариантов"}
+              {loading ? `${progress.done}/${progress.total}…` : "Анализ вариантов"}
             </button>
             {loading && <button onClick={cancel}
               className="px-3 py-2.5 rounded-lg border border-red-300 dark:border-red-800 text-red-600">
@@ -103,7 +103,7 @@ export default function VariantEffectPage() {
           {error && <div className="mt-3"><ErrorAlert message={error} /></div>}
 
           <div className="mt-4 text-[10px] text-zinc-400 bg-zinc-50 dark:bg-zinc-900 rounded p-2">
-            💡 Модель: ESM-2 650M (facebook/esm2_t33_650M_UR50D).<br/>
+            Модель: ESM-2 650M (facebook/esm2_t33_650M_UR50D).<br/>
             ΔLL &gt; 2 = делеиторная (красный), &lt; -2 = выгодная (зелёный).<br/>
             Применение: антигенный дрейф, AMR, вакцинный эскейп.
           </div>

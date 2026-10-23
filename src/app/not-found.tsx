@@ -5,7 +5,7 @@ export default function NotFound() {
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-background text-foreground">
       <div className="max-w-md w-full space-y-4 text-center">
-        <div className="text-6xl">🧬</div>
+        <div className="font-mono text-6xl font-bold tracking-widest text-zinc-300 dark:text-zinc-600">DNA</div>
         <h1 className="text-3xl font-bold">404</h1>
         <p className="text-sm text-muted-foreground">
           Страница не найдена. Возможно, ссылка устарела или была введена с ошибкой.

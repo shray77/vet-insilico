@@ -58,7 +58,7 @@ export default function StructurePredictionPage() {
   return (
     <ToolPageLayout
       name="Structure Prediction"
-      icon="🧬"
+      icon="DNA"
       color="blue"
       description="Предсказание 3D-структуры белка через ESMFold (Meta AI). Введите последовательность → получите PDB + pLDDT confidence. Бесплатно на HF."
     >
@@ -107,7 +107,7 @@ export default function StructurePredictionPage() {
             <div>• 30-120 сек на белок</div>
             <div>• pLDDT: 90+=высокая, 70-89=средняя, {">"}50=низкая</div>
             <div>• Бесплатно (HF Space, CPU tier)</div>
-            <div>• 💡 Требуется HF token (🤖 в шапке)</div>
+            <div>• Требуется HF token (кнопка ИИ в шапке)</div>
           </div>
         </div>
 

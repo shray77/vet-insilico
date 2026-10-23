@@ -97,7 +97,7 @@ export default function DrugRepurposingPage() {
     s >= 75 ? "#16a34a" : s >= 50 ? "#ca8a04" : s >= 30 ? "#ea580c" : "#dc2626";
 
   const activityIcon: Record<string, string> = {
-    antiviral: "🦠", antibacterial: "🧫", antiparasitic: "🔬", antiinflammatory: "💊", unknown: "❓",
+    antiviral: "Av", antibacterial: "Ab", antiparasitic: "Ap", antiinflammatory: "Ai", unknown: "?",
   };
 
   return (
@@ -122,7 +122,7 @@ export default function DrugRepurposingPage() {
                   : "border-transparent text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
               }`}
             >
-              {t === "screening" ? "🔬 Скрининг" : "📚 Как это работает"}
+              {t === "screening" ? "Скрининг" : "Как это работает"}
             </button>
           ))}
         </div>
@@ -156,10 +156,10 @@ export default function DrugRepurposingPage() {
                   >
                     <div className="font-semibold text-sm">{p.name_ru}</div>
                     <div className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-                      {p.type === "virus" ? "🦠 Вирус" : "🧫 Бактерия"} • {p.targets.length} мишеней
+                      {p.type === "virus" ? "Вирус" : "Бактерия"} • {p.targets.length} мишеней
                     </div>
                     {p.priority_ru === 1 && (
-                      <div className="text-xs text-red-500 mt-1 font-medium">⚡ Приоритет РФ</div>
+                      <div className="text-xs text-red-500 mt-1 font-medium">Приоритет РФ</div>
                     )}
                   </button>
                 ))}
@@ -176,7 +176,7 @@ export default function DrugRepurposingPage() {
                 <div className="space-y-2">
                   {pathogen.targets.map((t) => (
                     <div key={t.id} className="flex items-start gap-2 text-sm">
-                      <span className="text-teal-500 mt-0.5">🎯</span>
+                      <span className="text-teal-500 mt-0.5"></span>
                       <div className="flex-1">
                         <span className="font-medium">{t.name_ru}</span>
                         <span className="text-zinc-400 text-xs ml-2">{t.mw_kda} кДа</span>
@@ -200,7 +200,7 @@ export default function DrugRepurposingPage() {
                   disabled={running}
                   className="px-6 py-3 rounded-xl bg-teal-600 text-white font-semibold disabled:opacity-50 hover:bg-teal-700 transition shadow-lg shadow-teal-600/20"
                 >
-                  {running ? "⏳ Скрининг..." : `🚀 Скрининг ${DRUGS.length} препаратов`}
+                  {running ? "Скрининг..." : `Скрининг ${DRUGS.length} препаратов`}
                 </button>
                 <label className="flex items-center gap-2 text-sm cursor-pointer">
                   <input
@@ -227,7 +227,7 @@ export default function DrugRepurposingPage() {
                     onClick={exportCSV}
                     className="px-3 py-1.5 rounded-lg bg-teal-100 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 text-xs font-medium hover:bg-teal-200 dark:hover:bg-teal-900/60 transition"
                   >
-                    📥 Скачать CSV
+                    Скачать CSV
                   </button>
                 </div>
                 <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
@@ -262,9 +262,9 @@ export default function DrugRepurposingPage() {
                             </td>
                             <td className="px-3 py-2 text-xs hidden md:table-cell">{activityIcon[r.drug.activity]}</td>
                             <td className="px-3 py-2 text-center text-xs hidden md:table-cell">{r.bindingAffinity}</td>
-                            <td className="px-3 py-2 text-center hidden lg:table-cell">{r.lipinskiPass ? "✅" : "⚠️"}</td>
+                            <td className="px-3 py-2 text-center hidden lg:table-cell">{r.lipinskiPass ? "✓" : "⚠"}</td>
                             <td className="px-3 py-2 text-center hidden lg:table-cell">
-                              {r.target.pdb_id && <span className="text-xs">🧬</span>}
+                              {r.target.pdb_id && <span className="text-xs"></span>}
                             </td>
                           </tr>
                         ))}
@@ -282,7 +282,7 @@ export default function DrugRepurposingPage() {
             <h2 className="text-xl font-bold">Как работает in silico скрининг</h2>
 
             <div className="rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 p-4">
-              <h3 className="font-semibold mb-2">💊 Зачем это нужно?</h3>
+              <h3 className="font-semibold mb-2">Зачем это нужно?</h3>
               <p className="text-sm">
                 Разработка нового лекарства занимает 10-15 лет и стоит миллиарды.
                 <b> Drug repurposing</b> — берём уже существующие лекарства и проверяем,
@@ -296,7 +296,7 @@ export default function DrugRepurposingPage() {
             </div>
 
             <div className="rounded-xl bg-teal-50 dark:bg-teal-950/30 border border-teal-200 dark:border-teal-800 p-4">
-              <h3 className="font-semibold mb-2">🧮 Как считается Score (0-100)?</h3>
+              <h3 className="font-semibold mb-2">Как считается Score (0-100)?</h3>
               <p className="text-sm mb-2">Три фактора, каждый 0-100:</p>
               <div className="space-y-2 text-sm">
                 <div><b>1. Shape complementarity (35%)</b> — помещается ли молекула в карман белка? Оптимально когда радиус молекулы = 60-90% от радиуса кармана.</div>
@@ -307,7 +307,7 @@ export default function DrugRepurposingPage() {
             </div>
 
             <div className="rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-4">
-              <h3 className="font-semibold mb-2">📏 Правило Липинского (Rule of Five)</h3>
+              <h3 className="font-semibold mb-2">Правило Липинского (Rule of Five)</h3>
               <p className="text-sm">Фильтр для пероральной биодоступности. Препарат "проходит" если:</p>
               <ul className="text-sm mt-1 list-disc list-inside space-y-0.5">
                 <li>Молекулярная масса ≤ 500 Да</li>
@@ -319,14 +319,14 @@ export default function DrugRepurposingPage() {
             </div>
 
             <div className="rounded-xl bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 p-4">
-              <h3 className="font-semibold mb-2">🧬 3D визуализация</h3>
+              <h3 className="font-semibold mb-2">3D визуализация</h3>
               <p className="text-sm">
                 Кликните на строку результата — откроется диалог с детальным score breakdown и (если есть PDB ID) 3D структурой белка через 3Dmol.js. Покрутите мышью, лиганды выделены пурпурным.
               </p>
             </div>
 
             <div className="rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 p-4">
-              <h3 className="font-semibold mb-2">⚠️ Важно!</h3>
+              <h3 className="font-semibold mb-2">⚠ Важно!</h3>
               <p className="text-sm">Это <b>упрощённая модель</b>, не полный molecular dynamics. Результаты — гипотезы для экспериментальной проверки (in vitro / in vivo). Не являются ветеринарной рекомендацией.</p>
             </div>
           </div>
@@ -365,9 +365,9 @@ export default function DrugRepurposingPage() {
 
             <div className="space-y-2 mb-4">
               {[
-                { label: "📐 Форма (shape)", val: selectedResult.shapeScore, desc: "Помещается ли в карман" },
-                { label: "⚡ Заряд (electrostatic)", val: selectedResult.electrostaticScore, desc: "Совместимость зарядов" },
-                { label: "💧 Гидрофобность", val: selectedResult.hydrophobicScore, desc: "Сродство растворитель-карман" },
+                { label: "Форма (shape)", val: selectedResult.shapeScore, desc: "Помещается ли в карман" },
+                { label: "Заряд (electrostatic)", val: selectedResult.electrostaticScore, desc: "Совместимость зарядов" },
+                { label: "Гидрофобность", val: selectedResult.hydrophobicScore, desc: "Сродство растворитель-карман" },
               ].map((s) => (
                 <div key={s.label}>
                   <div className="flex justify-between text-sm mb-0.5">
@@ -393,7 +393,7 @@ export default function DrugRepurposingPage() {
               </div>
               <div className="flex justify-between mt-2">
                 <span className="text-zinc-400">Lipinski:</span>
-                <span>{selectedResult.lipinskiPass ? "✅ Совместим" : `⚠️ ${selectedResult.lipinskiViolations} нарушений`}</span>
+                <span>{selectedResult.lipinskiPass ? "✓ Совместим" : `⚠ ${selectedResult.lipinskiViolations} нарушений`}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-zinc-400">Селективность:</span>
@@ -401,17 +401,17 @@ export default function DrugRepurposingPage() {
               </div>
               <div className="flex justify-between">
                 <span className="text-zinc-400">Реестр РФ:</span>
-                <span>{selectedResult.drug.ru_registered ? "✅ Да" : "❌ Нет"}</span>
+                <span>{selectedResult.drug.ru_registered ? "✓ Да" : "✗ Нет"}</span>
               </div>
             </div>
 
             <div className="border-t border-zinc-200 dark:border-zinc-800 pt-3 mt-3">
-              <div className="text-sm font-medium mb-2">🎯 Мишень: {selectedResult.target.name_ru}</div>
+              <div className="text-sm font-medium mb-2">Мишень: {selectedResult.target.name_ru}</div>
               <p className="text-xs text-zinc-400 mb-3">{selectedResult.target.function_ru}</p>
               {selectedResult.target.pdb_id && (
                 <div className="rounded-lg bg-zinc-100 dark:bg-zinc-800 p-3">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-medium">🧬 3D структура {selectedResult.target.pdb_id.toUpperCase()}</span>
+                    <span className="text-xs font-medium">3D структура {selectedResult.target.pdb_id.toUpperCase()}</span>
                     <a
                       href={`https://www.rcsb.org/structure/${selectedResult.target.pdb_id.toUpperCase()}`}
                       target="_blank"
@@ -442,7 +442,7 @@ export default function DrugRepurposingPage() {
             )}
 
             <div className="border-t border-zinc-200 dark:border-zinc-800 pt-3 mt-3 text-xs text-zinc-400">
-              ⚠️ Упрощённая модель. Требуется in vitro / in vivo валидация.
+              ⚠ Упрощённая модель. Требуется in vitro / in vivo валидация.
             </div>
           </div>
         </div>
@@ -507,7 +507,7 @@ Respond ONLY as JSON:
   if (loading) {
     return (
       <div className="text-xs text-zinc-400 flex items-center gap-2">
-        <span>⏳ LLM анализирует кандидата...</span>
+        <span>LLM анализирует кандидата...</span>
         <button onClick={cancel} className="text-red-500 hover:text-red-700 underline">
           отменить
         </button>
@@ -522,9 +522,9 @@ Respond ONLY as JSON:
           onClick={run}
           className="px-3 py-2 rounded-lg bg-purple-100 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 text-xs font-medium hover:bg-purple-200 transition"
         >
-          🤖 ML-анализ кандидата (Qwen 3B)
+          ML-анализ кандидата (Qwen 3B)
         </button>
-        {error && <div className="mt-2 text-xs text-red-500">⚠️ {error}</div>}
+        {error && <div className="mt-2 text-xs text-red-500">⚠ {error}</div>}
       </div>
     );
   }
@@ -535,7 +535,7 @@ Respond ONLY as JSON:
         onClick={run}
         className="px-3 py-2 rounded-lg bg-purple-100 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 text-xs font-medium hover:bg-purple-200 transition"
       >
-        🤖 ML-анализ кандидата (Qwen 3B)
+        ML-анализ кандидата (Qwen 3B)
       </button>
     );
   }
@@ -548,7 +548,7 @@ Respond ONLY as JSON:
   return (
     <div className="rounded-lg bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 p-3">
       <div className="flex items-center justify-between mb-2">
-        <div className="text-xs font-bold text-purple-700 dark:text-purple-300">🤖 ML-анализ (Qwen 3B)</div>
+        <div className="text-xs font-bold text-purple-700 dark:text-purple-300">ML-анализ (Qwen 3B)</div>
         <div className="flex gap-3 text-xs">
           <span>
             Потенциал:{" "}
@@ -565,7 +565,7 @@ Respond ONLY as JSON:
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
         {Array.isArray(a.keyRisks) && a.keyRisks.length > 0 && (
           <div>
-            <div className="text-red-600 dark:text-red-400 font-medium mb-1">⚠️ Риски:</div>
+            <div className="text-red-600 dark:text-red-400 font-medium mb-1">⚠ Риски:</div>
             <ul className="list-disc list-inside space-y-0.5 text-zinc-700 dark:text-zinc-300">
               {a.keyRisks.slice(0, 3).map((r: string, i: number) => <li key={i}>{r}</li>)}
             </ul>
@@ -573,7 +573,7 @@ Respond ONLY as JSON:
         )}
         {Array.isArray(a.nextSteps) && a.nextSteps.length > 0 && (
           <div>
-            <div className="text-green-600 dark:text-green-400 font-medium mb-1">✅ Следующие шаги:</div>
+            <div className="text-green-600 dark:text-green-400 font-medium mb-1">✓ Следующие шаги:</div>
             <ul className="list-disc list-inside space-y-0.5 text-zinc-700 dark:text-zinc-300">
               {a.nextSteps.slice(0, 3).map((s: string, i: number) => <li key={i}>{s}</li>)}
             </ul>
@@ -645,13 +645,13 @@ function RDKitDescriptors({ drug, targetName }: { drug: DockingResult["drug"]; t
       {drug.smiles && (
         <div className="rounded-lg bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800 p-3">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold text-purple-700 dark:text-purple-300">🚀 AutoDock Vina (real docking)</span>
+            <span className="text-xs font-bold text-purple-700 dark:text-purple-300">AutoDock Vina (real docking)</span>
             <span className="text-[10px] text-zinc-400">HF Space backend</span>
           </div>
           {!vinaResult && !vinaLoading && (
             <div>
               <button onClick={runVina} className="px-3 py-2 rounded-lg bg-purple-600 text-white text-xs font-medium hover:bg-purple-700 transition">
-                🚀 Запустить real Vina docking (1-2 мин)
+                Запустить real Vina docking (1-2 мин)
               </button>
               <div className="text-[10px] text-zinc-400 mt-1">
                 Скачать PDB → подготовить receptor+ligand → Vina simulation → реальный ΔG
@@ -665,7 +665,7 @@ function RDKitDescriptors({ drug, targetName }: { drug: DockingResult["drug"]; t
             </div>
           )}
           {vinaError && (
-            <div className="text-xs text-red-500 mt-2">⚠️ {vinaError}</div>
+            <div className="text-xs text-red-500 mt-2">⚠ {vinaError}</div>
           )}
           {vinaResult && (
             <div>
@@ -705,12 +705,12 @@ function RDKitDescriptors({ drug, targetName }: { drug: DockingResult["drug"]; t
       {drug.smiles && (
         <div className="rounded-lg bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 p-3">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300">🚀 Real backend (RDKit, HF Space)</span>
+            <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300">Real backend (RDKit, HF Space)</span>
             <span className="text-[10px] text-zinc-400">Python</span>
           </div>
           {!backendResult && !backendLoading && (
             <button onClick={runBackend} className="px-3 py-2 rounded-lg bg-emerald-600 text-white text-xs font-medium hover:bg-emerald-700 transition">
-              🚀 Запустить real RDKit backend
+              Запустить real RDKit backend
             </button>
           )}
           {backendLoading && (
@@ -720,7 +720,7 @@ function RDKitDescriptors({ drug, targetName }: { drug: DockingResult["drug"]; t
             </div>
           )}
           {backendError && (
-            <div className="text-xs text-red-500 mt-2">⚠️ {backendError}</div>
+            <div className="text-xs text-red-500 mt-2">⚠ {backendError}</div>
           )}
           {backendResult && (
             <div>
@@ -735,8 +735,8 @@ function RDKitDescriptors({ drug, targetName }: { drug: DockingResult["drug"]; t
                 <div><span className="text-zinc-400">Charge:</span> <b>{backendResult.descriptors.formal_charge}</b></div>
               </div>
               <div className="grid grid-cols-2 gap-2 text-xs mb-2">
-                <div><span className="text-zinc-400">Lipinski:</span> <b className={backendResult.lipinski.pass ? "text-green-500" : "text-red-500"}>{backendResult.lipinski.pass ? "✅ Pass" : `⚠️ ${backendResult.lipinski.violations} violations`}</b></div>
-                <div><span className="text-zinc-400">Veber:</span> <b className={backendResult.veber_pass ? "text-green-500" : "text-red-500"}>{backendResult.veber_pass ? "✅ Pass" : "⚠️ Fail"}</b></div>
+                <div><span className="text-zinc-400">Lipinski:</span> <b className={backendResult.lipinski.pass ? "text-green-500" : "text-red-500"}>{backendResult.lipinski.pass ? "✓ Pass" : `⚠ ${backendResult.lipinski.violations} violations`}</b></div>
+                <div><span className="text-zinc-400">Veber:</span> <b className={backendResult.veber_pass ? "text-green-500" : "text-red-500"}>{backendResult.veber_pass ? "✓ Pass" : "⚠ Fail"}</b></div>
               </div>
               <div className="grid grid-cols-2 gap-2 text-xs mb-2">
                 <div><span className="text-zinc-400">Drug-likeness:</span> <b className="text-emerald-600">{backendResult.drug_likeness}/100</b></div>
@@ -750,7 +750,7 @@ function RDKitDescriptors({ drug, targetName }: { drug: DockingResult["drug"]; t
               )}
               {backendResult.alerts.length > 0 && (
                 <div className="mt-2">
-                  <div className="text-[10px] text-amber-600 dark:text-amber-400 font-medium">⚠️ Alerts:</div>
+                  <div className="text-[10px] text-amber-600 dark:text-amber-400 font-medium">⚠ Alerts:</div>
                   <ul className="text-[10px] list-disc list-inside text-zinc-600 dark:text-zinc-400">
                     {backendResult.alerts.map((a, i) => <li key={i}>{a}</li>)}
                   </ul>
@@ -772,18 +772,18 @@ function RDKitDescriptors({ drug, targetName }: { drug: DockingResult["drug"]; t
         ) : error && !result ? (
           <div>
             <button onClick={run} className="px-3 py-2 rounded-lg bg-teal-100 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 text-xs font-medium hover:bg-teal-200 transition">
-              🧬 Browser RDKit.js (WASM fallback)
+              Browser RDKit.js (WASM fallback)
             </button>
-            <div className="mt-2 text-xs text-red-500">⚠️ {error}</div>
+            <div className="mt-2 text-xs text-red-500">⚠ {error}</div>
           </div>
         ) : !result ? (
           <button onClick={run} className="px-3 py-2 rounded-lg bg-teal-100 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 text-xs font-medium hover:bg-teal-200 transition">
-            🧬 Browser RDKit.js (WASM fallback)
+            Browser RDKit.js (WASM fallback)
           </button>
         ) : (
           <div className="rounded-lg bg-teal-50 dark:bg-teal-950/20 border border-teal-200 dark:border-teal-800 p-3">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-teal-700 dark:text-teal-300">🧬 Browser descriptors (RDKit.js WASM)</span>
+              <span className="text-xs font-bold text-teal-700 dark:text-teal-300">Browser descriptors (RDKit.js WASM)</span>
               <span className="text-[10px] text-zinc-400">in-browser</span>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs mb-2">
@@ -797,7 +797,7 @@ function RDKitDescriptors({ drug, targetName }: { drug: DockingResult["drug"]; t
               <div><span className="text-zinc-400">fCsp3:</span> <b>{result.drug.descriptors.fractionCSP3}</b></div>
             </div>
             <div className="grid grid-cols-2 gap-2 text-xs mb-2">
-              <div><span className="text-zinc-400">Lipinski:</span> <b className={result.lipinskiPass ? "text-green-500" : "text-red-500"}>{result.lipinskiPass ? "✅ Pass" : `⚠️ ${result.lipinskiViolations} violations`}</b></div>
+              <div><span className="text-zinc-400">Lipinski:</span> <b className={result.lipinskiPass ? "text-green-500" : "text-red-500"}>{result.lipinskiPass ? "✓ Pass" : `⚠ ${result.lipinskiViolations} violations`}</b></div>
               <div><span className="text-zinc-400">Drug-likeness:</span> <b className="text-teal-600">{result.drugLikeness}/100</b></div>
             </div>
             {result.drug.descriptors.canonicalSMILES && (
@@ -805,7 +805,7 @@ function RDKitDescriptors({ drug, targetName }: { drug: DockingResult["drug"]; t
             )}
             {result.alerts.length > 0 && (
               <div className="mt-2">
-                <div className="text-[10px] text-amber-600 dark:text-amber-400 font-medium">⚠️ Alerts:</div>
+                <div className="text-[10px] text-amber-600 dark:text-amber-400 font-medium">⚠ Alerts:</div>
                 <ul className="text-[10px] list-disc list-inside text-zinc-600 dark:text-zinc-400">
                   {result.alerts.map((a, i) => <li key={i}>{a}</li>)}
                 </ul>

@@ -85,7 +85,7 @@ export default function AlignmentPage() {
         <div className="rounded-xl bg-cyan-50 dark:bg-cyan-950/30 border border-cyan-200 dark:border-cyan-800 p-4 mb-6 flex items-start gap-3 flex-wrap">
           <div className="flex-1 min-w-[260px]">
             <h2 className="font-semibold text-cyan-900 dark:text-cyan-100 mb-1">
-              🔗 Sequence Alignment — Needleman-Wunsch + Smith-Waterman
+              Sequence Alignment — Needleman-Wunsch + Smith-Waterman
             </h2>
             <p className="text-sm text-cyan-800 dark:text-cyan-200">
               Попарное выравнивание последовательностей. Глобальное (NW, для гомологичных       seqов) или локальное (SW, для поиска консервативных доменов).
@@ -140,7 +140,7 @@ export default function AlignmentPage() {
                     : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-200"
                 }`}
               >
-                🌐 Needleman-Wunsch<br/><span className="text-[10px] opacity-75">global</span>
+                Needleman-Wunsch<br/><span className="text-[10px] opacity-75">global</span>
               </button>
               <button
                 onClick={() => setAlgorithm("smith-waterman")}
@@ -150,7 +150,7 @@ export default function AlignmentPage() {
                     : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-200"
                 }`}
               >
-                🔍 Smith-Waterman<br/><span className="text-[10px] opacity-75">local</span>
+                Smith-Waterman<br/><span className="text-[10px] opacity-75">local</span>
               </button>
             </div>
 
