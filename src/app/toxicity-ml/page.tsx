@@ -46,7 +46,6 @@ export default function ToxicityMLPage() {
   return (
     <ToolPageLayout
       name="ML Toxicity"
-      icon="Tx"
       color="rose"
       description="Реальные ML-классификаторы токсичности (ChemBERTa fine-tunes на MoleculeNet). Ames, hERG, DILI, ClinTox, сенсибилизация кожи. 5 эндпоинтов, бесплатный HF API."
     >

@@ -63,7 +63,6 @@ export default function SequenceIDPage() {
   return (
     <ToolPageLayout
       name="Sequence ID"
-      icon="⌕"
       color="cyan"
       description="Идентификация последовательности через NCBI BLAST. Вставьте белок или ДНК — получите топ-совпадений + рекомендацию инструмента VetInSilico."
     >

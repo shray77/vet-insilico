@@ -2,14 +2,15 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { ArrowRight, Biohazard, CheckCircle2, Pill, SearchX, Wrench } from "lucide-react";
 import HubHeader from "@/components/HubHeader";
+import { CategoryIcon, ToolIcon } from "@/components/ToolIcon";
 import LiveOutbreaks from "@/components/LiveOutbreaks";
 import CloudStatsStrip from "@/components/CloudStatsStrip";
 import { DRUG_COUNT, PATHOGEN_COUNT } from "@/data/stats";
 
 interface Tool {
   href: string;
-  icon: string;
   title: string;
   tagline: string;
   desc: string;
@@ -23,7 +24,6 @@ interface Tool {
 interface Category {
   id: string;
   title: string;
-  icon: string;
   subtitle: string;
   tools: Tool[];
 }
@@ -32,12 +32,10 @@ const CATEGORIES: Category[] = [
   {
     id: "pharmacology",
     title: "Фармакология",
-    icon: "Rx",
     subtitle: "Drug repurposing, ADMET, PK/PD — поиск и оценка препаратов",
     tools: [
       {
         href: "/drug-repurposing",
-        icon: "DNA",
         title: "Drug Repurposing",
         tagline: "Скрининг 200+ препаратов с LLM-анализом",
         desc: "In silico docking — выбираем патоген, считаем score сродства для всех препаратов. 3D визуализация белок-лиганд через 3Dmol.js + LLM-анализ кандидатов через Qwen 3B. Экспорт в CSV.",
@@ -48,7 +46,6 @@ const CATEGORIES: Category[] = [
       },
       {
         href: "/admet",
-        icon: "Rx",
         title: "ADMET Predictor",
         tagline: "Фармакокинетика и токсичность",
         desc: "Из молекулярных свойств препарата (MW, LogP, заряд, HBD/HBA) предсказываем: биодоступность, BBB, hERG, AMES, гепатотоксичность, CYP3A4, drug-likeness. Path B: ML через Qwen LLM на SMILES.",
@@ -59,7 +56,6 @@ const CATEGORIES: Category[] = [
       },
       {
         href: "/pkpd",
-        icon: "St",
         title: "PK/PD Simulator",
         tagline: "Концентрация-время + dose-response",
         desc: "Однокомпартментная PK модель. PD-индексы: AUC/MIC (фторхинолоны), Cmax/MIC (аминогликозиды), T>MIC (β-лактамы). 6 препаратов с реальными ветеринарными параметрами.",
@@ -69,7 +65,6 @@ const CATEGORIES: Category[] = [
       },
       {
         href: "/dose-calculator",
-        icon: "Ch",
         title: "Antibiotic Dose Calculator",
         tagline: "Дозировка по весу/виду/возрасту",
         desc: "36 схем дозирования для 6 видов животных (свинья, КРС, птица, собака, кошка, лошадь). Расчёт по весу, коррекция на возраст, концентрацию, стоимость курса. Plumb's + РФ реестр.",
@@ -79,7 +74,6 @@ const CATEGORIES: Category[] = [
       },
       {
         href: "/pdb-viewer",
-        icon: "Lab",
         title: "Protein Structure Viewer",
         tagline: "3D визуализация PDB структур",
         desc: "Просмотр 3D структур белков из RCSB PDB через 3Dmol.js. 5 стилей: cartoon, stick, sphere, surface, lines. Лиганды и ионы металлов выделяются. 8 готовых структур.",
@@ -92,12 +86,10 @@ const CATEGORIES: Category[] = [
   {
     id: "vaccines-diagnostics",
     title: "Вакцины и диагностика",
-    icon: "Vac",
     subtitle: "Эпитопы, праймеры, резистентность — дизайн вакцин и ПЦР-детекция",
     tools: [
       {
         href: "/epitopes",
-        icon: "Vac",
         title: "Vaccine Epitopes",
         tagline: "B + T эпитопы с ESM-2 ML",
         desc: "Линейные B-эпитопы (Hopp-Woods, Chou-Fasman, Karplus-Schulz, Emini) + MHC-I 9-меры (HLA-A*02:01). ML-оценка naturalness через ESM-2 (Facebook protein language model).",
@@ -108,7 +100,6 @@ const CATEGORIES: Category[] = [
       },
       {
         href: "/vaccine-designer",
-        icon: "DNA",
         title: "Vaccine Designer",
         tagline: "Multi-epitope конструкт end-to-end",
         desc: "Полный пайплайн: предсказание B+T эпитопов → сборка с GPGPG-линкерами → сигнальный пептид + His-tag → кодон-оптимизация → GenBank экспорт.",
@@ -119,7 +110,6 @@ const CATEGORIES: Category[] = [
       },
       {
         href: "/sequence-id",
-        icon: "Se",
         title: "Sequence ID",
         tagline: "BLAST-идентификация последовательностей",
         desc: "Что это за последовательность? BLAST против NCBI GenBank → топ-совпадения + рекомендация инструмента VetInSilico. Для неизвестных образцов из поля.",
@@ -130,7 +120,6 @@ const CATEGORIES: Category[] = [
       },
       {
         href: "/outbreak-surveillance",
-        icon: "Pt",
         title: "Outbreak Surveillance",
         tagline: "Филогения + часы + AMR в одном пайплайне",
         desc: "Комбинированный анализ вспышки: филогенетическое дерево (UPGMA + Kimura 2P), молекулярные часы (TMRCA), AMR-сканирование. Для полевых изолятов ASFV/FMDV.",
@@ -141,7 +130,6 @@ const CATEGORIES: Category[] = [
       },
       {
         href: "/toxicity-ml",
-        icon: "Tx",
         title: "ML Toxicity",
         tagline: "ChemBERTa классификаторы токсичности",
         desc: "Реальные ML-модели (не LLM-угадайка): Ames, hERG, DILI, ClinTox, сенсибилизация кожи. 5 эндпоинтов через HF Inference API.",
@@ -152,7 +140,6 @@ const CATEGORIES: Category[] = [
       },
       {
         href: "/variant-effect",
-        icon: "DNA",
         title: "Variant Effect",
         tagline: "ESM-2 Δ-log-likelihood",
         desc: "Предсказание эффекта аминокислотных замен через ESM-2 650M. Антигенный дрейф, AMR, вакцинный эскейп. ΔLL: положительный = делеиторная.",
@@ -163,7 +150,6 @@ const CATEGORIES: Category[] = [
       },
       {
         href: "/structure-prediction",
-        icon: "Lab",
         title: "Structure Prediction",
         tagline: "ESMFold — 3D структура из последовательности",
         desc: "Предсказание 3D-структуры белка через ESMFold (Meta AI). PDB + pLDDT confidence. Визуализация в 3Dmol.js. Для любых последовательностей из поля.",
@@ -174,7 +160,6 @@ const CATEGORIES: Category[] = [
       },
       {
         href: "/primer-designer",
-        icon: "Lab",
         title: "PCR Primer Designer",
         tagline: "SantaLucia NN + DP + LLM",
         desc: "Tm (nearest-neighbor SantaLucia 1998), GC%, hairpin DP, self/cross-dimers ΔG, 3'-end stability, GC-clamp. ML-анализ специфичности и рисков через Qwen 3B.",
@@ -185,7 +170,6 @@ const CATEGORIES: Category[] = [
       },
       {
         href: "/amr",
-        icon: "Pt",
         title: "AMR Predictor",
         tagline: "Резистентность к антибиотикам",
         desc: "По гену-мишени (GyrA, RpoB, PBP, 16S rRNA) предсказываем резистентность. Rule-based мутации (CARD/ResFinder) + motif search (blaTEM, ermB, tetM, qnrA). 7 классов антибиотиков.",
@@ -195,7 +179,6 @@ const CATEGORIES: Category[] = [
       },
       {
         href: "/crispr",
-        icon: "DNA",
         title: "CRISPR gRNA Designer",
         tagline: "Дизайн guide RNA для SpCas9",
         desc: "Поиск NGG PAM на обеих цепях, on-target score (Doench 2016 упрощённо), off-target проверка против геномов хозяев, GC content, hairpin ΔG. Для редактирования CD163, ANP32A, MSTN.",
@@ -205,7 +188,6 @@ const CATEGORIES: Category[] = [
       },
       {
         href: "/codon-optimizer",
-        icon: "Tr",
         title: "Codon Optimization",
         tagline: "Оптимизация кодонов под вид",
         desc: "Оптимизация ДНК для экспрессии в свинье/КРС/курице/E. coli. Таблицы Kazusa, CAI (Codon Adaptation Index), избегание сайтов рестриктаз и шпилек. Для рекомбинантных вакцин.",
@@ -215,7 +197,6 @@ const CATEGORIES: Category[] = [
       },
       {
         href: "/ai-vet",
-        icon: "Dx",
         title: "AI Veterinarian",
         tagline: "Дифференциальный диагноз через LLM",
         desc: "Вводишь вид + возраст + симптомы → дифференциальный диагноз с вероятностями, рекомендуемые тесты, уровень срочности. LLM Qwen-Coder-3B через HuggingFace.",
@@ -229,12 +210,10 @@ const CATEGORIES: Category[] = [
   {
     id: "genomics",
     title: "Геномика",
-    icon: "DNA",
     subtitle: "Alignment, филогения, рестрикция — сравнение и картирование последовательностей",
     tools: [
       {
         href: "/alignment",
-        icon: "Ln",
         title: "Sequence Alignment",
         tagline: "Needleman-Wunsch + Smith-Waterman",
         desc: "Попарное выравнивание (глобальное и локальное). Скоринг через BLOSUM62 (белки) или match/mismatch (ДНК). Identity, similarity, gaps, score.",
@@ -244,7 +223,6 @@ const CATEGORIES: Category[] = [
       },
       {
         href: "/phylogeny",
-        icon: "Ph",
         title: "Phylogenetic Tree",
         tagline: "UPGMA + Neighbor-Joining",
         desc: "Дерево из гомологичных последовательностей. Kimura 2-parameter (ДНК), p-distance (белки). Newick export + SVG dendrogram + heatmap distance matrix.",
@@ -254,7 +232,6 @@ const CATEGORIES: Category[] = [
       },
       {
         href: "/restriction-map",
-        icon: "RE",
         title: "Restriction Map",
         tagline: "Карта сайтов рестриктаз",
         desc: "30+ рестриктаз (EcoRI, BamHI, HindIII, SmaI, NotI, SfiI...). IUPAC-коды. Линейная карта разрезов, размеры фрагментов, виртуальный гель-электрофорез.",
@@ -264,7 +241,6 @@ const CATEGORIES: Category[] = [
       },
       {
         href: "/plasmid-map",
-        icon: "Cx",
         title: "Plasmid Map Designer",
         tagline: "ORF + restriction sites на плазмиде",
         desc: "Анализ плазмид: поиск ORF (ATG/GTG/TTG → stop на обеих цепях), сайты рестриктаз, GC content. Circular SVG карта с ORF дугами и cut site метками.",
@@ -274,7 +250,6 @@ const CATEGORIES: Category[] = [
       },
       {
         href: "/molecular-clock",
-        icon: "PK",
         title: "Molecular Clock Calculator",
         tagline: "Время расхождения по генетическому расстоянию",
         desc: "Оценка времени расхождения по формуле T = d / (2r). 12 опубликованных clock rates (ASFV, Influenza, Rabies, FMDV, BVDV, Brucella, mtDNA...). 95% CI.",
@@ -287,12 +262,10 @@ const CATEGORIES: Category[] = [
   {
     id: "diagnostics-tools",
     title: "Диагностика и инструменты",
-    icon: "St",
     subtitle: "ELISA, AI ветврач — лабораторные и клинические инструменты",
     tools: [
       {
         href: "/elisa",
-        icon: "St",
         title: "ELISA Cut-off Calculator",
         tagline: "Cut-off + ROC + AUC для ELISA",
         desc: "Статистический анализ OD значений. Cut-off = mean + 2SD/3SD. ROC curve, AUC, sensitivity/specificity если есть positive controls. CV% для оценки качества.",
@@ -376,17 +349,20 @@ export default function HubPage() {
         {/* Quick stats */}
         <section className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-12">
           {[
-            { v: PATHOGEN_COUNT, label: "Патогенов", icon: "Pt" },
-            { v: DRUG_COUNT, label: "Препаратов" },
-            { v: "23", label: "Инструментов" },
-            { v: "137", label: "Тестов pass" },
-          ].map((s) => (
-            <div key={s.label} className="rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 text-center">
-              <div className="text-xl mb-0.5">{s.icon}</div>
-              <div className="text-xl font-bold text-teal-600">{s.v}</div>
-              <div className="text-[10px] text-zinc-400">{s.label}</div>
-            </div>
-          ))}
+            { v: PATHOGEN_COUNT, label: "Патогенов", icon: Biohazard },
+            { v: DRUG_COUNT, label: "Препаратов", icon: Pill },
+            { v: "23", label: "Инструментов", icon: Wrench },
+            { v: "137", label: "Тестов pass", icon: CheckCircle2 },
+          ].map((s) => {
+            const StatIcon = s.icon;
+            return (
+              <div key={s.label} className="rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 text-center">
+                <StatIcon size={20} strokeWidth={1.75} className="mx-auto mb-1 text-teal-500 dark:text-teal-400" aria-hidden="true" />
+                <div className="text-xl font-bold text-teal-600">{s.v}</div>
+                <div className="text-[10px] text-zinc-400">{s.label}</div>
+              </div>
+            );
+          })}
         </section>
 
         {/* Live: сводка вспышек через vet-api (не рендерится, если облако недоступно) */}
@@ -429,7 +405,9 @@ export default function HubPage() {
               {/* Category header */}
               <div className={`rounded-2xl border ${ca.border} bg-gradient-to-r ${ca.bg} p-4 mb-4`}>
                 <div className="flex items-center gap-3">
-                  <div className="font-mono text-sm font-bold tracking-widest text-zinc-500 dark:text-zinc-400 border border-zinc-300 dark:border-zinc-700 rounded-lg px-2.5 py-1.5" aria-hidden="true">{cat.icon}</div>
+                  <div className={`w-10 h-10 rounded-xl border ${ca.border} bg-white/70 dark:bg-zinc-900/70 flex items-center justify-center shrink-0`} aria-hidden="true">
+                    <CategoryIcon id={cat.id} size={20} className={ca.text} />
+                  </div>
                   <div>
                     <h2 className={`text-xl font-bold ${ca.text}`}>{cat.title}</h2>
                     <p className="text-xs text-zinc-500 dark:text-zinc-400">{cat.subtitle}</p>
@@ -448,7 +426,9 @@ export default function HubPage() {
                       className={`hub-card block rounded-2xl border-2 p-5 ${c.border} ${c.bg} relative`}
                     >
                       <div className="flex items-start justify-between mb-2">
-                        <div className="font-mono text-xs font-bold tracking-widest text-zinc-500 dark:text-zinc-400 border border-zinc-300 dark:border-zinc-700 rounded-lg px-2 py-1.5" aria-hidden="true">{tool.icon}</div>
+                        <div className={`w-9 h-9 rounded-lg border ${c.border} bg-white/70 dark:bg-zinc-900/70 flex items-center justify-center shrink-0`} aria-hidden="true">
+                          <ToolIcon href={tool.href} size={17} className={c.text} />
+                        </div>
                         <div className="flex flex-col items-end gap-1">
                           {tool.badge && (
                             <span className={`text-[10px] px-2 py-0.5 rounded-full bg-gradient-to-r ${c.gradient} text-white font-medium`}>
@@ -475,7 +455,9 @@ export default function HubPage() {
                           </span>
                         ))}
                       </div>
-                      <div className={`mt-3 text-xs font-medium ${c.text}`}>Открыть →</div>
+                      <div className={`mt-3 text-xs font-medium ${c.text} inline-flex items-center gap-1`}>
+                        Открыть <ArrowRight size={12} aria-hidden="true" />
+                      </div>
                     </Link>
                   );
                 })}
@@ -494,7 +476,7 @@ export default function HubPage() {
           )
         ) && (
           <div className="text-center py-12 text-zinc-400">
-            <div className="font-mono text-2xl font-bold tracking-widest text-zinc-400 dark:text-zinc-500 mb-3" aria-hidden="true">Se</div>
+            <SearchX size={30} strokeWidth={1.5} className="mx-auto mb-3 text-zinc-400 dark:text-zinc-500" aria-hidden="true" />
             <div className="text-sm">Ничего не найдено по запросу «{searchQuery}»</div>
             <button onClick={() => setSearchQuery("")} className="mt-3 text-xs text-teal-500 hover:underline">
               Очистить поиск

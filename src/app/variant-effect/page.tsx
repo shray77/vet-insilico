@@ -62,7 +62,6 @@ export default function VariantEffectPage() {
   return (
     <ToolPageLayout
       name="Variant Effect"
-      icon="DNA"
       color="blue"
       description="Предсказание эффекта аминокислотных замен через ESM-2 Δ-log-likelihood. Антигенный дрейф, лекарственная резистентность, эскейп-мутации вакцины."
     >

@@ -3,66 +3,67 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
+import { ChevronDown, Menu, Monitor, Moon, Sun } from "lucide-react";
 import HfTokenModal from "./HfTokenModal";
+import { ToolIcon } from "./ToolIcon";
 import { getHfToken } from "@/lib/hf";
 
 const TOOL_CATEGORIES = [
   {
     title: "Фармакология",
     tools: [
-      { href: "/drug-repurposing", label: "Docking", icon: "DNA" },
-      { href: "/admet", label: "ADMET", icon: "Rx" },
-      { href: "/toxicity-ml", label: "Toxicity ML", icon: "Tx" },
-      { href: "/pkpd", label: "PK/PD", icon: "St" },
-      { href: "/dose-calculator", label: "Дозы", icon: "Ch" },
+      { href: "/drug-repurposing", label: "Docking" },
+      { href: "/admet", label: "ADMET" },
+      { href: "/toxicity-ml", label: "Toxicity ML" },
+      { href: "/pkpd", label: "PK/PD" },
+      { href: "/dose-calculator", label: "Дозы" },
     ],
   },
   {
     title: "Вакцины",
     tools: [
-      { href: "/epitopes", label: "Эпитопы", icon: "Vac" },
-      { href: "/vaccine-designer", label: "Designer", icon: "DNA" },
+      { href: "/epitopes", label: "Эпитопы" },
+      { href: "/vaccine-designer", label: "Designer" },
     ],
   },
   {
     title: "Геномика",
     tools: [
-      { href: "/sequence-id", label: "BLAST ID", icon: "⌕" },
-      { href: "/variant-effect", label: "Variants", icon: "DNA" },
-      { href: "/structure-prediction", label: "ESMFold", icon: "Lab" },
-      { href: "/primer-designer", label: "Праймеры", icon: "Lab" },
-      { href: "/crispr", label: "CRISPR", icon: "RE" },
-      { href: "/codon-optimizer", label: "Кодоны", icon: "Tr" },
-      { href: "/alignment", label: "Align", icon: "↗" },
-      { href: "/phylogeny", label: "Филогения", icon: "Ph" },
-      { href: "/molecular-clock", label: "Часы", icon: "PK" },
-      { href: "/amr", label: "AMR", icon: "Pt" },
-      { href: "/restriction-map", label: "Рестрикция", icon: "RE" },
-      { href: "/plasmid-map", label: "Плазмида", icon: "Cx" },
+      { href: "/sequence-id", label: "BLAST ID" },
+      { href: "/variant-effect", label: "Variants" },
+      { href: "/structure-prediction", label: "ESMFold" },
+      { href: "/primer-designer", label: "Праймеры" },
+      { href: "/crispr", label: "CRISPR" },
+      { href: "/codon-optimizer", label: "Кодоны" },
+      { href: "/alignment", label: "Align" },
+      { href: "/phylogeny", label: "Филогения" },
+      { href: "/molecular-clock", label: "Часы" },
+      { href: "/amr", label: "AMR" },
+      { href: "/restriction-map", label: "Рестрикция" },
+      { href: "/plasmid-map", label: "Плазмида" },
     ],
   },
   {
     title: "Диагностика",
     tools: [
-      { href: "/outbreak-surveillance", label: "Surveillance", icon: "Pt" },
-      { href: "/elisa", label: "ELISA", icon: "St" },
-      { href: "/pdb-viewer", label: "3D Viewer", icon: "Lab" },
-      { href: "/ai-vet", label: "AI Вет", icon: "" },
+      { href: "/outbreak-surveillance", label: "Surveillance" },
+      { href: "/elisa", label: "ELISA" },
+      { href: "/pdb-viewer", label: "3D Viewer" },
+      { href: "/ai-vet", label: "AI Вет" },
     ],
   },
 ];
 
 // Top 4 most-used tools shown as direct icons on all screens
 const TOP_TOOLS = [
-  { href: "/drug-repurposing", label: "Docking", icon: "DNA" },
-  { href: "/epitopes", label: "Эпитопы", icon: "Vac" },
-  { href: "/vaccine-designer", label: "Designer", icon: "DNA" },
-  { href: "/ai-vet", label: "AI Вет", icon: "" },
+  { href: "/drug-repurposing", label: "Docking" },
+  { href: "/epitopes", label: "Эпитопы" },
+  { href: "/vaccine-designer", label: "Designer" },
+  { href: "/ai-vet", label: "AI Вет" },
 ];
 
 export default function HubHeader() {
   const pathname = usePathname();
-  const [dark, setDark] = useState(true);
   const [theme, setTheme] = useState<"dark" | "light" | "system">("dark");
   const [mlOpen, setMlOpen] = useState(false);
   const [hasToken, setHasToken] = useState(false);
@@ -103,10 +104,7 @@ export default function HubHeader() {
     setTheme(theme === "dark" ? "light" : theme === "light" ? "system" : "dark");
   };
 
-  const themeIcon =
-    theme === "dark"
-      ? '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>'
-      : '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+  const ThemeGlyph = theme === "dark" ? Moon : theme === "light" ? Sun : Monitor;
   const themeLabel = theme === "dark" ? "Тёмная" : theme === "light" ? "Светлая" : "Системная";
 
   return (
@@ -130,7 +128,7 @@ export default function HubHeader() {
                 }`}
                 title={t.label}
               >
-                <span className="mr-0.5">{t.icon}</span>
+                <ToolIcon href={t.href} size={13} className="mr-0.5 shrink-0" />
                 <span className="hidden lg:inline">{t.label}</span>
               </Link>
             ))}
@@ -143,7 +141,7 @@ export default function HubHeader() {
                   menuOpen ? "bg-zinc-100 dark:bg-zinc-800" : "hover:bg-zinc-100 dark:hover:bg-zinc-800"
                 } text-zinc-600 dark:text-zinc-400`}
               >
-                Все ⌄
+                Все <ChevronDown size={12} aria-hidden="true" />
               </button>
               {menuOpen && (
                 <div className="absolute right-0 top-full mt-1 w-64 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-xl p-2 max-h-[70vh] overflow-y-auto thin-scroll z-50">
@@ -159,7 +157,7 @@ export default function HubHeader() {
                             isActive(t.href) ? "bg-teal-500/10 text-teal-600 dark:text-teal-400" : "hover:bg-zinc-100 dark:hover:bg-zinc-800"
                           }`}
                         >
-                          <span>{t.icon}</span>
+                          <ToolIcon href={t.href} size={13} className="shrink-0" />
                           <span>{t.label}</span>
                         </Link>
                       ))}
@@ -175,14 +173,16 @@ export default function HubHeader() {
             <div className="relative" ref={menuRef}>
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
-                className="px-2 py-1 rounded-md text-xs font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                className="p-1.5 rounded-md text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                aria-label="Меню"
               >
-                ☰
+                <Menu size={16} aria-hidden="true" />
               </button>
               {menuOpen && (
                 <div className="absolute right-0 top-full mt-1 w-56 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-xl p-2 max-h-[70vh] overflow-y-auto thin-scroll z-50">
                   <Link href="/" onClick={() => setMenuOpen(false)}
                     className={`flex items-center gap-2 px-2 py-1 rounded-md text-xs mb-1 ${isActive("/") ? "bg-teal-500/10 text-teal-600 dark:text-teal-400" : "hover:bg-zinc-100 dark:hover:bg-zinc-800"}`}>
+                    <ToolIcon href="/" size={13} className="shrink-0" />
                     <span>Хаб</span>
                   </Link>
                   {TOOL_CATEGORIES.map((cat) => (
@@ -197,7 +197,7 @@ export default function HubHeader() {
                             isActive(t.href) ? "bg-teal-500/10 text-teal-600 dark:text-teal-400" : "hover:bg-zinc-100 dark:hover:bg-zinc-800"
                           }`}
                         >
-                          <span>{t.icon}</span>
+                          <ToolIcon href={t.href} size={13} className="shrink-0" />
                           <span>{t.label}</span>
                         </Link>
                       ))}
@@ -226,7 +226,7 @@ export default function HubHeader() {
             aria-label={`Тема: ${themeLabel}`}
             title={`Тема: ${themeLabel} (клик для смены)`}
           >
-            {themeIcon}
+            <ThemeGlyph size={15} strokeWidth={2} aria-hidden="true" />
           </button>
         </div>
       </header>

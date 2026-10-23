@@ -58,7 +58,6 @@ export default function StructurePredictionPage() {
   return (
     <ToolPageLayout
       name="Structure Prediction"
-      icon="DNA"
       color="blue"
       description="Предсказание 3D-структуры белка через ESMFold (Meta AI). Введите последовательность → получите PDB + pLDDT confidence. Бесплатно на HF."
     >

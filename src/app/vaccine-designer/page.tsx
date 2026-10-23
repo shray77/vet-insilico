@@ -57,7 +57,6 @@ export default function VaccineDesignerPage() {
   return (
     <ToolPageLayout
       name="Vaccine Designer"
-      icon="Vac"
       color="emerald"
       description="Multi-epitope vaccine construct designer: B+T epitope prediction, linker assembly, codon optimization, GenBank export."
     >

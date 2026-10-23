@@ -196,12 +196,12 @@ export default function Viewer3D({
     setCurrentStyle(newStyle);
   }
 
-  const styleButtons: { label: string; val: ViewerStyle; icon: string }[] = [
-    { label: "Картинки", val: "cartoon", icon: "DNA" },
-    { label: "Палочки", val: "stick", icon: "—" },
-    { label: "Сферы", val: "sphere", icon: "—" },
-    { label: "Поверхность", val: "surface", icon: "—" },
-    { label: "Линии", val: "lines", icon: "—" },
+  const styleButtons: { label: string; val: ViewerStyle }[] = [
+    { label: "Картинки", val: "cartoon" },
+    { label: "Палочки", val: "stick" },
+    { label: "Сферы", val: "sphere" },
+    { label: "Поверхность", val: "surface" },
+    { label: "Линии", val: "lines" },
   ];
 
   return (
@@ -218,7 +218,7 @@ export default function Viewer3D({
                 : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-200"
             }`}
           >
-            {b.icon} {b.label}
+            {b.label}
           </button>
         ))}
         <a

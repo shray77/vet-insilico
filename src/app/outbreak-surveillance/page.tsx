@@ -52,7 +52,6 @@ export default function OutbreakSurveillancePage() {
   return (
     <ToolPageLayout
       name="Outbreak Surveillance"
-      icon="Pt"
       color="orange"
       description="Комбинированный анализ вспышки: филогения + молекулярные часы + AMR. Загрузите полевые изоляты → получите дерево, оценку TMRCA, статус резистентности."
     >

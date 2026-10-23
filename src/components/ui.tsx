@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import HubHeader from "./HubHeader";
+import { ToolIcon } from "./ToolIcon";
 import { type ReactNode } from "react";
 
 // ─── Color themes for tool pages ────────────────────────────────────
@@ -24,8 +26,6 @@ const COLOR_MAP: Record<ToolColor, { bg: string; border: string; text: string; t
 interface ToolPageLayoutProps {
   /** Tool name shown in breadcrumb + hero */
   name: string;
-  /** Icon emoji shown in hero */
-  icon: string;
   /** Short description shown in hero */
   description: string;
   /** Color theme */
@@ -35,16 +35,20 @@ interface ToolPageLayoutProps {
 }
 
 /**
+ * The hero icon is derived from the route via the central Lucide registry
+ * (ToolIcon), so it always matches the hub card and nav.
+ *
  * Shared layout for all tool pages — eliminates ~50 lines of boilerplate
  * per page (breadcrumb + hero + main wrapper).
  *
  * Usage:
- *   <ToolPageLayout name="Codon Optimization" icon="Tr" description="..." color="fuchsia">
+ *   <ToolPageLayout name="Codon Optimization" description="..." color="fuchsia">
  *     {/* page content * /}
  *   </ToolPageLayout>
  */
-export function ToolPageLayout({ name, icon, description, color = "teal", children }: ToolPageLayoutProps) {
+export function ToolPageLayout({ name, description, color = "teal", children }: ToolPageLayoutProps) {
   const c = COLOR_MAP[color];
+  const pathname = usePathname();
   return (
     <div className="min-h-screen">
       <HubHeader />
@@ -57,7 +61,10 @@ export function ToolPageLayout({ name, icon, description, color = "teal", childr
         </div>
         {/* Hero */}
         <div className={`rounded-xl ${c.bg} border ${c.border} p-4 mb-6`}>
-          <h2 className={`font-semibold ${c.title} mb-1`}>{icon} {name}</h2>
+          <h2 className={`font-semibold ${c.title} mb-1 flex items-center gap-2`}>
+            <ToolIcon href={pathname} size={18} className={c.text} />
+            <span>{name}</span>
+          </h2>
           <p className={`text-sm ${c.text}`}>{description}</p>
         </div>
         {children}
