@@ -252,7 +252,7 @@ export default function EpitopesPage() {
                                     key={j}
                                     title={`${r.aa} @ pos ${j+1}: ${(r.prob * 100).toFixed(1)}%`}
                                     className="flex-1 h-6 rounded-sm flex items-center justify-center text-[10px] font-mono font-bold text-white"
-                                    style={{ backgroundColor: `rgba(168, 85, 247, ${Math.max(0.15, r.prob)})` }}
+                                    style={{ backgroundColor: `rgba(219, 39, 119, ${Math.max(0.15, r.prob)})` }}
                                   >
                                     {r.aa}
                                   </div>
@@ -365,7 +365,7 @@ export default function EpitopesPage() {
                                 title={`Pos ${s.position} ${s.residue}: propensity=${s.propensity}, surprise=${s.surprise}, prob=${s.prob}`}
                                 className="w-5 h-5 flex items-center justify-center rounded-sm font-bold text-white"
                                 style={{
-                                  backgroundColor: `rgba(168, 85, 247, ${Math.max(0.1, s.propensity)})`,
+                                  backgroundColor: `rgba(219, 39, 119, ${Math.max(0.1, s.propensity)})`,
                                   color: s.propensity > 0.5 ? "white" : "#0e7490",
                                 }}
                               >

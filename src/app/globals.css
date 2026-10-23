@@ -50,15 +50,6 @@
   animation: spin 0.6s linear infinite;
 }
 
-/* Pulse for ML badges */
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4); }
-  50% { box-shadow: 0 0 0 4px rgba(168, 85, 247, 0); }
-}
-.ml-badge-pulse {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
 /* Smooth color transitions for dark/light mode */
 * {
   transition-property: background-color, border-color, color, fill, stroke;

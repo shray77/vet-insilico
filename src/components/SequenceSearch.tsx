@@ -87,7 +87,7 @@ export function SequenceSearch({ onSelect, compact = false }: SequenceSearchProp
   const sourceColors: Record<string, string> = {
     NCBI: "#2563eb",
     UniProt: "#16a34a",
-    PDB: "#a855f7",
+    PDB: "#db2777",
   };
 
   if (compact && !expanded) {
