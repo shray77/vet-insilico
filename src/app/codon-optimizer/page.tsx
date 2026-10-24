@@ -38,7 +38,7 @@ export default function CodonOptimizerPage() {
         </div>
         <div className="rounded-xl bg-fuchsia-50 dark:bg-fuchsia-950/30 border border-fuchsia-200 dark:border-fuchsia-800 p-4 mb-6">
           <h2 className="font-semibold text-fuchsia-900 dark:text-fuchsia-100 mb-1">Codon Optimization Tool</h2>
-          <p className="text-sm text-fuchsia-800 dark:text-fuchsia-200">
+          <p className="text-sm text-fuchsia-800 dark:text-fuchsia-300">
             Оптимизация кодонов под экспрессию в организме-хозяине. Таблицы Kazusa для свиньи, КРС, курицы, E. coli.
             CAI (Codon Adaptation Index), избегание сайтов рестриктаз и шпилек.
           </p>
@@ -54,7 +54,7 @@ export default function CodonOptimizerPage() {
                     : "border-zinc-200 dark:border-zinc-800 hover:border-fuchsia-300 text-zinc-700 dark:text-zinc-300"
                   }`}>
                   <div className="font-medium">{s.name}</div>
-                  <div className={`text-xs ${sampleIdx === i ? "text-fuchsia-100" : "text-zinc-400"}`}>{s.species}</div>
+                  <div className={`text-xs ${sampleIdx === i ? "text-white/70" : "text-zinc-400"}`}>{s.species}</div>
                 </button>
               ))}
             </div>
@@ -118,7 +118,7 @@ export default function CodonOptimizerPage() {
                     <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 mb-3">Избегаемые сайты рестриктаз</h3>
                     <div className="flex flex-wrap gap-2">
                       {result.restrictionSitesAvoided.map(s => (
-                        <span key={s} className="text-xs px-2 py-1 rounded bg-amber-100 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 font-mono">{s}</span>
+                        <span key={s} className="text-xs px-2 py-1 rounded bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 font-mono">{s}</span>
                       ))}
                     </div>
                   </div>

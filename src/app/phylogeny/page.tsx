@@ -80,7 +80,7 @@ export default function PhylogenyPage() {
             <h2 className="font-semibold text-emerald-900 dark:text-emerald-100 mb-1">
               Phylogenetic Tree Builder — UPGMA + Neighbor-Joining
             </h2>
-            <p className="text-sm text-emerald-800 dark:text-emerald-200">
+            <p className="text-sm text-emerald-700">
               Строит филогенетическое дерево из набора гомологичных последовательностей. Сначала считается попарная
               distance matrix (Kimura 2-parameter для ДНК, p-distance для белков), затем — UPGMA (ultrametric)
               или NJ (Saitou-Nei 1987). Вывод — Newick + визуализация dendrogram.

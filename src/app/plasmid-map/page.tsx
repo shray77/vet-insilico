@@ -35,7 +35,7 @@ export default function PlasmidMapPage() {
         </div>
         <div className="rounded-xl bg-stone-50 dark:bg-stone-950/30 border border-stone-200 dark:border-stone-800 p-4 mb-6">
           <h2 className="font-semibold text-stone-900 dark:text-stone-100 mb-1">Plasmid Map Designer — ORF + restriction sites</h2>
-          <p className="text-sm text-stone-800 dark:text-stone-200">
+          <p className="text-sm text-zinc-700 dark:text-zinc-300">
             Анализ плазмидных последовательностей: поиск ORF (ATG/GTG/TTG → stop на обеих цепях),
             сайты рестриктаз, GC content. Визуализация circular map.
           </p>
@@ -47,11 +47,11 @@ export default function PlasmidMapPage() {
               {PLASMID_SAMPLES.map((s, i) => (
                 <button key={i} onClick={() => loadSample(i)}
                   className={`w-full text-left p-3 rounded-lg text-sm transition border ${
-                    sampleIdx === i ? "bg-stone-700 text-white border-stone-700"
+                    sampleIdx === i ? "bg-zinc-700 text-white border-zinc-700"
                     : "border-zinc-200 dark:border-zinc-800 hover:border-stone-300 text-zinc-700 dark:text-zinc-300"
                   }`}>
                   <div className="font-medium">{s.name}</div>
-                  <div className={`text-xs ${sampleIdx === i ? "text-stone-200" : "text-zinc-400"}`}>{s.desc}</div>
+                  <div className={`text-xs ${sampleIdx === i ? "text-white/70" : "text-zinc-400"}`}>{s.desc}</div>
                 </button>
               ))}
             </div>

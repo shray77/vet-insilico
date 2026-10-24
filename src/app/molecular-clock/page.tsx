@@ -36,7 +36,7 @@ export default function MolecularClockPage() {
         </div>
         <div className="rounded-xl bg-slate-50 dark:bg-slate-950/30 border border-slate-200 dark:border-slate-800 p-4 mb-6">
           <h2 className="font-semibold text-slate-900 dark:text-slate-100 mb-1">Molecular Clock Calculator</h2>
-          <p className="text-sm text-slate-800 dark:text-slate-200">
+          <p className="text-sm text-zinc-700 dark:text-zinc-300">
             Оценка времени расхождения по генетическому расстоянию. Формула: T = d / (2r).
             12 опубликованных clock rates для ветеринарии (ASFV, Influenza, Rabies, FMDV, BVDV, Brucella, mtDNA...).
           </p>
@@ -48,11 +48,11 @@ export default function MolecularClockPage() {
               {MOLECULAR_CLOCK_SAMPLES.map((s, i) => (
                 <button key={i} onClick={() => loadSample(i)}
                   className={`w-full text-left p-3 rounded-lg text-sm transition border ${
-                    sampleIdx === i ? "bg-slate-700 text-white border-slate-700"
+                    sampleIdx === i ? "bg-zinc-700 text-white border-zinc-700"
                     : "border-zinc-200 dark:border-zinc-800 hover:border-slate-300 text-zinc-700 dark:text-zinc-300"
                   }`}>
                   <div className="font-medium">{s.name}</div>
-                  <div className={`text-xs ${sampleIdx === i ? "text-slate-200" : "text-zinc-400"}`}>{s.gene}</div>
+                  <div className={`text-xs ${sampleIdx === i ? "text-white/70" : "text-zinc-400"}`}>{s.gene}</div>
                 </button>
               ))}
             </div>
@@ -80,7 +80,7 @@ export default function MolecularClockPage() {
           <div className="lg:col-span-2 space-y-6">
             <div className="rounded-xl border-2 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-6 text-center">
               <div className="text-xs text-slate-500 mb-1">Время расхождения</div>
-              <div className="text-4xl font-bold text-slate-700 dark:text-slate-200">{result.humanReadable}</div>
+              <div className="text-4xl font-bold text-zinc-700 dark:text-zinc-300">{result.humanReadable}</div>
               <div className="text-sm text-slate-500 mt-2">{result.divergenceTimeYears.toLocaleString()} лет</div>
               <div className="text-xs text-slate-400 mt-1">
                 95% CI: {result.lowerBoundYears.toLocaleString()} — {result.upperBoundYears.toLocaleString()} лет

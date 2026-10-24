@@ -126,7 +126,7 @@ export default function PKPDPage() {
               <h2 className="font-semibold text-rose-900 dark:text-rose-100 mb-1">
                 PK/PD Simulator — фармакокинетика + фармакодинамика
               </h2>
-              <p className="text-sm text-rose-800 dark:text-rose-200">
+              <p className="text-sm text-rose-800 dark:text-rose-300">
                 Однокомпартментная модель с first-order absorption. Считаем Cmax, AUC, t½, Css.
                 PD-индексы: AUC₂₄/MIC (фторхинолоны), Cmax/MIC (аминогликозиды), T&gt;MIC (β-лактамы).
                 Визуализация concentration-time графика + Emax dose-response.

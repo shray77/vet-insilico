@@ -73,7 +73,7 @@ export default function RestrictionMapPage() {
           <h2 className="font-semibold text-lime-900 dark:text-lime-100 mb-1">
             Restriction Map — карта сайтов рестриктаз
           </h2>
-          <p className="text-sm text-lime-800 dark:text-lime-200">
+          <p className="text-sm text-green-700">
             Находим сайты разрезания для 30+ рестриктаз (EcoRI, BamHI, HindIII, SmaI...) в ДНК-последовательности.
             Считаем позиции разрезов, размеры фрагментов, симулируем гель-электрофорез.
             Поддержка IUPAC-кодов (N, R, Y, S, W, K, M...).

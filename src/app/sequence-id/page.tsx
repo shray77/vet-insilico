@@ -151,7 +151,7 @@ export default function SequenceIDPage() {
             <div className="space-y-4">
               {/* Suggestion banner */}
               <Link href={result.suggestion.href}
-                className="block rounded-xl border border-cyan-200 dark:border-cyan-800 bg-cyan-50 dark:bg-cyan-950/30 p-4 hover:bg-cyan-100 dark:hover:bg-cyan-950/50 transition-colors group">
+                className="block rounded-xl border border-cyan-200 dark:border-cyan-800 bg-cyan-50 dark:bg-cyan-950/30 p-4 hover:bg-cyan-200 dark:hover:bg-cyan-950/50 transition-colors group">
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="text-xs text-cyan-600 dark:text-cyan-400 font-semibold mb-1">

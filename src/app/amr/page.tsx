@@ -45,7 +45,7 @@ export default function AMRPage() {
           <h2 className="font-semibold text-orange-900 dark:text-orange-100 mb-1">
             Antimicrobial Resistance Predictor
           </h2>
-          <p className="text-sm text-orange-800 dark:text-orange-200">
+          <p className="text-sm text-orange-800 dark:text-orange-300">
             По последовательности гена-мишени (GyrA, RpoB, PBP, 16S rRNA) предсказываем резистентность к классам антибиотиков.
             Rule-based поиск известных мутаций (CARD/ResFinder) + motif search для резистентных генов (blaTEM, ermB, tetM...).
           </p>
@@ -187,7 +187,7 @@ export default function AMRPage() {
                     </h3>
                     <div className="flex flex-wrap gap-1.5">
                       {affectedDrugs.slice(0, 30).map((d) => (
-                        <span key={d.id} className="text-xs px-2 py-1 rounded bg-red-100 dark:bg-red-950/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800">
+                        <span key={d.id} className="text-xs px-2 py-1 rounded bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800">
                           {d.name}
                         </span>
                       ))}

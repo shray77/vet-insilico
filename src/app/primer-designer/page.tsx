@@ -120,7 +120,7 @@ export default function PrimerDesignerPage() {
             <h2 className="font-semibold text-amber-900 dark:text-amber-100 mb-1">
               PCR Primer Designer — ML-powered
             </h2>
-            <p className="text-sm text-amber-800 dark:text-amber-200">
+            <p className="text-sm text-amber-800 dark:text-amber-300">
               Дизайн пар праймеров с детальной термодинамикой (SantaLucia 1998 NN, hairpin DP, dimers) +
               опциональный LLM-анализ специфичности и рисков через Qwen2.5-Coder-3B-Instruct (HuggingFace).
             </p>
@@ -347,7 +347,7 @@ export default function PrimerDesignerPage() {
                             <button
                               onClick={() => runLLMAnalysis(i)}
                               disabled={analyzing === i}
-                              className="px-3 py-2 rounded-lg bg-purple-100 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 text-xs font-medium hover:bg-purple-200 dark:hover:bg-purple-900/60 transition disabled:opacity-50"
+                              className="px-3 py-2 rounded-lg bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 text-xs font-medium hover:bg-purple-200 dark:hover:bg-purple-900/60 transition disabled:opacity-50"
                             >
                               {analyzing === i ? "LLM анализирует..." : "ML-анализ (Qwen 3B)"}
                             </button>
@@ -440,7 +440,7 @@ function MisprimingCheck({ forward, reverse }: { forward: string; reverse: strin
       <div className="mt-3 pt-3 border-t border-zinc-200 dark:border-zinc-800">
         <button
           onClick={run}
-          className="px-3 py-2 rounded-lg bg-orange-100 dark:bg-orange-950/40 text-orange-700 dark:text-orange-300 text-xs font-medium hover:bg-orange-200 dark:hover:bg-orange-900/60 transition"
+          className="px-3 py-2 rounded-lg bg-orange-50 dark:bg-orange-950/40 text-orange-700 dark:text-orange-300 text-xs font-medium hover:bg-orange-200 dark:hover:bg-orange-900/60 transition"
         >
           Mispriming check (Path B)
         </button>

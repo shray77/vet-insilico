@@ -10,16 +10,16 @@ import { type ReactNode } from "react";
 export type ToolColor = "teal" | "rose" | "indigo" | "fuchsia" | "amber" | "purple" | "emerald" | "cyan" | "orange" | "blue";
 
 const COLOR_MAP: Record<ToolColor, { bg: string; border: string; text: string; title: string }> = {
-  teal:    { bg: "bg-teal-50 dark:bg-teal-950/30",       border: "border-teal-200 dark:border-teal-800",       text: "text-teal-800 dark:text-teal-200",       title: "text-teal-900 dark:text-teal-100" },
-  rose:    { bg: "bg-rose-50 dark:bg-rose-950/30",       border: "border-rose-200 dark:border-rose-800",       text: "text-rose-800 dark:text-rose-200",       title: "text-rose-900 dark:text-rose-100" },
-  indigo:  { bg: "bg-indigo-50 dark:bg-indigo-950/30",   border: "border-indigo-200 dark:border-indigo-800",   text: "text-indigo-800 dark:text-indigo-200",   title: "text-indigo-900 dark:text-indigo-100" },
-  fuchsia: { bg: "bg-fuchsia-50 dark:bg-fuchsia-950/30", border: "border-fuchsia-200 dark:border-fuchsia-800", text: "text-fuchsia-800 dark:text-fuchsia-200", title: "text-fuchsia-900 dark:text-fuchsia-100" },
-  amber:   { bg: "bg-amber-50 dark:bg-amber-950/30",     border: "border-amber-200 dark:border-amber-800",     text: "text-amber-800 dark:text-amber-200",     title: "text-amber-900 dark:text-amber-100" },
-  purple:  { bg: "bg-purple-50 dark:bg-purple-950/30",   border: "border-purple-200 dark:border-purple-800",   text: "text-purple-800 dark:text-purple-200",   title: "text-purple-900 dark:text-purple-100" },
-  emerald: { bg: "bg-emerald-50 dark:bg-emerald-950/30", border: "border-emerald-200 dark:border-emerald-800", text: "text-emerald-800 dark:text-emerald-200", title: "text-emerald-900 dark:text-emerald-100" },
-  cyan:    { bg: "bg-cyan-50 dark:bg-cyan-950/30",       border: "border-cyan-200 dark:border-cyan-800",       text: "text-cyan-800 dark:text-cyan-200",       title: "text-cyan-900 dark:text-cyan-100" },
-  orange:  { bg: "bg-orange-50 dark:bg-orange-950/30",   border: "border-orange-200 dark:border-orange-800",   text: "text-orange-800 dark:text-orange-200",   title: "text-orange-900 dark:text-orange-100" },
-  blue:    { bg: "bg-blue-50 dark:bg-blue-950/30",       border: "border-blue-200 dark:border-blue-800",       text: "text-blue-800 dark:text-blue-200",       title: "text-blue-900 dark:text-blue-100" },
+  teal:    { bg: "bg-teal-50 dark:bg-teal-950/30",       border: "border-teal-200 dark:border-teal-800",       text: "text-teal-700",       title: "text-teal-700" },
+  rose:    { bg: "bg-rose-50 dark:bg-rose-950/30",       border: "border-rose-200 dark:border-rose-800",       text: "text-rose-800 dark:text-rose-300",       title: "text-rose-900 dark:text-rose-100" },
+  indigo:  { bg: "bg-indigo-50 dark:bg-indigo-950/30",   border: "border-indigo-200 dark:border-indigo-800",   text: "text-indigo-800 dark:text-indigo-300",   title: "text-indigo-900 dark:text-indigo-100" },
+  fuchsia: { bg: "bg-fuchsia-50 dark:bg-fuchsia-950/30", border: "border-fuchsia-200 dark:border-fuchsia-800", text: "text-fuchsia-800 dark:text-fuchsia-300", title: "text-fuchsia-900 dark:text-fuchsia-100" },
+  amber:   { bg: "bg-amber-50 dark:bg-amber-950/30",     border: "border-amber-200 dark:border-amber-800",     text: "text-amber-800 dark:text-amber-300",     title: "text-amber-900 dark:text-amber-100" },
+  purple:  { bg: "bg-purple-50 dark:bg-purple-950/30",   border: "border-purple-200 dark:border-purple-800",   text: "text-purple-800 dark:text-purple-300",   title: "text-purple-900 dark:text-purple-100" },
+  emerald: { bg: "bg-emerald-50 dark:bg-emerald-950/30", border: "border-emerald-200 dark:border-emerald-800", text: "text-emerald-700", title: "text-emerald-900 dark:text-emerald-100" },
+  cyan:    { bg: "bg-cyan-50 dark:bg-cyan-950/30",       border: "border-cyan-200 dark:border-cyan-800",       text: "text-cyan-800 dark:text-cyan-300",       title: "text-cyan-900 dark:text-cyan-100" },
+  orange:  { bg: "bg-orange-50 dark:bg-orange-950/30",   border: "border-orange-200 dark:border-orange-800",   text: "text-orange-800 dark:text-orange-300",   title: "text-orange-900 dark:text-orange-100" },
+  blue:    { bg: "bg-blue-50 dark:bg-blue-950/30",       border: "border-blue-200 dark:border-blue-800",       text: "text-blue-800 dark:text-blue-300",       title: "text-blue-900 dark:text-blue-100" },
 };
 
 // ─── ToolPageLayout ─────────────────────────────────────────────────

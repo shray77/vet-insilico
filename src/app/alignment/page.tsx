@@ -87,7 +87,7 @@ export default function AlignmentPage() {
             <h2 className="font-semibold text-cyan-900 dark:text-cyan-100 mb-1">
               Sequence Alignment — Needleman-Wunsch + Smith-Waterman
             </h2>
-            <p className="text-sm text-cyan-800 dark:text-cyan-200">
+            <p className="text-sm text-cyan-800 dark:text-cyan-300">
               Попарное выравнивание последовательностей. Глобальное (NW, для гомологичных       seqов) или локальное (SW, для поиска консервативных доменов).
               Скоринг: BLOSUM62 (белки) или match/mismatch (ДНК).
             </p>
@@ -275,7 +275,7 @@ export default function AlignmentPage() {
                     <span><b className="text-teal-600">|</b> совпадение</span>
                     <span><b className="text-zinc-500">:</b> похожие (BLOSUM62 &gt; 0)</span>
                     <span><b className="text-zinc-400">.</b> различие</span>
-                    <span><b className="text-zinc-300">_</b> gap</span>
+                    <span><b className="text-zinc-500">_</b> gap</span>
                   </div>
                 </div>
 

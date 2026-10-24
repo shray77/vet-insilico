@@ -278,20 +278,20 @@ const CATEGORIES: Category[] = [
 ];
 
 const ACCENT_CLASSES: Record<string, { bg: string; border: string; text: string; gradient: string }> = {
-  teal: { bg: "bg-teal-50 dark:bg-teal-950/20", border: "border-teal-200 dark:border-teal-800", text: "text-teal-600 dark:text-teal-400", gradient: "from-teal-500 to-emerald-500" },
-  blue: { bg: "bg-blue-50 dark:bg-blue-950/20", border: "border-blue-200 dark:border-blue-800", text: "text-blue-600 dark:text-blue-400", gradient: "from-blue-500 to-cyan-500" },
-  purple: { bg: "bg-purple-50 dark:bg-purple-950/20", border: "border-purple-200 dark:border-purple-800", text: "text-purple-600 dark:text-purple-400", gradient: "from-purple-500 to-pink-500" },
-  amber: { bg: "bg-amber-50 dark:bg-amber-950/20", border: "border-amber-200 dark:border-amber-800", text: "text-amber-600 dark:text-amber-400", gradient: "from-amber-500 to-orange-500" },
-  cyan: { bg: "bg-cyan-50 dark:bg-cyan-950/20", border: "border-cyan-200 dark:border-cyan-800", text: "text-cyan-600 dark:text-cyan-400", gradient: "from-cyan-500 to-blue-500" },
-  emerald: { bg: "bg-emerald-50 dark:bg-emerald-950/20", border: "border-emerald-200 dark:border-emerald-800", text: "text-emerald-600 dark:text-emerald-400", gradient: "from-emerald-500 to-teal-500" },
-  rose: { bg: "bg-rose-50 dark:bg-rose-950/20", border: "border-rose-200 dark:border-rose-800", text: "text-rose-600 dark:text-rose-400", gradient: "from-rose-500 to-pink-500" },
-  orange: { bg: "bg-orange-50 dark:bg-orange-950/20", border: "border-orange-200 dark:border-orange-800", text: "text-orange-600 dark:text-orange-400", gradient: "from-orange-500 to-red-500" },
-  lime: { bg: "bg-lime-50 dark:bg-lime-950/20", border: "border-lime-200 dark:border-lime-800", text: "text-lime-700 dark:text-lime-400", gradient: "from-lime-500 to-green-500" },
-  indigo: { bg: "bg-indigo-50 dark:bg-indigo-950/20", border: "border-indigo-200 dark:border-indigo-800", text: "text-indigo-600 dark:text-indigo-400", gradient: "from-indigo-500 to-purple-500" },
-  fuchsia: { bg: "bg-fuchsia-50 dark:bg-fuchsia-950/20", border: "border-fuchsia-200 dark:border-fuchsia-800", text: "text-fuchsia-600 dark:text-fuchsia-400", gradient: "from-fuchsia-500 to-pink-500" },
-  violet: { bg: "bg-violet-50 dark:bg-violet-950/20", border: "border-violet-200 dark:border-violet-800", text: "text-violet-600 dark:text-violet-400", gradient: "from-violet-500 to-purple-500" },
-  stone: { bg: "bg-stone-50 dark:bg-stone-950/20", border: "border-stone-200 dark:border-stone-800", text: "text-stone-600 dark:text-stone-400", gradient: "from-stone-500 to-amber-500" },
-  slate: { bg: "bg-slate-50 dark:bg-slate-950/20", border: "border-slate-200 dark:border-slate-800", text: "text-slate-600 dark:text-slate-400", gradient: "from-slate-500 to-zinc-500" },
+  teal: { bg: "bg-teal-50 dark:bg-teal-950/20", border: "border-teal-200 dark:border-teal-800", text: "text-teal-600 dark:text-teal-400", gradient: "from-teal-600 to-teal-600" },
+  blue: { bg: "bg-blue-50 dark:bg-blue-950/20", border: "border-blue-200 dark:border-blue-800", text: "text-blue-600 dark:text-blue-400", gradient: "from-blue-600 to-blue-600" },
+  purple: { bg: "bg-purple-50 dark:bg-purple-950/20", border: "border-purple-200 dark:border-purple-800", text: "text-purple-600 dark:text-purple-400", gradient: "from-purple-600 to-purple-600" },
+  amber: { bg: "bg-amber-50 dark:bg-amber-950/20", border: "border-amber-200 dark:border-amber-800", text: "text-amber-600 dark:text-amber-400", gradient: "from-amber-600 to-amber-600" },
+  cyan: { bg: "bg-cyan-50 dark:bg-cyan-950/20", border: "border-cyan-200 dark:border-cyan-800", text: "text-cyan-600 dark:text-cyan-400", gradient: "from-cyan-600 to-cyan-600" },
+  emerald: { bg: "bg-emerald-50 dark:bg-emerald-950/20", border: "border-emerald-200 dark:border-emerald-800", text: "text-emerald-600 dark:text-emerald-400", gradient: "from-emerald-600 to-emerald-600" },
+  rose: { bg: "bg-rose-50 dark:bg-rose-950/20", border: "border-rose-200 dark:border-rose-800", text: "text-rose-600 dark:text-rose-400", gradient: "from-rose-600 to-rose-600" },
+  orange: { bg: "bg-orange-50 dark:bg-orange-950/20", border: "border-orange-200 dark:border-orange-800", text: "text-orange-600 dark:text-orange-400", gradient: "from-orange-600 to-orange-600" },
+  lime: { bg: "bg-lime-50 dark:bg-lime-950/20", border: "border-lime-200 dark:border-lime-800", text: "text-lime-700 dark:text-lime-400", gradient: "from-lime-600 to-lime-600" },
+  indigo: { bg: "bg-indigo-50 dark:bg-indigo-950/20", border: "border-indigo-200 dark:border-indigo-800", text: "text-indigo-600 dark:text-indigo-400", gradient: "from-indigo-600 to-indigo-600" },
+  fuchsia: { bg: "bg-fuchsia-50 dark:bg-fuchsia-950/20", border: "border-fuchsia-200 dark:border-fuchsia-800", text: "text-fuchsia-600 dark:text-fuchsia-400", gradient: "from-fuchsia-600 to-fuchsia-600" },
+  violet: { bg: "bg-violet-50 dark:bg-violet-950/20", border: "border-violet-200 dark:border-violet-800", text: "text-violet-600 dark:text-violet-400", gradient: "from-violet-600 to-violet-600" },
+  stone: { bg: "bg-stone-50 dark:bg-stone-950/20", border: "border-stone-200 dark:border-stone-800", text: "text-stone-600 dark:text-stone-400", gradient: "from-stone-600 to-stone-600" },
+  slate: { bg: "bg-slate-50 dark:bg-slate-950/20", border: "border-slate-200 dark:border-slate-800", text: "text-slate-600 dark:text-slate-400", gradient: "from-slate-600 to-slate-600" },
 };
 
 const CATEGORY_ACCENT: Record<string, { bg: string; text: string; border: string }> = {
@@ -331,8 +331,8 @@ export default function HubPage() {
           <div className="inline-block px-3 py-1 rounded-full bg-teal-100 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 text-xs font-medium mb-4">
             Open-source in silico toolkit для ветеринарии
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-teal-600 dark:text-teal-400">
-            VetInSilico Hub
+          <h1 className="text-4xl md:text-5xl font-normal tracking-tight mb-4 font-display text-zinc-700">
+            VetInSilico <em className="text-teal-600 dark:text-teal-400 not-italic">Hub</em>
           </h1>
           <p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
             23 инструмента для in silico исследований ветеринарии — от drug repurposing до CRISPR, филогении, ESM-2 и AI-диагностики.
@@ -409,7 +409,7 @@ export default function HubPage() {
                     <CategoryIcon id={cat.id} size={20} className={ca.text} />
                   </div>
                   <div>
-                    <h2 className={`text-xl font-bold ${ca.text}`}>{cat.title}</h2>
+                    <h2 className={`text-xl font-normal font-display ${ca.text}`}>{cat.title}</h2>
                     <p className="text-xs text-zinc-500 dark:text-zinc-400">{cat.subtitle}</p>
                   </div>
                   <div className="ml-auto text-xs text-zinc-400">{filteredTools.length} тул{filteredTools.length === 1 ? "" : "ов"}</div>
@@ -438,7 +438,7 @@ export default function HubPage() {
                           {tool.requiresML && (
                             <span
                               title="Требуется HF token для ML-функций (LLM анализ / ESM-2). Базовые функции работают без него."
-                              className="text-[9px] px-1.5 py-0.5 rounded-full bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 font-medium border border-purple-200 dark:border-purple-800"
+                              className="text-[9px] px-1.5 py-0.5 rounded-full bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 font-medium border border-purple-200 dark:border-purple-800"
                             >
                               требует ИИ
                             </span>

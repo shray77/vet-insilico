@@ -84,7 +84,7 @@ export default function StatsPage() {
             <h1 className="font-semibold text-indigo-900 dark:text-indigo-100 mb-1">
               Облако VetInSilico — статистика использования
             </h1>
-            <p className="text-sm text-indigo-800 dark:text-indigo-200">
+            <p className="text-sm text-indigo-800 dark:text-indigo-300">
               Живые цифры воркера <code className="text-xs">vet-api</code>: AI-расчёты, кеш, облачные ссылки.
               Агрегаты за 7 дней, без IP и без персональных данных.
             </p>
@@ -201,7 +201,7 @@ export default function StatsPage() {
 
         {/* ─── Как это считается ─── */}
         <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 text-xs text-zinc-500 dark:text-zinc-400">
-          <b className="text-zinc-700 dark:text-zinc-200">Как это считается</b><br />
+          <b className="text-zinc-700 dark:text-zinc-300">Как это считается</b><br />
           • Счётчики — в KV воркера, ключ вида <code>stats:&lt;тип&gt;:&lt;дата&gt;</code>, TTL 7 дней. Без IP, cookies и авторизации.<br />
           • AI-лимит: <b>40 расчётов/день на IP</b> (chat и ESM раздельно). Повтор того же запроса идёт из кеша (24 ч) и не сжигает лимит upstream.<br />
           • Ссылки-сценарии: до <b>10/день на IP</b>, живут <b>90 дней</b>.<br />

@@ -119,7 +119,7 @@ export default function VariantEffectPage() {
                   <AlertTriangle className="h-4 w-4 text-blue-500" />
                   <span className="text-sm font-bold text-blue-900 dark:text-blue-100">Сводка</span>
                 </div>
-                <div className="text-xs text-blue-800 dark:text-blue-200">{result.summary}</div>
+                <div className="text-xs text-blue-800 dark:text-blue-300">{result.summary}</div>
                 <div className="grid grid-cols-3 gap-2 mt-3">
                   <div className="text-center">
                     <div className="text-xl font-bold text-red-500">{result.deleteriousCount}</div>

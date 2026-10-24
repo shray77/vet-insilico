@@ -58,9 +58,9 @@ export default function AdmetPage() {
     l === "low" ? "Низкий" : l === "moderate" ? "Умеренный" : "Высокий";
 
   const levelBg = (l: AdmetLevel) =>
-    l === "low" ? "bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300"
-    : l === "moderate" ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-950/40 dark:text-yellow-300"
-    : "bg-red-100 text-red-800 dark:bg-red-950/40 dark:text-red-300";
+    l === "low" ? "bg-green-50 text-green-800 dark:bg-green-950/40 dark:text-green-300"
+    : l === "moderate" ? "bg-yellow-50 text-yellow-800 dark:bg-yellow-950/40 dark:text-yellow-300"
+    : "bg-red-50 text-red-800 dark:bg-red-950/40 dark:text-red-300";
 
   // Items for the property grid
   const items: { key: string; value: number; level: AdmetLevel; suffix?: string; invert?: boolean }[] = [
@@ -92,7 +92,7 @@ export default function AdmetPage() {
           <h2 className="font-semibold text-blue-900 dark:text-blue-100 mb-1">
             ADMET Predictor — фармакокинетика и токсичность
           </h2>
-          <p className="text-sm text-blue-800 dark:text-blue-200">
+          <p className="text-sm text-blue-800 dark:text-blue-300">
             Выбираем препарат → получаем 12 параметров: всасывание, распределение, метаболизм,
             выведение, токсичность. Все расчёты по молекулярным дескрипторам (rule-based эвристики).
           </p>
@@ -191,7 +191,7 @@ export default function AdmetPage() {
                 <div className="font-semibold text-amber-700 dark:text-amber-300 text-sm mb-2">
                   Алерты ({result.alerts.length})
                 </div>
-                <ul className="text-xs space-y-1 list-disc list-inside text-amber-800 dark:text-amber-200">
+                <ul className="text-xs space-y-1 list-disc list-inside text-amber-800 dark:text-amber-300">
                   {result.alerts.map((a, i) => <li key={i}>{a}</li>)}
                 </ul>
               </div>
@@ -292,7 +292,7 @@ export default function AdmetPage() {
 
               {!mlResult && !mlLoading && (
                 <div>
-                  <p className="text-xs text-purple-800 dark:text-purple-200 mb-3">
+                  <p className="text-xs text-purple-800 dark:text-purple-300 mb-3">
                     Запускает LLM (Qwen-Coder-3B, 3B params) на SMILES-структуре препарата.
                     Модель видела миллионы SMILES в pretraining и может распознавать структурные алерты
                     (токсофоры, реактивные группы). Это приближение ADMETlab 3.0 (которая использует GNN).

@@ -66,7 +66,7 @@ export default function LiveOutbreaks({ limit = 8 }: { limit?: number }) {
           <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-60 ${state === "live" ? "bg-emerald-400" : "bg-amber-400"}`}></span>
           <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${state === "live" ? "bg-emerald-500" : "bg-amber-500"}`}></span>
         </span>
-        <h2 className="font-bold text-emerald-800 dark:text-emerald-200">
+        <h2 className="font-bold text-emerald-700">
           Сводка вспышек — {state === "live" ? "live" : "снимок"}
         </h2>
         <span
@@ -97,7 +97,7 @@ export default function LiveOutbreaks({ limit = 8 }: { limit?: number }) {
               <span
                 className={`ml-auto shrink-0 text-[9px] px-1 py-0.5 rounded uppercase font-bold ${
                   o.status?.toLowerCase() === "ongoing"
-                    ? "bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-300"
+                    ? "bg-rose-50 dark:bg-rose-950 text-rose-600 dark:text-rose-300"
                     : "bg-zinc-100 dark:bg-zinc-800 text-zinc-500"
                 }`}
               >

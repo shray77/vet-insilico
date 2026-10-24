@@ -15,17 +15,17 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-background text-foreground">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-zinc-50 text-zinc-700">
       <div className="max-w-md w-full space-y-4 text-center">
-        <div className="font-mono text-5xl font-bold tracking-widest text-zinc-300 dark:text-zinc-600">DNA</div>
+        <div className="font-mono text-5xl font-bold tracking-widest text-zinc-400">DNA</div>
         <h2 className="text-xl font-bold">Что-то пошло не так</h2>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-zinc-400">
           Произошла ошибка при обработке вашего запроса. Это может быть из-за
           невалидных входных данных или временной проблемы с API.
         </p>
         {error.message && (
-          <details className="text-left text-xs bg-muted/50 rounded-md p-3">
-            <summary className="cursor-pointer text-muted-foreground">
+          <details className="text-left text-xs bg-zinc-100 rounded-md p-3">
+            <summary className="cursor-pointer text-zinc-400">
               Технические детали
             </summary>
             <pre className="mt-2 whitespace-pre-wrap break-all">
@@ -37,13 +37,13 @@ export default function Error({
         <div className="flex gap-2 justify-center">
           <button
             onClick={reset}
-            className="px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
+            className="px-4 py-2 rounded-md bg-teal-600 text-white text-sm font-medium hover:bg-teal-700 transition-colors"
           >
             Попробовать снова
           </button>
           <a
             href="/vet-insilico/"
-            className="px-4 py-2 rounded-md border text-sm font-medium hover:bg-accent transition-colors"
+            className="px-4 py-2 rounded-md border border-zinc-200 text-sm font-medium hover:bg-zinc-100 transition-colors"
           >
             На главную
           </a>

@@ -27,8 +27,8 @@ export default function ELISAPage() {
           <span>ELISA Cut-off Calculator</span>
         </div>
         <div className="rounded-xl bg-teal-50 dark:bg-teal-950/30 border border-teal-200 dark:border-teal-800 p-4 mb-6">
-          <h2 className="font-semibold text-teal-900 dark:text-teal-100 mb-1">ELISA Cut-off Calculator</h2>
-          <p className="text-sm text-teal-800 dark:text-teal-200">
+          <h2 className="font-semibold text-teal-700 mb-1">ELISA Cut-off Calculator</h2>
+          <p className="text-sm text-teal-700">
             Статистический анализ OD значений ELISA. Cut-off = mean + 2SD (или 3SD).
             ROC curve, AUC, sensitivity/specificity если есть positive controls.
           </p>
@@ -77,7 +77,7 @@ export default function ELISAPage() {
                   </div>
                   <div className="rounded-lg bg-teal-100 dark:bg-teal-950/40 p-3 text-center border-2 border-teal-400">
                     <div className="text-xs text-teal-600 dark:text-teal-300">Cut-off</div>
-                    <div className="text-xl font-bold text-teal-700 dark:text-teal-200">{result.recommendedCutoff}</div>
+                    <div className="text-xl font-bold text-teal-700">{result.recommendedCutoff}</div>
                   </div>
                 </div>
 

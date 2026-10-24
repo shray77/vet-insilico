@@ -30,30 +30,43 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0d9488",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FAF9F5" },
+    { media: "(prefers-color-scheme: dark)", color: "#211E19" },
+  ],
   width: "device-width",
   initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru" className="dark" suppressHydrationWarning>
+    <html lang="ru" suppressHydrationWarning>
       <head>
+        {/* Шрифты ДС «Научная периодика»: Instrument Serif + Inter + IBM Plex Mono.
+            Офлайн — деградация на системные (зад Declared в vet-ds.css). */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+          rel="stylesheet"
+        />
+        {/* Тема ДС A: светлая «бумага» — дефолт; data-theme="dark" — «вечерний номер».
+            Ставится до первой отрисовки, FOUC нет. Сохранённый выбор > системная. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('vis-theme');if(t==='light')document.documentElement.classList.remove('dark');}catch(e){}`,
+            __html: `try{var t=localStorage.getItem('vis-theme')||'system';var d=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.setAttribute('data-theme',d?'dark':'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}`,
           }}
         />
       </head>
       <body>
         {children}
-        <footer className="border-t border-white/10 py-5 text-center text-xs text-zinc-500">
+        <footer className="border-t border-zinc-200 py-5 text-center text-xs text-zinc-500">
           Информационный сервис · не ветеринарная консультация ·{" "}
-          <a className="underline underline-offset-2 hover:text-zinc-300" href={`${basePath}/terms/`}>
+          <a className="underline underline-offset-2 hover:text-zinc-600" href={`${basePath}/terms/`}>
             условия использования и дисклеймер
           </a>{" "}
           ·{" "}
-          <a className="underline underline-offset-2 hover:text-zinc-300" href="https://shray77.github.io/terms.html">
+          <a className="underline underline-offset-2 hover:text-zinc-600" href="https://shray77.github.io/terms.html">
             условия экосистемы
           </a>
         </footer>

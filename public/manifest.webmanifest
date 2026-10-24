@@ -5,8 +5,8 @@
   "start_url": "/vet-insilico/",
   "scope": "/vet-insilico/",
   "display": "standalone",
-  "background_color": "#09090b",
-  "theme_color": "#0d9488",
+  "background_color": "#FAF9F5",
+  "theme_color": "#FAF9F5",
   "orientation": "any",
   "icons": [
     {
@@ -28,7 +28,12 @@
       "purpose": "any"
     }
   ],
-  "categories": ["science", "education", "medical", "productivity"],
+  "categories": [
+    "science",
+    "education",
+    "medical",
+    "productivity"
+  ],
   "lang": "ru",
   "dir": "ltr"
 }

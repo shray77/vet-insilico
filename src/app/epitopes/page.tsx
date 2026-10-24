@@ -107,7 +107,7 @@ export default function EpitopesPage() {
           <h2 className="font-semibold text-purple-900 dark:text-purple-100 mb-1">
             Vaccine Epitope Predictor
           </h2>
-          <p className="text-sm text-purple-800 dark:text-purple-200">
+          <p className="text-sm text-purple-800 dark:text-purple-300">
             Из аминокислотной последовательности белка находим B-клеточные (линейные) и T-клеточные (MHC-I) эпитопы.
             Готовый кандидат для пептидной вакцины. Алгоритмы: Hopp-Woods, Chou-Fasman, Karplus-Schulz, Emini.
           </p>
@@ -279,7 +279,7 @@ export default function EpitopesPage() {
                                 }
                               }}
                               disabled={analyzingIdx === i}
-                              className="mt-3 px-2 py-1 rounded text-xs bg-purple-100 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-900/60 transition disabled:opacity-50"
+                              className="mt-3 px-2 py-1 rounded text-xs bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-900/60 transition disabled:opacity-50"
                             >
                               {analyzingIdx === i ? "ESM-2..." : "ESM-2 naturalness"}
                             </button>
@@ -307,7 +307,7 @@ export default function EpitopesPage() {
                   <div className="rounded-xl border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-950/20 p-4">
                     {!mlBScan && !mlBScanLoading && (
                       <div>
-                        <p className="text-xs text-purple-800 dark:text-purple-200 mb-3">
+                        <p className="text-xs text-purple-800 dark:text-purple-300 mb-3">
                           Запускает ESM-2 (35M params, Facebook) на каждой позиции белка. Считает "surprise"
                           (−log prob) — высокий surprise = поверхностный/дисордерный участок (хороший эпитоп).
                           Это приближение BepiPred-3.0 (Haste et al. 2023), которая fine-tune'ит ESM-2 на 30k эпитопов.
@@ -334,7 +334,7 @@ export default function EpitopesPage() {
                             ESM-2 анализирует {mlBScanProgress.done}/{mlBScanProgress.total} остатков...
                           </span>
                         </div>
-                        <div className="h-2 rounded-full bg-purple-100 dark:bg-purple-900 overflow-hidden">
+                        <div className="h-2 rounded-full bg-purple-50 dark:bg-purple-900 overflow-hidden">
                           <div
                             className="h-full bg-purple-600 transition-all"
                             style={{ width: `${mlBScanProgress.total > 0 ? (mlBScanProgress.done / mlBScanProgress.total) * 100 : 0}%` }}
@@ -467,7 +467,7 @@ export default function EpitopesPage() {
                                     <button
                                       onClick={() => runMHCML(i, e.sequence)}
                                       disabled={mhcMLLoading === i}
-                                      className="text-[10px] px-2 py-1 rounded bg-purple-100 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 hover:bg-purple-200 transition disabled:opacity-50"
+                                      className="text-[10px] px-2 py-1 rounded bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 hover:bg-purple-200 transition disabled:opacity-50"
                                     >
                                       {mhcMLLoading === i ? "" : ""}
                                     </button>

@@ -122,7 +122,7 @@ export default function OutbreakSurveillancePage() {
                   <span className="text-sm font-bold text-orange-900 dark:text-orange-100">Сводка анализа вспышки</span>
                 </div>
                 {report.summary.map((s, i) => (
-                  <div key={i} className="text-xs text-orange-800 dark:text-orange-200 flex items-start gap-1.5">
+                  <div key={i} className="text-xs text-orange-800 dark:text-orange-300 flex items-start gap-1.5">
                     <span className="shrink-0">•</span>
                     <span>{s}</span>
                   </div>

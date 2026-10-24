@@ -3,16 +3,16 @@
  */
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-background text-foreground">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-zinc-50 text-zinc-700">
       <div className="max-w-md w-full space-y-4 text-center">
-        <div className="font-mono text-6xl font-bold tracking-widest text-zinc-300 dark:text-zinc-600">DNA</div>
+        <div className="font-mono text-6xl font-bold tracking-widest text-zinc-400">DNA</div>
         <h1 className="text-3xl font-bold">404</h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-zinc-400">
           Страница не найдена. Возможно, ссылка устарела или была введена с ошибкой.
         </p>
         <a
           href="/vet-insilico/"
-          className="inline-block px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
+          className="inline-block px-4 py-2 rounded-md bg-teal-600 text-white text-sm font-medium hover:bg-teal-700 transition-colors"
         >
           На главную
         </a>

@@ -119,7 +119,7 @@ export default function DrugRepurposingPage() {
               className={`px-4 py-2 text-sm font-medium border-b-2 transition -mb-px ${
                 tab === t
                   ? "border-teal-500 text-teal-600 dark:text-teal-400"
-                  : "border-transparent text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
+                  : "border-transparent text-zinc-500 hover:text-zinc-700"
               }`}
             >
               {t === "screening" ? "Скрининг" : "Как это работает"}
@@ -130,10 +130,10 @@ export default function DrugRepurposingPage() {
         {tab === "screening" && (
           <div className="space-y-6">
             <div className="rounded-xl bg-teal-50 dark:bg-teal-950/30 border border-teal-200 dark:border-teal-800 p-4">
-              <h2 className="font-semibold text-teal-900 dark:text-teal-100 mb-1">
+              <h2 className="font-semibold text-teal-700 mb-1">
                 In Silico Drug Repurposing
               </h2>
-              <p className="text-sm text-teal-800 dark:text-teal-200">
+              <p className="text-sm text-teal-700">
                 Подберём существующие препараты, которые могут связаться с белком патогена и заблокировать его.
                 Выбираем патоген → запускаем скрининг → смотрим топ кандидатов с оценкой сродства.
               </p>
@@ -181,7 +181,7 @@ export default function DrugRepurposingPage() {
                         <span className="font-medium">{t.name_ru}</span>
                         <span className="text-zinc-400 text-xs ml-2">{t.mw_kda} кДа</span>
                         {t.pdb_id && (
-                          <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
+                          <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
                             PDB: {t.pdb_id}
                           </span>
                         )}
@@ -341,7 +341,7 @@ export default function DrugRepurposingPage() {
                 <h3 className="text-lg font-bold">{selectedResult.drug.name}</h3>
                 <p className="text-sm text-zinc-400">МНН: {selectedResult.drug.inn}</p>
               </div>
-              <button onClick={() => setSelectedResult(null)} className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white text-xl">✕</button>
+              <button onClick={() => setSelectedResult(null)} className="text-zinc-400 hover:text-zinc-700 text-xl">✕</button>
             </div>
 
             <div className="flex items-center gap-4 mb-4">
@@ -520,7 +520,7 @@ Respond ONLY as JSON:
       <div>
         <button
           onClick={run}
-          className="px-3 py-2 rounded-lg bg-purple-100 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 text-xs font-medium hover:bg-purple-200 transition"
+          className="px-3 py-2 rounded-lg bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 text-xs font-medium hover:bg-purple-200 transition"
         >
           ML-анализ кандидата (Qwen 3B)
         </button>
@@ -533,7 +533,7 @@ Respond ONLY as JSON:
     return (
       <button
         onClick={run}
-        className="px-3 py-2 rounded-lg bg-purple-100 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 text-xs font-medium hover:bg-purple-200 transition"
+        className="px-3 py-2 rounded-lg bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 text-xs font-medium hover:bg-purple-200 transition"
       >
         ML-анализ кандидата (Qwen 3B)
       </button>

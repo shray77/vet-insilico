@@ -60,7 +60,7 @@ export default function HfTokenModal({ open, onClose }: { open: boolean; onClose
             <h3 className="text-lg font-bold">Настройки вычислений</h3>
             <p className="text-xs text-zinc-400 mt-1">Облачный AI · Workers AI (эдж) + HF token</p>
           </div>
-          <button onClick={onClose} className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white text-xl">✕</button>
+          <button onClick={onClose} className="text-zinc-400 hover:text-zinc-700 text-xl">✕</button>
         </div>
 
         <div className="space-y-3">
@@ -111,7 +111,7 @@ export default function HfTokenModal({ open, onClose }: { open: boolean; onClose
             </div>
           </div>
 
-          <div className="rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 p-3 text-xs text-blue-800 dark:text-blue-200">
+          <div className="rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 p-3 text-xs text-blue-800 dark:text-blue-300">
             <div className="font-semibold mb-1">Зачем свой токен?</div>
             <div>
               ESM-2 (protein LM) теперь умеет работать целиком в браузере (transformers.js, первая загрузка весов ~34 МБ, дальше из кеша) — токен не обязателен. Свой HF-токен остаётся запасным облачным путём для ESM-2 и fallback для LLM: Qwen2.5-Coder-3B-Instruct напрямую через HuggingFace.

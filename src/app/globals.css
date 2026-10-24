@@ -1,30 +1,353 @@
 @import "tailwindcss";
+@import "./vet-ds.css";
 
+/* ==========================================================================
+   vet-insilico × vet-ds v2.1.1 «Научная периодика» (DS A, Task 149)
+   --------------------------------------------------------------------------
+   Стратегия: утилиты Tailwind остаются в разметке, но их ЦВЕТА
+   перегружены на токены ДС через @theme inline → theme-flip идёт
+   через html[data-theme] (light «бумага» / dark «вечерний номер»).
+   dark: варианты становятся избыточными, но безвредными.
+
+   Грабля, которую migration чинит: в Tailwind v4 dark: по умолчанию
+   = prefers-color-scheme ОС, @custom-variant нигде не был задан —
+   тоггл темы переключал мёртвый класс .dark (визуальный no-op).
+   ========================================================================== */
+
+/* Тёмная тема = атрибут data-theme (единый механизм с токенами ДС) */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* --------------------------------------------------------------------------
+   Маппинг палитры Tailwind → токены ДС.
+   Коллизии двойных ролей оттенков решены по доминантной роли
+   (bg-тень vs text-тень); точечные правки — в самих страницах.
+   -------------------------------------------------------------------------- */
+@theme inline {
+  /* -- нейтралы: бумага/графит -------------------------------------------- */
+  --color-zinc-50: var(--ds-bg);            /* фон страницы */
+  --color-zinc-100: var(--ds-surface2);     /* hover-строки, стат-карточки */
+  --color-zinc-200: var(--ds-border);       /* волосяные линии */
+  --color-zinc-300: var(--ds-muted);        /* вторичный текст */
+  --color-zinc-400: var(--ds-faint);        /* метаданные (AA везде) */
+  --color-zinc-500: var(--ds-muted);        /* второстепенный текст */
+  --color-zinc-600: var(--ds-muted);
+  --color-zinc-700: var(--ds-text);         /* основной текст */
+  --color-zinc-800: var(--ds-border);       /* dark-вариант волосяных */
+  --color-zinc-900: var(--ds-surface);      /* карточки */
+  --color-zinc-950: var(--ds-bg);
+  --color-white: var(--ds-surface);         /* bg-white = карточка */
+  /* чёрный НЕ переопределяем: гель-электрофорез, оверлеи — литерал */
+
+  --color-stone-50: var(--ds-bg);
+  --color-stone-100: var(--ds-surface2);
+  --color-stone-200: var(--ds-border);
+  --color-stone-300: var(--ds-border-strong);
+  --color-stone-400: var(--ds-faint);
+  --color-stone-500: var(--ds-muted);
+  --color-stone-600: var(--ds-muted);
+  --color-stone-700: var(--ds-text);
+  --color-stone-800: var(--ds-border);
+  --color-stone-900: var(--ds-surface);
+  --color-stone-950: var(--ds-bg);
+  --color-slate-50: var(--ds-bg);
+  --color-slate-100: var(--ds-surface2);
+  --color-slate-200: var(--ds-border);
+  --color-slate-300: var(--ds-border-strong);
+  --color-slate-400: var(--ds-faint);
+  --color-slate-500: var(--ds-muted);
+  --color-slate-600: var(--ds-muted);
+  --color-slate-700: var(--ds-text);
+  --color-slate-800: var(--ds-border);
+  --color-slate-900: var(--ds-surface);
+  --color-slate-950: var(--ds-bg);
+  --color-gray-50: var(--ds-bg);
+  --color-gray-100: var(--ds-surface2);
+  --color-gray-200: var(--ds-border);
+  --color-gray-300: var(--ds-border-strong);
+  --color-gray-400: var(--ds-faint);
+  --color-gray-500: var(--ds-muted);
+  --color-gray-600: var(--ds-muted);
+  --color-gray-700: var(--ds-text);
+  --color-gray-800: var(--ds-border);
+  --color-gray-900: var(--ds-surface);
+  --color-gray-950: var(--ds-bg);
+  --color-neutral-50: var(--ds-bg);
+  --color-neutral-100: var(--ds-surface2);
+  --color-neutral-200: var(--ds-border);
+  --color-neutral-300: var(--ds-border-strong);
+  --color-neutral-400: var(--ds-faint);
+  --color-neutral-500: var(--ds-muted);
+  --color-neutral-600: var(--ds-muted);
+  --color-neutral-700: var(--ds-text);
+  --color-neutral-800: var(--ds-border);
+  --color-neutral-900: var(--ds-text);
+  --color-neutral-950: var(--ds-bg);
+
+  /* -- акцент: teal → эпидемиологический красный периодики ----------------- */
+  --color-teal-50: color-mix(in srgb, var(--ds-accent) 6%, var(--ds-bg));
+  --color-teal-100: color-mix(in srgb, var(--ds-accent) 12%, var(--ds-bg));
+  --color-teal-200: color-mix(in srgb, var(--ds-accent) 22%, var(--ds-bg));
+  --color-teal-300: var(--ds-accent);
+  --color-teal-400: var(--ds-accent);
+  --color-teal-500: var(--ds-accent);
+  --color-teal-600: var(--ds-accent-strong);
+  --color-teal-700: var(--ds-accent-strong);
+  --color-teal-800: var(--ds-accent-strong);
+  --color-teal-900: color-mix(in srgb, var(--ds-accent) 30%, var(--ds-bg));
+  --color-teal-950: color-mix(in srgb, var(--ds-accent) 14%, var(--ds-bg));
+
+  /* -- семантика статусов → токены ДС --------------------------------------- */
+  --color-red-300: var(--ds-red);
+  --color-red-400: var(--ds-red);
+  --color-red-500: var(--ds-red);
+  --color-red-600: var(--ds-red);
+  --color-red-700: var(--ds-red);
+  --color-red-900: var(--ds-red);
+  --color-red-50: color-mix(in srgb, var(--ds-red) 8%, var(--ds-bg));
+  --color-red-100: var(--ds-red);
+  --color-red-200: color-mix(in srgb, var(--ds-red) 24%, var(--ds-bg));
+  --color-red-800: color-mix(in srgb, var(--ds-red) 30%, var(--ds-bg));
+  --color-red-950: color-mix(in srgb, var(--ds-red) 16%, var(--ds-bg));
+
+  --color-green-300: var(--ds-green);
+  --color-green-400: var(--ds-green);
+  --color-green-500: var(--ds-green);
+  --color-green-600: var(--ds-green);
+  --color-green-700: var(--ds-green);
+  --color-green-900: var(--ds-green);
+  --color-green-50: color-mix(in srgb, var(--ds-green) 8%, var(--ds-bg));
+  --color-green-200: color-mix(in srgb, var(--ds-green) 24%, var(--ds-bg));
+  --color-green-800: color-mix(in srgb, var(--ds-green) 30%, var(--ds-bg));
+  --color-green-950: color-mix(in srgb, var(--ds-green) 16%, var(--ds-bg));
+
+  --color-emerald-300: var(--ds-green);
+  --color-emerald-400: var(--ds-green);
+  --color-emerald-500: var(--ds-green);
+  --color-emerald-600: var(--ds-green);
+  --color-emerald-700: var(--ds-green);
+  --color-emerald-900: var(--ds-green);
+  --color-emerald-50: color-mix(in srgb, var(--ds-green) 8%, var(--ds-bg));
+  --color-emerald-100: var(--ds-green);
+  --color-emerald-200: color-mix(in srgb, var(--ds-green) 24%, var(--ds-bg));
+  --color-emerald-800: color-mix(in srgb, var(--ds-green) 30%, var(--ds-bg));
+  --color-emerald-950: color-mix(in srgb, var(--ds-green) 16%, var(--ds-bg));
+
+  --color-lime-300: var(--ds-green);
+  --color-lime-400: var(--ds-green);
+  --color-lime-500: var(--ds-green);
+  --color-lime-600: var(--ds-green);
+  --color-lime-900: var(--ds-green);
+  --color-lime-50: color-mix(in srgb, var(--ds-green) 8%, var(--ds-bg));
+  --color-lime-200: color-mix(in srgb, var(--ds-green) 24%, var(--ds-bg));
+  --color-lime-800: color-mix(in srgb, var(--ds-green) 30%, var(--ds-bg));
+  --color-lime-950: color-mix(in srgb, var(--ds-green) 16%, var(--ds-bg));
+
+  --color-amber-200: color-mix(in srgb, var(--ds-amber) 22%, var(--ds-bg));
+  --color-amber-300: var(--ds-amber);
+  --color-amber-400: var(--ds-amber);
+  --color-amber-500: var(--ds-amber);
+  --color-amber-600: var(--ds-amber);
+  --color-amber-700: var(--ds-amber);
+  --color-amber-800: var(--ds-amber);
+  --color-amber-900: var(--ds-amber);
+  --color-amber-50: color-mix(in srgb, var(--ds-amber) 8%, var(--ds-bg));
+  --color-amber-100: var(--ds-amber);
+  --color-amber-950: color-mix(in srgb, var(--ds-amber) 16%, var(--ds-bg));
+
+  --color-yellow-400: var(--ds-amber);
+  --color-yellow-500: var(--ds-amber);
+  --color-yellow-600: var(--ds-amber);
+  --color-yellow-700: var(--ds-amber);
+  --color-yellow-800: var(--ds-amber);
+  --color-yellow-900: var(--ds-amber);
+  --color-yellow-50: color-mix(in srgb, var(--ds-amber) 8%, var(--ds-bg));
+  --color-yellow-100: var(--ds-amber);
+  --color-yellow-200: color-mix(in srgb, var(--ds-amber) 22%, var(--ds-bg));
+  --color-yellow-300: var(--ds-amber);
+  --color-yellow-950: color-mix(in srgb, var(--ds-amber) 16%, var(--ds-bg));
+
+  --color-blue-100: var(--ds-blue);
+  --color-blue-200: color-mix(in srgb, var(--ds-blue) 22%, var(--ds-bg));
+  --color-blue-300: var(--ds-blue);
+  --color-blue-400: var(--ds-blue);
+  --color-blue-500: var(--ds-blue);
+  --color-blue-600: var(--ds-blue);
+  --color-blue-700: var(--ds-blue);
+  --color-blue-800: var(--ds-blue);
+  --color-blue-900: var(--ds-blue);
+  --color-blue-50: color-mix(in srgb, var(--ds-blue) 8%, var(--ds-bg));
+  --color-blue-950: color-mix(in srgb, var(--ds-blue) 16%, var(--ds-bg));
+
+  --color-cyan-100: var(--ds-blue);
+  --color-cyan-200: color-mix(in srgb, var(--ds-blue) 22%, var(--ds-bg));
+  --color-cyan-300: var(--ds-blue);
+  --color-cyan-400: var(--ds-blue);
+  --color-cyan-500: var(--ds-blue);
+  --color-cyan-600: var(--ds-blue);
+  --color-cyan-700: var(--ds-blue);
+  --color-cyan-800: var(--ds-blue);
+  --color-cyan-900: var(--ds-blue);
+  --color-cyan-50: color-mix(in srgb, var(--ds-blue) 8%, var(--ds-bg));
+  --color-cyan-950: color-mix(in srgb, var(--ds-blue) 16%, var(--ds-bg));
+
+  --color-sky-400: var(--ds-blue);
+  --color-sky-500: var(--ds-blue);
+  --color-sky-600: var(--ds-blue);
+  --color-sky-50: color-mix(in srgb, var(--ds-blue) 8%, var(--ds-bg));
+  --color-sky-100: var(--ds-blue);
+  --color-sky-200: var(--ds-blue);
+  --color-sky-700: var(--ds-blue);
+  --color-sky-800: var(--ds-blue);
+  --color-sky-900: var(--ds-blue);
+  --color-sky-950: color-mix(in srgb, var(--ds-blue) 16%, var(--ds-bg));
+
+  --color-indigo-100: var(--ds-violet);
+  --color-indigo-200: color-mix(in srgb, var(--ds-violet) 22%, var(--ds-bg));
+  --color-indigo-300: var(--ds-violet);
+  --color-indigo-400: var(--ds-violet);
+  --color-indigo-500: var(--ds-violet);
+  --color-indigo-600: var(--ds-violet);
+  --color-indigo-700: var(--ds-violet);
+  --color-indigo-800: var(--ds-violet);
+  --color-indigo-900: var(--ds-violet);
+  --color-indigo-50: color-mix(in srgb, var(--ds-violet) 8%, var(--ds-bg));
+  --color-indigo-950: color-mix(in srgb, var(--ds-violet) 16%, var(--ds-bg));
+
+  --color-purple-100: var(--ds-violet);
+  --color-purple-200: color-mix(in srgb, var(--ds-violet) 22%, var(--ds-bg));
+  --color-purple-300: var(--ds-violet);
+  --color-purple-400: var(--ds-violet);
+  --color-purple-500: var(--ds-violet);
+  --color-purple-600: var(--ds-violet);
+  --color-purple-700: var(--ds-violet);
+  --color-purple-800: var(--ds-violet);
+  --color-purple-900: var(--ds-violet);
+  --color-purple-50: color-mix(in srgb, var(--ds-violet) 8%, var(--ds-bg));
+  --color-purple-950: color-mix(in srgb, var(--ds-violet) 16%, var(--ds-bg));
+
+  --color-violet-100: var(--ds-violet);
+  --color-violet-200: color-mix(in srgb, var(--ds-violet) 22%, var(--ds-bg));
+  --color-violet-300: var(--ds-violet);
+  --color-violet-400: var(--ds-violet);
+  --color-violet-500: var(--ds-violet);
+  --color-violet-600: var(--ds-violet);
+  --color-violet-700: var(--ds-violet);
+  --color-violet-800: var(--ds-violet);
+  --color-violet-900: var(--ds-violet);
+  --color-violet-50: color-mix(in srgb, var(--ds-violet) 8%, var(--ds-bg));
+  --color-violet-950: color-mix(in srgb, var(--ds-violet) 16%, var(--ds-bg));
+
+  --color-fuchsia-100: var(--ds-violet);
+  --color-fuchsia-200: color-mix(in srgb, var(--ds-violet) 22%, var(--ds-bg));
+  --color-fuchsia-300: var(--ds-violet);
+  --color-fuchsia-400: var(--ds-violet);
+  --color-fuchsia-500: var(--ds-violet);
+  --color-fuchsia-600: var(--ds-violet);
+  --color-fuchsia-700: var(--ds-violet);
+  --color-fuchsia-800: var(--ds-violet);
+  --color-fuchsia-900: var(--ds-violet);
+  --color-fuchsia-50: color-mix(in srgb, var(--ds-violet) 8%, var(--ds-bg));
+  --color-fuchsia-950: color-mix(in srgb, var(--ds-violet) 16%, var(--ds-bg));
+
+  /* rose = «высокий риск» (кандидаты репурпозинга) → красный ДС */
+  --color-rose-100: var(--ds-red);
+  --color-rose-200: color-mix(in srgb, var(--ds-red) 22%, var(--ds-bg));
+  --color-rose-300: var(--ds-red);
+  --color-rose-400: var(--ds-red);
+  --color-rose-500: var(--ds-red);
+  --color-rose-600: var(--ds-red);
+  --color-rose-700: var(--ds-red);
+  --color-rose-800: var(--ds-red);
+  --color-rose-900: var(--ds-red);
+  --color-rose-50: color-mix(in srgb, var(--ds-red) 8%, var(--ds-bg));
+  --color-rose-950: color-mix(in srgb, var(--ds-red) 16%, var(--ds-bg));
+
+  /* -- оранжевый: риск/высокие значения ------------------------------------- */
+  --color-orange-100: var(--ds-orange);
+  --color-orange-200: color-mix(in srgb, var(--ds-orange) 22%, var(--ds-bg));
+  --color-orange-300: var(--ds-orange);
+  --color-orange-400: var(--ds-orange);
+  --color-orange-500: var(--ds-orange);
+  --color-orange-600: var(--ds-orange);
+  --color-orange-700: var(--ds-orange);
+  --color-orange-800: var(--ds-orange);
+  --color-orange-900: var(--ds-orange);
+  --color-orange-50: color-mix(in srgb, var(--ds-orange) 8%, var(--ds-bg));
+  --color-orange-950: color-mix(in srgb, var(--ds-orange) 16%, var(--ds-bg));
+
+  /* -- типографика: голос системы -------------------------------------------- */
+  --font-sans: var(--ds-font-sans);
+  --font-mono: var(--ds-font-mono);
+  --font-display: var(--ds-font-display);
+
+  /* -- радиусы периодики: сдержанные (бан-лист: > 10px) ----------------------- */
+  --radius-sm: 4px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 8px;
+  --radius-2xl: 8px;
+  --radius-3xl: 10px;
+
+  /* -- тени: бумажный ambient -------------------------------------------------- */
+  --shadow-xl: var(--ds-shadow);
+  --shadow-2xl: var(--ds-shadow);
+}
+
+/* --------------------------------------------------------------------------
+   Базовые стили — на токенах ДС напрямую
+   -------------------------------------------------------------------------- */
 @layer base {
   body {
-    font-family: system-ui, -apple-system, sans-serif;
-    @apply bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100;
+    background: var(--ds-bg);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+    font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased;
   }
   html {
     scroll-behavior: smooth;
+    color-scheme: light;
+  }
+  html[data-theme="dark"] {
+    color-scheme: dark;
+  }
+  *:focus-visible {
+    outline: 2px solid var(--ds-accent);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--ds-accent) 28%, transparent);
+  }
+}
+
+/* text-white в приложении живёт ТОЛЬКО на акцентных заливках → accent-ink */
+@layer utilities {
+  .text-white {
+    color: var(--ds-accent-ink);
   }
 }
 
 /* Thin scrollbar */
 .thin-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
-.thin-scroll::-webkit-scrollbar-thumb { background: #888; border-radius: 2px; }
+.thin-scroll::-webkit-scrollbar-thumb {
+  background: var(--ds-border-strong);
+  border-radius: 2px;
+}
 .thin-scroll::-webkit-scrollbar-track { background: transparent; }
 
 /* 3Dmol viewer fills container */
 .viewer-3d > div { width: 100% !important; height: 100% !important; }
 
-/* Hub card hover effect */
+/* Hub card hover: бумажный ambient, без цветного свечения */
 .hub-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  transition:
+    transform var(--ds-dur) var(--ds-ease),
+    box-shadow var(--ds-dur) var(--ds-ease),
+    border-color var(--ds-dur) var(--ds-ease);
 }
 .hub-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 32px -8px rgba(13, 148, 136, 0.3);
+  transform: translateY(-2px);
+  box-shadow: var(--ds-shadow);
 }
 
 /* Fade-in animation for page content */
@@ -33,7 +356,7 @@
   to { opacity: 1; transform: translateY(0); }
 }
 .fade-in {
-  animation: fadeIn 0.3s ease-out;
+  animation: fadeIn var(--ds-dur) var(--ds-ease);
 }
 
 /* Spinner for loading states */
@@ -50,25 +373,14 @@
   animation: spin 0.6s linear infinite;
 }
 
-/* Smooth color transitions for dark/light mode */
+/* Плавная смена тем — единая спецификация движения ДС */
 * {
   transition-property: background-color, border-color, color, fill, stroke;
-  transition-duration: 150ms;
-  transition-timing-function: ease;
+  transition-duration: var(--ds-dur);
+  transition-timing-function: var(--ds-ease);
 }
 
-/* Exclude 3Dmol viewer from color transition (causes flicker) */
+/* 3Dmol-вьюер исключён из переходов (мерцание) */
 .viewer-3d, .viewer-3d * {
   transition: none !important;
-}
-
-/* Focus ring for accessibility */
-*:focus-visible {
-  outline: 2px solid #0d9488;
-  outline-offset: 2px;
-}
-
-/* Selection color */
-::selection {
-  background: rgba(13, 148, 136, 0.3);
 }

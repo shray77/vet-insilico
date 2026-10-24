@@ -64,21 +64,26 @@ const TOP_TOOLS = [
 
 export default function HubHeader() {
   const pathname = usePathname();
-  const [theme, setTheme] = useState<"dark" | "light" | "system">("dark");
+  const [theme, setTheme] = useState<"dark" | "light" | "system">("light");
   const [mlOpen, setMlOpen] = useState(false);
   const [hasToken, setHasToken] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const themeTouched = useRef(false);
 
-  // Theme handling — supports dark/light/system
+  // Тема ДС: init-скрипт в layout уже поставил data-theme до гидрации —
+  // на маунте только читаем выбор пользователя (для иконки), не трогаем DOM.
   useEffect(() => {
     const saved = localStorage.getItem("vis-theme") as "dark" | "light" | "system" | null;
     if (saved) setTheme(saved);
   }, []);
 
+  // Применяем тему только после явного действия пользователя (иначе
+  // был бы 1-кадровый флеш светлой у тёмных юзеров на каждой загрузке)
   useEffect(() => {
+    if (!themeTouched.current) return;
     const isDark = theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
-    document.documentElement.classList.toggle("dark", isDark);
+    document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
     try { localStorage.setItem("vis-theme", theme); } catch {}
   }, [theme]);
 
@@ -101,7 +106,8 @@ export default function HubHeader() {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   const cycleTheme = () => {
-    setTheme(theme === "dark" ? "light" : theme === "light" ? "system" : "dark");
+    themeTouched.current = true;
+    setTheme(theme === "light" ? "dark" : theme === "dark" ? "system" : "light");
   };
 
   const ThemeGlyph = theme === "dark" ? Moon : theme === "light" ? Sun : Monitor;

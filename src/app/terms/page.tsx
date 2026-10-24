@@ -88,16 +88,16 @@ const SECTIONS: { id: string; title: string; body: React.ReactNode }[] = [
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-200">
+    <div className="min-h-screen bg-zinc-50 text-zinc-500">
       <div className="mx-auto max-w-3xl px-5 pb-16">
         <a
           href="/vet-insilico/"
-          className="mt-6 inline-block text-xs text-zinc-500 transition-colors hover:text-zinc-300"
+          className="mt-6 inline-block text-xs text-zinc-500 transition-colors hover:text-zinc-600"
         >
           ← VetInSilico Hub
         </a>
-        <header className="mt-4 border-b border-white/10 pb-6">
-          <h1 className="text-2xl font-semibold tracking-tight text-zinc-100">
+        <header className="mt-4 border-b border-zinc-200 pb-6">
+          <h1 className="text-2xl font-semibold tracking-tight text-zinc-700 font-display">
             Условия использования и дисклеймер
           </h1>
           <p className="mt-2 text-sm text-zinc-400">
@@ -109,7 +109,7 @@ export default function TermsPage() {
           <h2 className="text-xs font-semibold uppercase tracking-widest text-teal-400">
             Коротко
           </h2>
-          <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm text-zinc-300">
+          <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm text-zinc-500">
             <li>
               Сервис информационный, предоставляется <b>«как есть»</b>, без гарантий.
             </li>
@@ -124,8 +124,8 @@ export default function TermsPage() {
           </ul>
         </div>
 
-        <section id="about" className="mt-4 rounded-xl border border-white/10 bg-zinc-900/60 p-5">
-          <h2 className="text-base font-semibold text-zinc-100">О сервисе</h2>
+        <section id="about" className="mt-4 rounded-xl border border-zinc-200 bg-zinc-100 p-5">
+          <h2 className="text-base font-semibold text-zinc-700">О сервисе</h2>
           <p className="mt-2 text-sm leading-relaxed text-zinc-400">
             VetInSilico Hub — набор браузерных исследовательских инструментов для ветеринарной
             патологии (drug repurposing, ADMET, эпитопы, праймеры, филогения, калькуляторы и др.).
@@ -133,7 +133,7 @@ export default function TermsPage() {
             носит информационно-исследовательский характер. Отдельные проекты экосистемы могут
             иметь собственные страницы условий —{" "}
             <a
-              className="text-teal-300 underline-offset-2 hover:underline"
+              className="text-teal-500 underline-offset-2 hover:underline"
               href="https://shray77.github.io/terms.html"
             >
               общие условия экосистемы VetInSilico
@@ -146,22 +146,22 @@ export default function TermsPage() {
           <section
             key={s.id}
             id={s.id}
-            className="mt-3 rounded-xl border border-white/10 bg-zinc-900/60 p-5"
+            className="mt-3 rounded-xl border border-zinc-200 bg-zinc-100 p-5"
           >
-            <h2 className="text-base font-semibold text-zinc-100">{s.title}</h2>
-            <div className="mt-2 text-sm leading-relaxed text-zinc-400 [&_b]:font-semibold [&_b]:text-zinc-200">
+            <h2 className="text-base font-semibold text-zinc-700">{s.title}</h2>
+            <div className="mt-2 text-sm leading-relaxed text-zinc-400 [&_b]:font-semibold [&_b]:text-zinc-600">
               {s.body}
             </div>
           </section>
         ))}
 
-        <section id="changes" className="mt-3 rounded-xl border border-white/10 bg-zinc-900/60 p-5">
-          <h2 className="text-base font-semibold text-zinc-100">Изменение условий и связь</h2>
+        <section id="changes" className="mt-3 rounded-xl border border-zinc-200 bg-zinc-100 p-5">
+          <h2 className="text-base font-semibold text-zinc-700">Изменение условий и связь</h2>
           <p className="mt-2 text-sm leading-relaxed text-zinc-400">
             Условия могут быть изменены в любой момент; актуальная версия — на этой странице.
             Замечания — через GitHub Issues:{" "}
             <a
-              className="text-teal-300 underline-offset-2 hover:underline"
+              className="text-teal-500 underline-offset-2 hover:underline"
               href="https://github.com/shray77/vet-insilico/issues"
             >
               github.com/shray77/vet-insilico

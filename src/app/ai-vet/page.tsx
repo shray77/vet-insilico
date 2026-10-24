@@ -93,7 +93,7 @@ export default function AIVetPage() {
         </div>
         <div className="rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 p-4 mb-6">
           <h2 className="font-semibold text-rose-900 dark:text-rose-100 mb-1">AI Veterinarian — Diagnostic Assistant</h2>
-          <p className="text-sm text-rose-800 dark:text-rose-200">
+          <p className="text-sm text-rose-800 dark:text-rose-300">
             Дифференциальный диагноз на основе симптомов. LLM (Qwen-Coder-3B) анализирует ввод и предлагает
             вероятные диагнозы, рекомендуемые тесты, уровень срочности. требует ИИ.
           </p>
@@ -186,13 +186,13 @@ export default function AIVetPage() {
                     <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 mb-2">Рекомендуемые тесты</h3>
                     <div className="flex flex-wrap gap-1.5">
                       {result.recommendedTests.map((t, i) => (
-                        <span key={i} className="text-xs px-2 py-1 rounded bg-rose-100 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300">{t}</span>
+                        <span key={i} className="text-xs px-2 py-1 rounded bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300">{t}</span>
                       ))}
                     </div>
                   </div>
                 )}
 
-                <div className="rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-3 text-xs text-amber-800 dark:text-amber-200">
+                <div className="rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-3 text-xs text-amber-800 dark:text-amber-300">
                   ⚠ Это образовательный инструмент, не замена ветеринарной консультации.
                   Обратитесь к ветврачу для подтверждения диагноза и назначения лечения.
                 </div>

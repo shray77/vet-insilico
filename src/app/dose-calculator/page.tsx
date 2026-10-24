@@ -37,7 +37,7 @@ export default function DoseCalculatorPage() {
         </div>
         <div className="rounded-xl bg-cyan-50 dark:bg-cyan-950/30 border border-cyan-200 dark:border-cyan-800 p-4 mb-6">
           <h2 className="font-semibold text-cyan-900 dark:text-cyan-100 mb-1">Antibiotic Dose Calculator (ветеринарный)</h2>
-          <p className="text-sm text-cyan-800 dark:text-cyan-200">
+          <p className="text-sm text-cyan-800 dark:text-cyan-300">
             Калькулятор дозировки антибиотиков для 6 видов животных. База: {DOSE_DATABASE.length} схем дозирования.
             Расчёт по весу, коррекция на возраст, концентрацию препарата, стоимость курса.
           </p>
@@ -111,7 +111,7 @@ export default function DoseCalculatorPage() {
                         <div className="text-xs text-zinc-400">{r.species} • {r.route} • каждые {r.intervalHours}ч • {r.durationDays} дн</div>
                       </div>
                       {r.warning && (
-                        <span className="text-xs px-2 py-1 rounded bg-red-100 dark:bg-red-950/30 text-red-700 dark:text-red-300">⚠ {r.warning}</span>
+                        <span className="text-xs px-2 py-1 rounded bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-300">⚠ {r.warning}</span>
                       )}
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
@@ -139,12 +139,12 @@ export default function DoseCalculatorPage() {
                       </div>
                     )}
                     {r.notes && (
-                      <div className="mt-2 p-2 rounded text-xs bg-amber-50 dark:bg-amber-950/30 text-amber-800 dark:text-amber-200">
+                      <div className="mt-2 p-2 rounded text-xs bg-amber-50 dark:bg-amber-950/30 text-amber-800 dark:text-amber-300">
                         {r.notes}
                       </div>
                     )}
                     {r.contraindications && (
-                      <div className="mt-1 p-2 rounded text-xs bg-red-50 dark:bg-red-950/30 text-red-800 dark:text-red-200">
+                      <div className="mt-1 p-2 rounded text-xs bg-red-50 dark:bg-red-950/30 text-red-700">
                         ⚠ {r.contraindications}
                       </div>
                     )}

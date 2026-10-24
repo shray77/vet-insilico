@@ -36,7 +36,7 @@ export default function PdbViewerPage() {
         </div>
         <div className="rounded-xl bg-violet-50 dark:bg-violet-950/30 border border-violet-200 dark:border-violet-800 p-4 mb-6">
           <h2 className="font-semibold text-violet-900 dark:text-violet-100 mb-1">Protein Structure Viewer — 3Dmol.js</h2>
-          <p className="text-sm text-violet-800 dark:text-violet-200">
+          <p className="text-sm text-violet-800 dark:text-violet-300">
             Просмотр 3D структур белков из RCSB PDB. 5 стилей отображения (cartoon, stick, sphere, surface, lines).
             Лиганды выделяются пурпурным, ионы металлов — оранжевым.
           </p>
