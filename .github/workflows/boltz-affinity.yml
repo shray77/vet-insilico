@@ -1,0 +1,123 @@
+name: Boltz-2 affinity pilot (nightly)
+
+# Зачем: в Drug Repurposing скоринг — учебная эвристика. Этот ночной ран
+# добавляет НАСТОЯЩИЕ предсказания аффинности Boltz-2 (MIT, структура+ΔG уровня
+# FEP при ~1000x скорости) для пилотного набора пар препарат×мишень:
+# валидационные (римантадин/амантадин × M2 2RLF, осельтамивир/занамивир × NA 2HTY)
+# и гипотезы репурпозинга (ремдесивир/фавипиравир × ASFV PolX 1JQR,
+# доксициклин × LipL32 2ZZ8). Результат — статический
+# public/data/boltz-affinities.json (колонка «Boltz-2» в витрине).
+#
+# CPU-ран: ~2.5-5 ч на ubuntu-latest (7 пар, ≤400 остатков). Веса (~3.3 ГБ)
+# кэшируются. Пара упавшая по OOM/таймауту пишется в JSON со status=error
+# и не роняет ран (см. scripts/boltz_pilot/run_pilot.py).
+
+on:
+  schedule:
+    - cron: "30 2 * * *"   # 05:30 МСК
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: boltz-affinity
+  cancel-in-progress: false
+
+jobs:
+  boltz:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Wheels кэшируем (torch-cpu ~200MB + rdkit/scipy/sklearn ~1.5GB)
+      - name: Cache pip wheels
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: boltz-cpu-pip-v1-py311
+
+      # Веса Boltz-2 + CCD (~3.6 ГБ): скачиваются один раз, дальше тёплый кэш.
+      - name: Cache Boltz weights
+        uses: actions/cache@v4
+        with:
+          path: ~/.boltz
+          key: boltz-weights-v1
+
+      - name: Install CPU torch + boltz
+        run: |
+          pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+          pip install --quiet "boltz==2.2.1"
+
+      - name: Show boltz version
+        run: boltz --help | head -5
+
+      - name: Run affinity pilot
+        env:
+          BOLTZ_CACHE: ~/.boltz
+          OMP_NUM_THREADS: "4"
+          MKL_NUM_THREADS: "4"
+          BOLTZ_ACCEL_TAG: "cpu (GitHub Actions, 4 vCPU)"
+        run: python scripts/boltz_pilot/run_pilot.py
+
+      # Санити-чек формы JSON (колонка витрины ждёт поля model/pairs)
+      - name: Sanity-check output JSON
+        run: |
+          node -e "
+            const d = JSON.parse(require('fs').readFileSync('public/data/boltz-affinities.json', 'utf8'));
+            if (!d.model || !Array.isArray(d.pairs) || d.pairs.length === 0) {
+              console.error('bad boltz json shape'); process.exit(1);
+            }
+            const ok = d.pairs.filter(p => p.status === 'ok');
+            console.log('boltz json ok:', ok.length + '/' + d.pairs.length, 'pairs, generated', d.generated);
+            if (ok.length === 0) process.exit(1);
+          "
+
+      # Полный лог рана — артефактом (джсоны ошибок обрезаны до 800 символов)
+      - name: Upload run artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: boltz-run-${{ github.run_number }}
+          path: |
+            public/data/boltz-affinities.json
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Commit (only if changed)
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/boltz-affinities.json
+          if git diff --cached --quiet; then
+            echo "Прогнозы не изменились — коммит не нужен"
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          ok=$(python3 -c "import json;print(sum(1 for p in json.load(open('public/data/boltz-affinities.json'))['pairs'] if p['status']=='ok'))")
+          git commit -m "chore(data): Boltz-2 affinity pilot — $ok pairs updated
+
+          Nightly CPU run of boltz==2.2.1 on the pilot pair set (validated +
+          repurposing hypotheses). Updated: $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+
+      # Пуш от GITHUB_TOKEN не триггерит воркфлоу (антирекурсия) — деплой явно.
+      - name: Trigger site deploy
+        if: steps.commit.outputs.pushed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'deploy.yml',
+              ref: 'main'
+            });

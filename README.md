@@ -60,7 +60,8 @@
 - **Molecular toolkit**: RDKit.js WASM (CDN, 4MB)
 - **ML**: HuggingFace Inference API (Qwen2.5-Coder-3B-Instruct via nscale, ESM-2 35M via hf-inference)
 - **Hosting**: GitHub Pages (static) + **полу-динамика через [vet-api](https://github.com/shray77/vet-api)** (Cloudflare Worker)
-- **Tests**: Vitest, 158 tests, 16 test files
+- **Tests**: Vitest, 176 tests, 17 test files
+- **Boltz-2**: ночной GitHub Actions-ран (CPU) — предсказания аффинности (IC50/ΔG) для пилотных пар «препарат × мишень», статический JSON без внешних зависимостей
 
 ## Полу-динамика (static + vet-api)
 
@@ -83,6 +84,25 @@
 - **28 restriction enzymes**
 - **12 molecular clock rates** (published)
 - **36 antibiotic dose schemes** (Plumb's + РФ реестр)
+
+## Boltz-2 аффинности (ночной CI-ран)
+
+[Drug Repurposing](https://shray77.github.io/vet-insilico/drug-repurposing/) показывает рядом с учебным скорингом
+**настоящие предсказания аффинности** моделью [Boltz-2](https://github.com/jwohlwend/boltz)
+(MIT, Wohlwend et al. 2025) для пилотного набора пар:
+
+- валидация: римантадин/амантадин × M2 (2RLF), осельтамивир/занамивир × нейраминидаза N1 (2HTY) — сверяются с экспериментом;
+- гипотезы репурпозинга: ремдесивир/фавипиравир × ASFV PolX (1JQR), доксициклин × LipL32 (2ZZ8).
+
+Конвейер: `scripts/boltz_pilot/run_pilot.py` — RCSB FASTA → YAML (белковые цепи + лиганд SMILES,
+`properties.affinity.binder`) → `boltz predict` (CPU, без MSA) → парсинг `affinity_*.json` →
+`public/data/boltz-affinities.json` (коммитится ботом, воркфлоу `boltz-affinity.yml`, 05:30 МСК).
+Единицы: предсказание = log10(IC50 мкМ); ΔG = (6 − y) × 1.364 ккал/моль.
+Веса (~3.3 ГБ) кэшируются Actions-кэшем; упавшая пара (OOM/таймаут) пишется в JSON со
+status=error и не роняет ран.
+
+PDB-мишени в `src/data/pathogens.ts` выверены по RCSB (Task 151): 14 битых ID заменены
+(2LKF был лейкоцидином, 6QYL — MBP-фьюжном…), 6 мишеней без публичных структур — честно без ID.
 
 ## ML setup (optional)
 

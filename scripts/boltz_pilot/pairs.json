@@ -1,0 +1,98 @@
+{
+  "model": "boltz-2",
+  "comment": "Пилотный набор пар для ночного Boltz-2 рана (vet-insilico Task 151). Каждая пара: препарат из src/data/drugs.ts x мишень из src/data/pathogens.ts. Сортировка: сначала валидационные пары (известные активы в связке со своими кристаллическими структурами), затем гипотезы репурпозинга. chains: какие цепи из FASTA брать (биологическая сборка достаточного размера; для M2 — тетрамер, для мономерных мишеней — цепь A).",
+  "pairs": [
+    {
+      "drug_id": "drug-110-rimantadine",
+      "inn": "Rimantadine",
+      "smiles": "CC(C12CC3CC(C1)CC(C3)C2)N",
+      "target_id": "hpai-m2",
+      "target_name": "Ионный канал M2 (Influenza A)",
+      "pdb_id": "2RLF",
+      "chains": ["A", "B", "C", "D"],
+      "kind": "validated",
+      "reference": {
+        "ic50_um": 60,
+        "note": "2RLF — NMR-структура M2 именно в комплексе с римантадином; Ki десятки мкМ в липидных бислоях, EC50 ~0.1-1 мкМ в вирусных ассаях"
+      }
+    },
+    {
+      "drug_id": "drug-109-amantadine",
+      "inn": "Amantadine",
+      "smiles": "C1C2CC3CC1CC(C2)(C3)N",
+      "target_id": "hpai-m2",
+      "target_name": "Ионный канал M2 (Influenza A)",
+      "pdb_id": "2RLF",
+      "chains": ["A", "B", "C", "D"],
+      "kind": "validated",
+      "reference": {
+        "ic50_um": 16,
+        "note": "Классика: амантадин блокирует пору M2 (Schnell & Chou 2008; PDB 6BKK); EC50 0.2-1 мкМ, Ki сильно зависит от ассая и субтипа"
+      }
+    },
+    {
+      "drug_id": "drug-111-oseltamivir",
+      "inn": "Oseltamivir",
+      "smiles": "CCC(CC)OC1C=C(CC(C1NC(=O)C)N)C(=O)OCC",
+      "target_id": "hpai-na",
+      "target_name": "Нейраминидаза NA (Influenza A H5N1)",
+      "pdb_id": "2HTY",
+      "chains": ["A"],
+      "kind": "validated",
+      "reference": {
+        "ic50_um": 0.002,
+        "note": "2HTY — кристалл N1 именно с осельтамивиром (Russell 2006); IC50 1-3 нМ для N1 чувствительных штаммов"
+      }
+    },
+    {
+      "drug_id": "drug-112-zanamivir",
+      "inn": "Zanamivir",
+      "smiles": "CC(=O)NC1C(C=C(OC1C(C(CO)O)O)C(=O)O)N=C(N)N",
+      "target_id": "hpai-na",
+      "target_name": "Нейраминидаза NA (Influenza A H5N1)",
+      "pdb_id": "2HTY",
+      "chains": ["A"],
+      "kind": "validated",
+      "reference": {
+        "ic50_um": 0.001,
+        "note": "Занамивир — второй клинический ингибитор NA; IC50 0.5-3 нМ для N1"
+      }
+    },
+    {
+      "drug_id": "drug-116-remdesivir",
+      "inn": "Remdesivir",
+      "smiles": "CCC(CC)COC(=O)C(C)NP(=O)(OCC1C(C(C(O1)(C#N)C2=CC=C3N2N=CN=C3N)O)O)OC4=CC=CC=C4",
+      "target_id": "asfv-polx",
+      "target_name": "ДНК-полимераза X (ASFV)",
+      "pdb_id": "1JQR",
+      "chains": ["A"],
+      "kind": "hypothesis",
+      "reference": null,
+      "hypothesis": "АЧС не имеет терапии; PolX — уникальная репаративная полимераза ASFV (нет гомолога у свиньи), ремдесивир — нуклеозидный аналог. Прямых данных нет — гипотеза для in vitro."
+    },
+    {
+      "drug_id": "drug-118-favipiravir",
+      "inn": "Favipiravir",
+      "smiles": "C1=C(N=C(C(=O)N1)C(=O)N)F",
+      "target_id": "asfv-polx",
+      "target_name": "ДНК-полимераза X (ASFV)",
+      "pdb_id": "1JQR",
+      "chains": ["A"],
+      "kind": "hypothesis",
+      "reference": null,
+      "hypothesis": "Фавипиравир — синтетический аналог пуриновой нуклеобазы с широким противовирусным профилем РНК-полимераз. Прямых данных по PolX нет — гипотеза."
+    },
+    {
+      "drug_id": "drug-018-doxycycline",
+      "inn": "Doxycycline",
+      "smiles": "CC1C2C(C3C(C(=O)C(=C(C3(C(=O)C2=C(C4=C1C=CC=C4O)O)O)O)C(=O)N)N(C)C)O",
+      "target_id": "leptospira-lip32",
+      "target_name": "Липопротеин LipL32 (Leptospira interrogans)",
+      "pdb_id": "2ZZ8",
+      "chains": ["A"],
+      "kind": "hypothesis",
+      "reference": null,
+      "hypothesis": "Доксициклин — препарат выбора при лептоспирозе (in vivo мишень — рибосома), но связывание с поверхностным LipL32 не изучено. Пара сравнивает реальный ИИ-докинг с упрощённым скорером витрины."
+    }
+  ]
+}

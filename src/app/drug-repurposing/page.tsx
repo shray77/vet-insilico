@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
 import Viewer3D from "@/components/Viewer3D";
@@ -10,6 +10,17 @@ import { virtualScreening, getTopResults, type DockingResult } from "@/lib/docki
 import { analyzeWithLLM } from "@/lib/hf";
 import { dockWithRDKit, type MolecularDescriptors } from "@/lib/rdkit-docking";
 import { apiDocking, apiVinaDocking, type DockingAPIResult, type VinaDockingResult } from "@/lib/api";
+import {
+  boltzIndex,
+  formatIc50,
+  loadBoltzData,
+  pairKey,
+  referenceDelta,
+  STRENGTH_COLOR,
+  STRENGTH_LABEL_RU,
+  strengthOf,
+  type BoltzPair,
+} from "@/lib/boltz";
 
 type Tab = "screening" | "learn";
 
@@ -20,6 +31,20 @@ export default function DrugRepurposingPage() {
   const [running, setRunning] = useState(false);
   const [lipinskiOnly, setLipinskiOnly] = useState(true);
   const [selectedResult, setSelectedResult] = useState<DockingResult | null>(null);
+  const [boltzIdx, setBoltzIdx] = useState<Map<string, BoltzPair>>(new Map());
+  const [boltzMeta, setBoltzMeta] = useState<{ model: string; generated: string | null; okCount: number } | null>(null);
+
+  // Boltz-2 канал: статический JSON из ночного Actions-рана (может отсутствовать)
+  useEffect(() => {
+    let alive = true;
+    loadBoltzData().then((d) => {
+      if (!alive || !d) return;
+      const idx = boltzIndex(d);
+      setBoltzIdx(idx);
+      setBoltzMeta({ model: d.model, generated: d.generated, okCount: idx.size });
+    });
+    return () => { alive = false; };
+  }, []);
 
   const pathogen = useMemo(
     () => PATHOGENS.find((p) => p.id === selectedPathogen),
@@ -47,32 +72,40 @@ export default function DrugRepurposingPage() {
     const headers = [
       "rank", "drug_name", "inn", "pharm_group", "mechanism",
       "target", "pdb_id", "score", "shape", "electrostatic", "hydrophobic",
-      "dg_kcal_mol", "lipinski_pass", "lipinski_violations",
+      "dg_kcal_mol", "boltz2_ic50_um", "boltz2_delta_g", "boltz2_prob_binder", "boltz2_kind",
+      "lipinski_pass", "lipinski_violations",
       "selectivity", "mw", "logp", "hbd", "hba", "charge", "ru_registered",
     ];
-    const rows = topResults.map((r, i) => [
-      i + 1,
-      r.drug.name,
-      r.drug.inn,
-      r.drug.pharm_group,
-      r.drug.mechanism || "",
-      r.target.name_ru,
-      r.target.pdb_id || "",
-      r.score,
-      r.shapeScore,
-      r.electrostaticScore,
-      r.hydrophobicScore,
-      r.bindingAffinity,
-      r.lipinskiPass ? "pass" : "fail",
-      r.lipinskiViolations,
-      r.selectivityIndex,
-      r.drug.mw,
-      r.drug.logp,
-      r.drug.hbd,
-      r.drug.hba,
-      r.drug.charge,
-      r.drug.ru_registered ? "yes" : "no",
-    ]);
+    const rows = topResults.map((r, i) => {
+      const b = boltzIdx.get(pairKey(r.drug.id, r.target.id));
+      return [
+        i + 1,
+        r.drug.name,
+        r.drug.inn,
+        r.drug.pharm_group,
+        r.drug.mechanism || "",
+        r.target.name_ru,
+        r.target.pdb_id || "",
+        r.score,
+        r.shapeScore,
+        r.electrostaticScore,
+        r.hydrophobicScore,
+        r.bindingAffinity,
+        b && typeof b.ic50_um_est === "number" ? b.ic50_um_est : "",
+        b && typeof b.delta_g_kcal_mol === "number" ? b.delta_g_kcal_mol : "",
+        b && typeof b.affinity_probability_binary === "number" ? b.affinity_probability_binary : "",
+        b ? b.kind : "",
+        r.lipinskiPass ? "pass" : "fail",
+        r.lipinskiViolations,
+        r.selectivityIndex,
+        r.drug.mw,
+        r.drug.logp,
+        r.drug.hbd,
+        r.drug.hba,
+        r.drug.charge,
+        r.drug.ru_registered ? "yes" : "no",
+      ];
+    });
     const csv = [
       headers.join(","),
       ...rows.map((row) => row.map((c) => {
@@ -230,6 +263,15 @@ export default function DrugRepurposingPage() {
                     Скачать CSV
                   </button>
                 </div>
+                {boltzMeta && (
+                  <p className="text-xs text-zinc-400 mb-2">
+                    Колонка «Boltz-2» — настоящие предсказания аффинности (IC50) моделью Boltz-2 для пилотных пар;
+                    {boltzMeta.generated
+                      ? ` ночной CI-ран от ${new Date(boltzMeta.generated).toLocaleString("ru-RU", { dateStyle: "medium", timeStyle: "short" })}, пар: ${boltzMeta.okCount}.`
+                      : " первый ночной ран ещё не прошёл — данных пока нет."}
+                    {" "}Остальные ячейки — учебный скоринг этой страницы.
+                  </p>
+                )}
                 <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
@@ -241,6 +283,7 @@ export default function DrugRepurposingPage() {
                           <th className="px-3 py-2 text-center">Score</th>
                           <th className="px-3 py-2 hidden md:table-cell">Тип</th>
                           <th className="px-3 py-2 text-center hidden md:table-cell">ΔG</th>
+                          <th className="px-3 py-2 text-center hidden md:table-cell" title="Настоящие предсказания аффинности Boltz-2 (ночной CI-ран): оценка IC50">Boltz-2</th>
                           <th className="px-3 py-2 text-center hidden lg:table-cell">Lip</th>
                           <th className="px-3 py-2 text-center hidden lg:table-cell">3D</th>
                         </tr>
@@ -262,6 +305,20 @@ export default function DrugRepurposingPage() {
                             </td>
                             <td className="px-3 py-2 text-xs hidden md:table-cell">{activityIcon[r.drug.activity]}</td>
                             <td className="px-3 py-2 text-center text-xs hidden md:table-cell">{r.bindingAffinity}</td>
+                            <td className="px-3 py-2 text-center text-xs hidden md:table-cell">
+                              {(() => {
+                                const bp = boltzIdx.get(pairKey(r.drug.id, r.target.id));
+                                if (!bp || typeof bp.ic50_um_est !== "number")
+                                  return <span className="text-zinc-300 dark:text-zinc-600">—</span>;
+                                const st = strengthOf(bp.ic50_um_est);
+                                const tip = `Boltz-2: IC50 ~${formatIc50(bp.ic50_um_est)}, ΔG ${bp.delta_g_kcal_mol} ккал/моль, prob ${(bp.affinity_probability_binary ?? 0).toFixed(2)}, ipTM ${bp.confidence?.iptm ?? "—"}`;
+                                return (
+                                  <span className="font-semibold" style={{ color: STRENGTH_COLOR[st] }} title={tip}>
+                                    {formatIc50(bp.ic50_um_est)}
+                                  </span>
+                                );
+                              })()}
+                            </td>
                             <td className="px-3 py-2 text-center hidden lg:table-cell">{r.lipinskiPass ? "✓" : "⚠"}</td>
                             <td className="px-3 py-2 text-center hidden lg:table-cell">
                               {r.target.pdb_id && <span className="text-xs"></span>}
@@ -304,6 +361,23 @@ export default function DrugRepurposingPage() {
                 <div><b>3. Hydrophobic match (35%)</b> — гидрофобные молекулы любят гидрофобные карманы. Гидрофильные — гидрофильные. Плюс водородные связи для гидрофильных.</div>
               </div>
               <p className="text-sm mt-2">Итого: Score = 0.35×Shape + 0.30×Electrostatic + 0.35×Hydrophobic. Штраф -5 за каждое нарушение правила Липинского.</p>
+            </div>
+
+            <div className="rounded-xl bg-teal-50 dark:bg-teal-950/30 border border-teal-200 dark:border-teal-800 p-4">
+              <h3 className="font-semibold mb-2">А что такое колонка «Boltz-2»?</h3>
+              <p className="text-sm">
+                <b>Boltz-2</b> (Wohlwend et al., MIT, 2025, лицензия MIT) — генеративная модель, которая
+                предсказывает структуру комплекса и <b>аффинность связывания</b> с точностью
+                free-energy-расчётов при ~1000× скорости. Для избранных пар «препарат × мишень» мы
+                прогоняем её настоящим инференсом (ночной CI-ран на CPU, без MSA) и показываем
+                оценку IC50 рядом с учебным скорингом.
+              </p>
+              <p className="text-sm mt-2">
+                Единицы: предсказание — лог-шкала IC50 (мкМ); ΔG = (6 − y) × 1.364 ккал/моль.
+                Валидационные пары (осельтамивир × нейраминидаза, римантадин × M2) сверяются
+                с экспериментом прямо в карточке результата. Это ориентир для гипотез —
+                не ветеринарная рекомендация.
+              </p>
             </div>
 
             <div className="rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-4">
@@ -404,6 +478,47 @@ export default function DrugRepurposingPage() {
                 <span>{selectedResult.drug.ru_registered ? "✓ Да" : "✗ Нет"}</span>
               </div>
             </div>
+
+            {boltzIdx.get(pairKey(selectedResult.drug.id, selectedResult.target.id)) && (() => {
+              const bp = boltzIdx.get(pairKey(selectedResult.drug.id, selectedResult.target.id))!;
+              const st = strengthOf(bp.ic50_um_est ?? Infinity);
+              const refDelta = referenceDelta(bp);
+              return (
+                <div className="border-t border-zinc-200 dark:border-zinc-800 pt-3 mt-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium">Boltz-2 · предсказанная аффинность</span>
+                    <span
+                      className="text-[10px] px-1.5 py-0.5 rounded font-semibold uppercase tracking-wide"
+                      style={{ backgroundColor: STRENGTH_COLOR[st], color: "#fff" }}
+                    >
+                      {bp.kind === "validated" ? "валидация" : "гипотеза"}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+                    <div className="flex justify-between"><span className="text-zinc-400">IC50 (оценка):</span><span className="font-semibold" style={{ color: STRENGTH_COLOR[st] }}>{formatIc50(bp.ic50_um_est ?? 0)} ({STRENGTH_LABEL_RU[st]})</span></div>
+                    <div className="flex justify-between"><span className="text-zinc-400">ΔG:</span><span>{bp.delta_g_kcal_mol} ккал/моль</span></div>
+                    <div className="flex justify-between"><span className="text-zinc-400">Вероятность биндинга:</span><span>{((bp.affinity_probability_binary ?? 0) * 100).toFixed(0)}%</span></div>
+                    <div className="flex justify-between"><span className="text-zinc-400">ipTM / ligand ipTM:</span><span>{bp.confidence?.iptm ?? "—"} / {bp.confidence?.ligand_iptm ?? "—"}</span></div>
+                    <div className="flex justify-between"><span className="text-zinc-400">Структура:</span><span>{bp.pdb_id.toUpperCase()} (цепи {bp.chains.join(", ")})</span></div>
+                    <div className="flex justify-between"><span className="text-zinc-400">Модель:</span><span>{boltzMeta?.model ?? "boltz-2"}, CPU CI-ран</span></div>
+                  </div>
+                  {bp.reference && (
+                    <div className="mt-2 text-xs bg-zinc-50 dark:bg-zinc-800/50 rounded-lg p-2">
+                      <b>Эксперимент:</b> IC50 ≈ {formatIc50(bp.reference.ic50_um)}
+                      {refDelta !== null && <> · отклонение предсказания {refDelta > 0 ? "+" : ""}{refDelta} log10 ед.</>}
+                      <span className="block text-zinc-400 mt-0.5">{bp.reference.note}</span>
+                    </div>
+                  )}
+                  {bp.hypothesis && (
+                    <div className="mt-2 text-xs bg-zinc-50 dark:bg-zinc-800/50 rounded-lg p-2">{bp.hypothesis}</div>
+                  )}
+                  <p className="text-[11px] text-zinc-400 mt-2">
+                    Boltz-2 (MIT, Wohlwend et al. 2025) — генеративная модель структура+аффинность; здесь CPU-инференс
+                    без MSA, поэтому значения — ориентир для гипотез, не замена эксперимента.
+                  </p>
+                </div>
+              );
+            })()}
 
             <div className="border-t border-zinc-200 dark:border-zinc-800 pt-3 mt-3">
               <div className="text-sm font-medium mb-2">Мишень: {selectedResult.target.name_ru}</div>

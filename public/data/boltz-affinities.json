@@ -1,0 +1,17 @@
+{
+  "model": "boltz-2",
+  "generated": null,
+  "params": {
+    "recycling_steps": 3,
+    "sampling_steps": 200,
+    "diffusion_samples": 1,
+    "msa": "single-sequence (no MSA server)",
+    "accelerator": "cpu (GitHub Actions)"
+  },
+  "units": {
+    "affinity_pred_value": "log10(IC50 [uM]), Boltz-2 affinity head",
+    "delta_g_kcal_mol": "(6 - y) * 1.364 (kcal/mol, RT*ln10 per log unit @298K)",
+    "note": "меньше IC50 / меньше (более отрицательный) dG = сильнее связывание"
+  },
+  "pairs": []
+}
