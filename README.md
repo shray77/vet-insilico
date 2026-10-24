@@ -104,6 +104,23 @@ status=error и не роняет ран.
 PDB-мишени в `src/data/pathogens.ts` выверены по RCSB (Task 151): 14 битых ID заменены
 (2LKF был лейкоцидином, 6QYL — MBP-фьюжном…), 6 мишеней без публичных структур — честно без ID.
 
+## ChEMBL-срез (ADMET / PK-PD)
+
+ADMET и PK/PD сверяют наши эвристические дескрипторы с реальной базой
+[ChEMBL](https://www.ebi.ac.uk/chembl/) (веб-API EBI): молекулярные свойства (RDKit
+по каноническим структурам), фазы одобрения (`max_phase` 4 = approved), год первого
+одобрения, флаг отзыва и курированные механизмы действия (с переводом типов на русский).
+
+- данные: `public/data/chembl-reference.json` — статический срез (актуальный релиз
+  ChEMBL, версия пишется в файл; 188/202 препарата резолвятся), ноль запросов в рантайме;
+- обновление: воркфлоу `chembl-weekly.yml` (пн 07:10 МСК) — `scripts/chembl/fetch_chembl.mjs`
+  дергает molecule/mechanism/target API с politeness-задержкой, санити-чек, коммит-бот;
+- UI: ADMET — блок «ChEMBL <id>» с таблицей сверки (MW/LogP/HBD/HBA/RotB: наши vs ChEMBL,
+  колонка Δ с подсветкой больших расхождений) и чипами механизмов; PK/PD — компактный
+  статус у выбора профиля (6 препаратов, маппинг имя→INN);
+- расхождения ожидаемы: наш LogP — cLogP из открытых источников, ChEMBL считает ALogP;
+  MW у солей может отличаться (full_mwt = вся соль).
+
 ## ML setup (optional)
 
 ML features (LLM analysis, ESM-2 naturalness, RDKit descriptors) require a free HuggingFace token:

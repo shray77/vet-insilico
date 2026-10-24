@@ -1,11 +1,24 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
 import { DRUGS } from "@/data/drugs";
 import { predictADMET, ADMET_LABELS_RU, LEVEL_COLOR, type AdmetLevel } from "@/lib/admet";
 import { predictADMETML, type ADMETMLResult } from "@/lib/hf";
+import {
+  chemblIndex,
+  descriptorDelta,
+  formatDelta,
+  chemblUrl,
+  findChembl,
+  loadChemblData,
+  mechanismLines,
+  phaseLabelRu,
+  approvalYear,
+  type ChemblData,
+  type ChemblDrug,
+} from "@/lib/chembl";
 
 export default function AdmetPage() {
   const [query, setQuery] = useState("");
@@ -13,6 +26,14 @@ export default function AdmetPage() {
   const [mlResult, setMlResult] = useState<ADMETMLResult | null>(null);
   const [mlLoading, setMlLoading] = useState(false);
   const [mlError, setMlError] = useState("");
+  const [chembl, setChembl] = useState<ChemblData | null>(null);
+
+  // ChEMBL-канал: статический срез из недельного CI-рана (может отсутствовать)
+  useEffect(() => {
+    let alive = true;
+    loadChemblData().then((d) => { if (alive) setChembl(d); });
+    return () => { alive = false; };
+  }, []);
 
   const filteredDrugs = useMemo(() => {
     const q = query.toLowerCase().trim();
@@ -25,6 +46,10 @@ export default function AdmetPage() {
   const drug = useMemo(
     () => DRUGS.find((d) => d.id === selectedId) || DRUGS[0],
     [selectedId],
+  );
+  const chemblRow: ChemblDrug | null = useMemo(
+    () => findChembl(chemblIndex(chembl), drug.inn) ?? null,
+    [chembl, drug.inn],
   );
 
   const result = useMemo(() => predictADMET(drug), [drug]);
@@ -160,6 +185,93 @@ export default function AdmetPage() {
                 Механизм: {drug.mechanism || "—"}
               </div>
             </div>
+
+            {/* ChEMBL: сверка с реальной базой */}
+            {chemblRow && (
+              <div className="rounded-xl border border-sky-200 dark:border-sky-800 bg-sky-50/50 dark:bg-sky-950/20 p-4">
+                <div className="flex flex-wrap items-center gap-2 mb-3">
+                  <span className="text-sm font-semibold text-sky-800 dark:text-sky-200">
+                    ChEMBL {chemblRow.chembl_id}
+                  </span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-sky-600 text-white font-semibold uppercase tracking-wide">
+                    {phaseLabelRu(chemblRow)}
+                  </span>
+                  {approvalYear(chemblRow) && (
+                    <span className="text-xs text-sky-700 dark:text-sky-300">
+                      одобрен с {approvalYear(chemblRow)}
+                    </span>
+                  )}
+                  {chemblRow.withdrawn_flag && (
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-red-600 text-white font-semibold uppercase tracking-wide">
+                      отозван
+                    </span>
+                  )}
+                  <span className="ml-auto text-[10px] text-sky-600 dark:text-sky-400">
+                    срез {chembl?.version}
+                  </span>
+                  <a
+                    href={chemblUrl(chemblRow)}
+                    target="_blank"
+                    rel="noopener"
+                    className="text-xs text-sky-600 dark:text-sky-400 hover:underline"
+                  >
+                    карточка ↗
+                  </a>
+                </div>
+                {chemblRow.properties && (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-xs">
+                      <thead>
+                        <tr className="text-left text-sky-700/70 dark:text-sky-300/70">
+                          <th className="py-1 pr-3 font-medium">Дескриптор</th>
+                          <th className="py-1 pr-3 font-medium text-right">Наши данные</th>
+                          <th className="py-1 pr-3 font-medium text-right">ChEMBL (RDKit)</th>
+                          <th className="py-1 font-medium text-right">Δ</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {([
+                          ["MW, Да", drug.mw, chemblRow.properties.full_mwt],
+                          ["LogP", drug.logp, chemblRow.properties.alogp],
+                          ["HBD", drug.hbd, chemblRow.properties.hbd],
+                          ["HBA", drug.hba, chemblRow.properties.hba],
+                          ["Вращаемые связи", drug.rotatable_bonds, chemblRow.properties.rtb],
+                        ] as [string, number, number | null][]).map(([label, ours, theirs]) => {
+                          const d = descriptorDelta(ours, theirs);
+                          const big = d !== null && Math.abs(d) > (label === "MW, Да" ? 10 : 1);
+                          return (
+                            <tr key={label} className="border-t border-sky-200/60 dark:border-sky-800/60">
+                              <td className="py-1 pr-3">{label}</td>
+                              <td className="py-1 pr-3 font-mono text-right">{ours}</td>
+                              <td className="py-1 pr-3 font-mono text-right">{theirs ?? "—"}</td>
+                              <td className={`py-1 font-mono text-right ${big ? "text-amber-600 dark:text-amber-400 font-semibold" : "text-sky-700 dark:text-sky-300"}`}>
+                                {formatDelta(d)}
+                            </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+                {mechanismLines(chemblRow).length > 0 && (
+                  <div className="mt-3 text-xs">
+                    <div className="text-sky-700/70 dark:text-sky-300/70 mb-1">Механизмы действия (курированные):</div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {mechanismLines(chemblRow).map((m, i) => (
+                        <span key={i} className="px-1.5 py-0.5 rounded bg-white dark:bg-zinc-900 border border-sky-200 dark:border-sky-800 text-sky-800 dark:text-sky-200">
+                          {m}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <p className="mt-2 text-[10px] text-sky-600/80 dark:text-sky-400/80">
+                  Свойства считает ChEMBL (RDKit по канонической структуре); расхождения свыше 10 Да по массе
+                  или 1 по LogP — повод проверить наши дескрипторы. Статический срез {chembl?.version} от {chembl ? new Date(chembl.generated).toLocaleDateString("ru-RU") : ""}, без внешних запросов в рантайме.
+                </p>
+              </div>
+            )}
 
             {/* Drug-likeness summary */}
             <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 bg-gradient-to-br from-blue-50 to-teal-50 dark:from-blue-950/30 dark:to-teal-950/30">

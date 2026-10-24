@@ -1,0 +1,5662 @@
+{
+  "source": "ChEMBL web API (https://www.ebi.ac.uk/chembl/)",
+  "version": "ChEMBL_37",
+  "generated": "2026-10-24T20:11:31.387Z",
+  "note": "Статический срез для офлайн/РФ-доступности; обновляется недельным CI-раном. Свойства ChEMBL считает RDKit по каноническим структурам — сверяйте с локальными дескрипторами.",
+  "drugs": [
+    {
+      "inn": "Amoxicillin",
+      "chembl_id": "CHEMBL1082",
+      "pref_name": "AMOXICILLIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1974,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 365.41,
+        "alogp": 0.02,
+        "hba": 6,
+        "hbd": 4,
+        "psa": 132.96,
+        "rtb": 4,
+        "aromatic_rings": 1,
+        "heavy_atoms": 25,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2354204",
+          "target_name": "Bacterial penicillin-binding protein",
+          "references": [
+            "ISBN 9780702034718 PP. 626-627"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Ampicillin",
+      "chembl_id": "CHEMBL174",
+      "pref_name": "AMPICILLIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1965,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 349.41,
+        "alogp": 0.32,
+        "hba": 5,
+        "hbd": 3,
+        "psa": 112.73,
+        "rtb": 4,
+        "aromatic_rings": 1,
+        "heavy_atoms": 24,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2354204",
+          "target_name": "Bacterial penicillin-binding protein",
+          "references": [
+            "PubMed 7447421",
+            "Wikipedia Penicillin_binding_proteins#Function"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Cephalexin",
+      "chembl_id": "CHEMBL1200544",
+      "pref_name": "CEPHALEXIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1971,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 365.41,
+        "alogp": 0.44,
+        "hba": 5,
+        "hbd": 3,
+        "psa": 112.73,
+        "rtb": 4,
+        "aromatic_rings": 1,
+        "heavy_atoms": 24,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2354204",
+          "target_name": "Bacterial penicillin-binding protein",
+          "references": [
+            "PubMed 7447421"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Ceftiofur",
+      "chembl_id": "CHEMBL222913",
+      "pref_name": "CEFTIOFUR",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 523.57,
+        "alogp": 0.98,
+        "hba": 12,
+        "hbd": 3,
+        "psa": 177.42,
+        "rtb": 8,
+        "aromatic_rings": 2,
+        "heavy_atoms": 34,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2354204",
+          "target_name": "Bacterial penicillin-binding protein",
+          "references": [
+            "EMA https://www.ema.europa.eu/en/documents/product-information/naxcel-epar-product-information_en.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Cefquinome",
+      "chembl_id": "CHEMBL1631107",
+      "pref_name": "CEFQUINOME",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 528.62,
+        "alogp": -0.65,
+        "hba": 10,
+        "hbd": 2,
+        "psa": 153.92,
+        "rtb": 7,
+        "aromatic_rings": 2,
+        "heavy_atoms": 36,
+        "num_ro5_violations": 1
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Cefoperazone",
+      "chembl_id": "CHEMBL507674",
+      "pref_name": "CEFOPERAZONE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1982,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 645.68,
+        "alogp": -1.11,
+        "hba": 13,
+        "hbd": 4,
+        "psa": 220.26,
+        "rtb": 9,
+        "aromatic_rings": 2,
+        "heavy_atoms": 44,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Enrofloxacin",
+      "chembl_id": "CHEMBL15511",
+      "pref_name": "ENROFLOXACIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 359.4,
+        "alogp": 2.32,
+        "hba": 5,
+        "hbd": 1,
+        "psa": 65.78,
+        "rtb": 4,
+        "aromatic_rings": 2,
+        "heavy_atoms": 26,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Ciprofloxacin",
+      "chembl_id": "CHEMBL8",
+      "pref_name": "CIPROFLOXACIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1987,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 331.35,
+        "alogp": 1.58,
+        "hba": 5,
+        "hbd": 2,
+        "psa": 74.57,
+        "rtb": 3,
+        "aromatic_rings": 2,
+        "heavy_atoms": 24,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2311224",
+          "target_name": "Bacterial DNA gyrase",
+          "references": [
+            "FDA label/2009/021918lbl.pdf"
+          ]
+        },
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2363076",
+          "target_name": "Topoisomerase IV",
+          "references": [
+            "FDA label/2019/021473s040lbl.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Marbofloxacin",
+      "chembl_id": "CHEMBL478120",
+      "pref_name": "MARBOFLOXACIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 362.36,
+        "alogp": 0.51,
+        "hba": 7,
+        "hbd": 1,
+        "psa": 78.25,
+        "rtb": 2,
+        "aromatic_rings": 2,
+        "heavy_atoms": 26,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Difloxacin",
+      "chembl_id": "CHEMBL6259",
+      "pref_name": "DIFLOXACIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 399.4,
+        "alogp": 2.72,
+        "hba": 5,
+        "hbd": 1,
+        "psa": 65.78,
+        "rtb": 3,
+        "aromatic_rings": 3,
+        "heavy_atoms": 29,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Danofloxacin",
+      "chembl_id": "CHEMBL157548",
+      "pref_name": "DANOFLOXACIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 357.39,
+        "alogp": 2.07,
+        "hba": 5,
+        "hbd": 1,
+        "psa": 65.78,
+        "rtb": 3,
+        "aromatic_rings": 2,
+        "heavy_atoms": 26,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Sarafloxacin",
+      "chembl_id": "CHEMBL37858",
+      "pref_name": "SARAFLOXACIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 385.37,
+        "alogp": 2.38,
+        "hba": 5,
+        "hbd": 2,
+        "psa": 74.57,
+        "rtb": 3,
+        "aromatic_rings": 3,
+        "heavy_atoms": 28,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Orbifloxacin",
+      "chembl_id": "CHEMBL295433",
+      "pref_name": "ORBIFLOXACIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 395.38,
+        "alogp": 2.64,
+        "hba": 5,
+        "hbd": 2,
+        "psa": 74.57,
+        "rtb": 3,
+        "aromatic_rings": 2,
+        "heavy_atoms": 28,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Ibafloxacin",
+      "chembl_id": "CHEMBL170052",
+      "pref_name": "IBAFLOXACIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 275.28,
+        "alogp": 2.65,
+        "hba": 3,
+        "hbd": 1,
+        "psa": 59.3,
+        "rtb": 1,
+        "aromatic_rings": 2,
+        "heavy_atoms": 20,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2311224",
+          "target_name": "Bacterial DNA gyrase",
+          "references": [
+            "EMA https://www.ema.europa.eu/en/documents/product-information/ibaflin-epar-product-information_en.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Oxytetracycline",
+      "chembl_id": "CHEMBL1517",
+      "pref_name": "OXYTETRACYCLINE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1964,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 460.44,
+        "alogp": -1.24,
+        "hba": 10,
+        "hbd": 7,
+        "psa": 201.85,
+        "rtb": 2,
+        "aromatic_rings": 1,
+        "heavy_atoms": 33,
+        "num_ro5_violations": 1
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2363135",
+          "target_name": "Bacterial 70S ribosome",
+          "references": [
+            "KEGG D01596"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Doxycycline",
+      "chembl_id": "CHEMBL1200699",
+      "pref_name": "DOXYCYCLINE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1967,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 462.46,
+        "alogp": -0.35,
+        "hba": 9,
+        "hbd": 6,
+        "psa": 181.62,
+        "rtb": 2,
+        "aromatic_rings": 1,
+        "heavy_atoms": 32,
+        "num_ro5_violations": 1
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL4073",
+          "target_name": "Matrilysin",
+          "references": [
+            "DailyMed setid=3105a84b-655e-4940-9d11-4209cdb05d6b",
+            "PubMed 17199549",
+            "PubMed 20370419"
+          ]
+        },
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL4588",
+          "target_name": "Neutrophil collagenase",
+          "references": [
+            "DailyMed setid=3105a84b-655e-4940-9d11-4209cdb05d6b",
+            "PubMed 17199549",
+            "PubMed 20370419"
+          ]
+        },
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL280",
+          "target_name": "Collagenase 3",
+          "references": [
+            "DailyMed setid=3105a84b-655e-4940-9d11-4209cdb05d6b",
+            "PubMed 17199549",
+            "PubMed 20370419"
+          ]
+        },
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL332",
+          "target_name": "Interstitial collagenase",
+          "references": [
+            "DailyMed setid=3105a84b-655e-4940-9d11-4209cdb05d6b",
+            "PubMed 17199549",
+            "PubMed 20370419"
+          ]
+        },
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2363135",
+          "target_name": "Bacterial 70S ribosome",
+          "references": [
+            "DailyMed setid=bfd09049-1777-43e7-bf79-ceea4bdce13b",
+            "PubMed 27246781"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Chlortetracycline",
+      "chembl_id": "CHEMBL404520",
+      "pref_name": "CHLORTETRACYCLINE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1950,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 478.89,
+        "alogp": 0.44,
+        "hba": 9,
+        "hbd": 6,
+        "psa": 181.62,
+        "rtb": 2,
+        "aromatic_rings": 1,
+        "heavy_atoms": 33,
+        "num_ro5_violations": 1
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Tetracycline",
+      "chembl_id": "CHEMBL1440",
+      "pref_name": "TETRACYCLINE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1953,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 444.44,
+        "alogp": -0.21,
+        "hba": 9,
+        "hbd": 6,
+        "psa": 181.62,
+        "rtb": 2,
+        "aromatic_rings": 1,
+        "heavy_atoms": 32,
+        "num_ro5_violations": 1
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2363135",
+          "target_name": "Bacterial 70S ribosome",
+          "references": [
+            "FDA label/2012/050719s017s020lbl.pdf",
+            "PubMed 15141029",
+            "Wikipedia Tetracycline#Mechanism_of_action"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Gentamicin",
+      "chembl_id": "CHEMBL6067485",
+      "pref_name": "GENTAMICIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1970,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": true,
+      "properties": null,
+      "mechanisms": []
+    },
+    {
+      "inn": "Neomycin",
+      "chembl_id": "CHEMBL3989751",
+      "pref_name": "NEOMYCIN",
+      "molecule_type": "Unknown",
+      "max_phase": "4.0",
+      "first_approval": 1957,
+      "withdrawn_flag": true,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": null,
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2363135",
+          "target_name": "Bacterial 70S ribosome",
+          "references": [
+            "PubMed 11959595"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Streptomycin",
+      "chembl_id": "CHEMBL372795",
+      "pref_name": "STREPTOMYCIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1946,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 581.58,
+        "alogp": -8.16,
+        "hba": 15,
+        "hbd": 12,
+        "psa": 336.43,
+        "rtb": 9,
+        "aromatic_rings": 0,
+        "heavy_atoms": 40,
+        "num_ro5_violations": 3
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Spectinomycin",
+      "chembl_id": "CHEMBL1167",
+      "pref_name": "SPECTINOMYCIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1971,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 332.35,
+        "alogp": -2.93,
+        "hba": 9,
+        "hbd": 5,
+        "psa": 129.51,
+        "rtb": 2,
+        "aromatic_rings": 0,
+        "heavy_atoms": 23,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Kanamycin",
+      "chembl_id": "CHEMBL1384",
+      "pref_name": "KANAMYCIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1973,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 484.5,
+        "alogp": -7.29,
+        "hba": 15,
+        "hbd": 11,
+        "psa": 282.61,
+        "rtb": 6,
+        "aromatic_rings": 0,
+        "heavy_atoms": 33,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Amikacin",
+      "chembl_id": "CHEMBL177",
+      "pref_name": "AMIKACIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1981,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 585.61,
+        "alogp": -8.42,
+        "hba": 17,
+        "hbd": 13,
+        "psa": 331.94,
+        "rtb": 10,
+        "aromatic_rings": 0,
+        "heavy_atoms": 40,
+        "num_ro5_violations": 3
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Tobramycin",
+      "chembl_id": "CHEMBL1747",
+      "pref_name": "TOBRAMYCIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1975,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 467.52,
+        "alogp": -6.3,
+        "hba": 14,
+        "hbd": 10,
+        "psa": 268.17,
+        "rtb": 6,
+        "aromatic_rings": 0,
+        "heavy_atoms": 32,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2364022",
+          "target_name": "70S ribosome",
+          "references": [
+            "FDA label/2013/201688s000lbl.pdf",
+            "PubMed 20108982",
+            "Wikipedia Tobramycin#Mechanism_of_action"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Florfenicol",
+      "chembl_id": "CHEMBL1241590",
+      "pref_name": "FLORFENICOL",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 358.22,
+        "alogp": 1.38,
+        "hba": 4,
+        "hbd": 2,
+        "psa": 83.47,
+        "rtb": 6,
+        "aromatic_rings": 1,
+        "heavy_atoms": 21,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Chloramphenicol",
+      "chembl_id": "CHEMBL130",
+      "pref_name": "CHLORAMPHENICOL",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1950,
+      "withdrawn_flag": true,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 323.13,
+        "alogp": 0.91,
+        "hba": 5,
+        "hbd": 3,
+        "psa": 112.7,
+        "rtb": 6,
+        "aromatic_rings": 1,
+        "heavy_atoms": 20,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2363135",
+          "target_name": "Bacterial 70S ribosome",
+          "references": [
+            "PubMed 16091044",
+            "PubMed 6375931",
+            "Wikipedia Chloramphenicol"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Thiamphenicol",
+      "chembl_id": "CHEMBL1236282",
+      "pref_name": "THIAMPHENICOL",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 356.23,
+        "alogp": 0.4,
+        "hba": 5,
+        "hbd": 3,
+        "psa": 103.7,
+        "rtb": 6,
+        "aromatic_rings": 1,
+        "heavy_atoms": 21,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Erythromycin",
+      "chembl_id": "CHEMBL532",
+      "pref_name": "ERYTHROMYCIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1964,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 733.94,
+        "alogp": 1.79,
+        "hba": 14,
+        "hbd": 5,
+        "psa": 193.91,
+        "rtb": 7,
+        "aromatic_rings": 0,
+        "heavy_atoms": 51,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2363135",
+          "target_name": "Bacterial 70S ribosome",
+          "references": [
+            "DailyMed setid=9a63da11-01be-4c63-a260-e6bdbb4a7a69",
+            "PubMed 20876130"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Tylosin",
+      "chembl_id": "CHEMBL42743",
+      "pref_name": "TYLOSIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 916.11,
+        "alogp": 1.83,
+        "hba": 18,
+        "hbd": 5,
+        "psa": 238.67,
+        "rtb": 13,
+        "aromatic_rings": 0,
+        "heavy_atoms": 64,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Tilmicosin",
+      "chembl_id": "CHEMBL1908333",
+      "pref_name": "TILMICOSIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 869.15,
+        "alogp": 3.34,
+        "hba": 15,
+        "hbd": 4,
+        "psa": 186.15,
+        "rtb": 12,
+        "aromatic_rings": 0,
+        "heavy_atoms": 61,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Tulathromycin",
+      "chembl_id": "CHEMBL6067973",
+      "pref_name": "TULATHROMYCIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": null,
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2363135",
+          "target_name": "Bacterial 70S ribosome",
+          "references": [
+            "EMA https://www.ema.europa.eu/en/documents/product-information/tulinovet-epar-product-information_en.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Gamithromycin",
+      "chembl_id": "CHEMBL2107342",
+      "pref_name": "GAMITHROMYCIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 777.05,
+        "alogp": 2.68,
+        "hba": 14,
+        "hbd": 5,
+        "psa": 180.08,
+        "rtb": 9,
+        "aromatic_rings": 0,
+        "heavy_atoms": 54,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2363135",
+          "target_name": "Bacterial 70S ribosome",
+          "references": [
+            "EMA https://www.ema.europa.eu/en/documents/product-information/zactran-epar-product-information_en-0.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Tildipirosin",
+      "chembl_id": "CHEMBL3039509",
+      "pref_name": "TILDIPIROSIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 734.03,
+        "alogp": 4.18,
+        "hba": 11,
+        "hbd": 3,
+        "psa": 132.24,
+        "rtb": 9,
+        "aromatic_rings": 0,
+        "heavy_atoms": 52,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2363135",
+          "target_name": "Bacterial 70S ribosome",
+          "references": [
+            "EMA https://www.ema.europa.eu/en/documents/product-information/zuprevo-epar-product-information_en.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Azithromycin",
+      "chembl_id": "CHEMBL529",
+      "pref_name": "AZITHROMYCIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1991,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 749,
+        "alogp": 1.9,
+        "hba": 14,
+        "hbd": 5,
+        "psa": 180.08,
+        "rtb": 7,
+        "aromatic_rings": 0,
+        "heavy_atoms": 52,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2363135",
+          "target_name": "Bacterial 70S ribosome",
+          "references": [
+            "PubMed 12623020",
+            "PubMed 15851032",
+            "PubMed 19071138"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Clarithromycin",
+      "chembl_id": "CHEMBL1741",
+      "pref_name": "CLARITHROMYCIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1991,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 747.96,
+        "alogp": 2.44,
+        "hba": 14,
+        "hbd": 4,
+        "psa": 182.91,
+        "rtb": 8,
+        "aromatic_rings": 0,
+        "heavy_atoms": 52,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2363135",
+          "target_name": "Bacterial 70S ribosome",
+          "references": [
+            "DailyMed setid=aa44552c-3cfe-4111-8aa5-4251aeed9be9#nlm34090-1",
+            "PubMed 7683018",
+            "PubMed 9425251"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Spiramycin",
+      "chembl_id": "CHEMBL6195749",
+      "pref_name": "SPIRAMYCIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": false,
+      "properties": null,
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2363135",
+          "target_name": "Bacterial 70S ribosome",
+          "references": [
+            "PubMed 15795375"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Clindamycin",
+      "chembl_id": "CHEMBL1753",
+      "pref_name": "CLINDAMYCIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1970,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 424.99,
+        "alogp": 0.39,
+        "hba": 7,
+        "hbd": 4,
+        "psa": 102.26,
+        "rtb": 7,
+        "aromatic_rings": 0,
+        "heavy_atoms": 27,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Lincomycin",
+      "chembl_id": "CHEMBL1447",
+      "pref_name": "LINCOMYCIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1964,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 406.55,
+        "alogp": -0.86,
+        "hba": 8,
+        "hbd": 5,
+        "psa": 122.49,
+        "rtb": 7,
+        "aromatic_rings": 0,
+        "heavy_atoms": 27,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2363135",
+          "target_name": "Bacterial 70S ribosome",
+          "references": [
+            "FDA label/2018/050317s183lbl.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Sulfadiazine",
+      "chembl_id": "CHEMBL439",
+      "pref_name": "SULFADIAZINE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1941,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 250.28,
+        "alogp": 0.86,
+        "hba": 5,
+        "hbd": 2,
+        "psa": 97.97,
+        "rtb": 3,
+        "aromatic_rings": 2,
+        "heavy_atoms": 17,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2364668",
+          "target_name": "Dihydropteroate synthase",
+          "references": [
+            "PubMed 15673759",
+            "PubMed 9127492"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Sulfamethoxazole",
+      "chembl_id": "CHEMBL443",
+      "pref_name": "SULFAMETHOXAZOLE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1973,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 253.28,
+        "alogp": 1.37,
+        "hba": 5,
+        "hbd": 2,
+        "psa": 98.22,
+        "rtb": 3,
+        "aromatic_rings": 2,
+        "heavy_atoms": 17,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2364668",
+          "target_name": "Dihydropteroate synthase",
+          "references": [
+            "PubMed 7486915"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Sulfamethoxypyridazine",
+      "chembl_id": "CHEMBL268869",
+      "pref_name": "SULFAMETHOXYPYRIDAZINE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": null,
+      "withdrawn_flag": true,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 280.31,
+        "alogp": 0.87,
+        "hba": 6,
+        "hbd": 2,
+        "psa": 107.2,
+        "rtb": 4,
+        "aromatic_rings": 2,
+        "heavy_atoms": 19,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2364668",
+          "target_name": "Dihydropteroate synthase",
+          "references": [
+            "PubMed 13521763",
+            "PubMed 13615757",
+            "PubMed 7486915"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Sulfadoxine",
+      "chembl_id": "CHEMBL1539",
+      "pref_name": "SULFADOXINE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1981,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 310.34,
+        "alogp": 0.88,
+        "hba": 7,
+        "hbd": 2,
+        "psa": 116.43,
+        "rtb": 5,
+        "aromatic_rings": 2,
+        "heavy_atoms": 21,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2013",
+          "target_name": "Dihydropteroate synthetase",
+          "references": [
+            "DailyMed archiveid=86578",
+            "Wikipedia Sulfadoxine"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Sulfaguanidine",
+      "chembl_id": "CHEMBL338802",
+      "pref_name": "SULFAGUANIDINE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": null,
+      "withdrawn_flag": true,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 214.25,
+        "alogp": -0.56,
+        "hba": 4,
+        "hbd": 4,
+        "psa": 122.06,
+        "rtb": 2,
+        "aromatic_rings": 1,
+        "heavy_atoms": 14,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Trimethoprim",
+      "chembl_id": "CHEMBL22",
+      "pref_name": "TRIMETHOPRIM",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1973,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 290.32,
+        "alogp": 1.26,
+        "hba": 7,
+        "hbd": 2,
+        "psa": 105.51,
+        "rtb": 5,
+        "aromatic_rings": 2,
+        "heavy_atoms": 21,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2364669",
+          "target_name": "Dihydrofolate reductase",
+          "references": [
+            "DailyMed setid=a4e9183f-d0eb-4ba7-9204-760b1fd62010"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Baquiloprim",
+      "chembl_id": "CHEMBL2105911",
+      "pref_name": "BAQUILOPRIM",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 308.39,
+        "alogp": 2.15,
+        "hba": 6,
+        "hbd": 2,
+        "psa": 93.95,
+        "rtb": 3,
+        "aromatic_rings": 3,
+        "heavy_atoms": 23,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Ormetoprim",
+      "chembl_id": "CHEMBL494760",
+      "pref_name": "ORMETOPRIM",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 274.32,
+        "alogp": 1.56,
+        "hba": 6,
+        "hbd": 2,
+        "psa": 96.28,
+        "rtb": 4,
+        "aromatic_rings": 2,
+        "heavy_atoms": 20,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Diaveridine",
+      "chembl_id": "CHEMBL19633",
+      "pref_name": "DIAVERIDINE",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 260.3,
+        "alogp": 1.25,
+        "hba": 6,
+        "hbd": 2,
+        "psa": 96.28,
+        "rtb": 4,
+        "aromatic_rings": 2,
+        "heavy_atoms": 19,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Metronidazole",
+      "chembl_id": "CHEMBL137",
+      "pref_name": "METRONIDAZOLE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1963,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 171.16,
+        "alogp": 0.09,
+        "hba": 5,
+        "hbd": 1,
+        "psa": 81.19,
+        "rtb": 3,
+        "aromatic_rings": 1,
+        "heavy_atoms": 12,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2364041",
+          "target_name": "DNA",
+          "references": [
+            "FDA label/2011/021806s003lbl.pdf",
+            "Wikipedia Metronidazole#Mechanism_of_action"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Tinidazole",
+      "chembl_id": "CHEMBL1220",
+      "pref_name": "TINIDAZOLE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 2004,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 247.28,
+        "alogp": 0.53,
+        "hba": 6,
+        "hbd": 0,
+        "psa": 95.1,
+        "rtb": 5,
+        "aromatic_rings": 1,
+        "heavy_atoms": 16,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "DISRUPTING AGENT",
+          "target_chembl_id": "CHEMBL2366045",
+          "target_name": "DNA",
+          "references": [
+            "DailyMed setid=a0d01539-8413-4703-94cc-d221918630a1"
+          ]
+        },
+        {
+          "action_type": "DISRUPTING AGENT",
+          "target_chembl_id": "CHEMBL2364041",
+          "target_name": "DNA",
+          "references": [
+            "FDA label/2007/021618s003lbl.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Dimetridazole",
+      "chembl_id": "CHEMBL38938",
+      "pref_name": "DIMETRIDAZOLE",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 141.13,
+        "alogp": 0.64,
+        "hba": 4,
+        "hbd": 0,
+        "psa": 60.96,
+        "rtb": 1,
+        "aromatic_rings": 1,
+        "heavy_atoms": 10,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Ronidazole",
+      "chembl_id": "CHEMBL290299",
+      "pref_name": "RONIDAZOLE",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 200.15,
+        "alogp": -0.08,
+        "hba": 6,
+        "hbd": 1,
+        "psa": 113.28,
+        "rtb": 3,
+        "aromatic_rings": 1,
+        "heavy_atoms": 14,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Furazolidone",
+      "chembl_id": "CHEMBL1103",
+      "pref_name": "FURAZOLIDONE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1958,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 225.16,
+        "alogp": 0.97,
+        "hba": 6,
+        "hbd": 0,
+        "psa": 98.18,
+        "rtb": 3,
+        "aromatic_rings": 1,
+        "heavy_atoms": 16,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2364041",
+          "target_name": "DNA",
+          "references": [
+            "PubMed 535918",
+            "PubMed 7870098"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Nitrofurantoin",
+      "chembl_id": "CHEMBL572",
+      "pref_name": "NITROFURANTOIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1953,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 238.16,
+        "alogp": 0.07,
+        "hba": 6,
+        "hbd": 1,
+        "psa": 118.05,
+        "rtb": 3,
+        "aromatic_rings": 1,
+        "heavy_atoms": 17,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2364041",
+          "target_name": "DNA",
+          "references": [
+            "FDA label/2009/009175s037lbl.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Colistin",
+      "chembl_id": "CHEMBL6067481",
+      "pref_name": "COLISTIN",
+      "molecule_type": "Unknown",
+      "max_phase": "4.0",
+      "first_approval": 1962,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": null,
+      "mechanisms": []
+    },
+    {
+      "inn": "Polymyxin B",
+      "chembl_id": "CHEMBL5314354",
+      "pref_name": "POLYMYXIN B",
+      "molecule_type": "Protein",
+      "max_phase": "4.0",
+      "first_approval": 1957,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": true,
+      "properties": null,
+      "mechanisms": []
+    },
+    {
+      "inn": "Bacitracin",
+      "chembl_id": "CHEMBL1200558",
+      "pref_name": "BACITRACIN",
+      "molecule_type": "Protein",
+      "max_phase": "4.0",
+      "first_approval": 1948,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 1422.72,
+        "alogp": null,
+        "hba": null,
+        "hbd": null,
+        "psa": null,
+        "rtb": null,
+        "aromatic_rings": null,
+        "heavy_atoms": null,
+        "num_ro5_violations": null
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2364036",
+          "target_name": "C55-isoprenyl pyrophosphate",
+          "references": [
+            "PubMed 4332017"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Ivermectin",
+      "chembl_id": "CHEMBL6067487",
+      "pref_name": "IVERMECTIN",
+      "molecule_type": "Unknown",
+      "max_phase": "4.0",
+      "first_approval": 1996,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": null,
+      "mechanisms": [
+        {
+          "action_type": "MODULATOR",
+          "target_chembl_id": "CHEMBL2363050",
+          "target_name": "Glutamate-gated chloride channel",
+          "references": [
+            "FDA label/2014/204154Orig1s000lbl.pdf",
+            "ISBN 9780702034718 PP. 671",
+            "PubMed 13678839"
+          ]
+        },
+        {
+          "action_type": "MODULATOR",
+          "target_chembl_id": "CHEMBL2363051",
+          "target_name": "Glutamate-gated chloride channel",
+          "references": [
+            "FDA label/2014/204154Orig1s000lbl.pdf",
+            "ISBN 9780702034718 PP. 671",
+            "PubMed 13678839"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Doramectin",
+      "chembl_id": "CHEMBL2361641",
+      "pref_name": "DORAMECTIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 899.13,
+        "alogp": 5.91,
+        "hba": 14,
+        "hbd": 3,
+        "psa": 170.06,
+        "rtb": 7,
+        "aromatic_rings": 0,
+        "heavy_atoms": 64,
+        "num_ro5_violations": 3
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Moxidectin",
+      "chembl_id": "CHEMBL2104415",
+      "pref_name": "MOXIDECTIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 2018,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 639.83,
+        "alogp": 5.73,
+        "hba": 9,
+        "hbd": 2,
+        "psa": 116.04,
+        "rtb": 3,
+        "aromatic_rings": 0,
+        "heavy_atoms": 46,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": [
+        {
+          "action_type": null,
+          "target_chembl_id": null,
+          "target_name": null,
+          "references": [
+            "FDA label/2018/210867lbl.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Eprinomectin",
+      "chembl_id": "CHEMBL3989594",
+      "pref_name": "EPRINOMECTIN",
+      "molecule_type": "Unknown",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 1814.26,
+        "alogp": null,
+        "hba": null,
+        "hbd": null,
+        "psa": null,
+        "rtb": null,
+        "aromatic_rings": null,
+        "heavy_atoms": null,
+        "num_ro5_violations": null
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Abamectin",
+      "chembl_id": "CHEMBL3215298",
+      "pref_name": "ABAMECTIN",
+      "molecule_type": "Unknown",
+      "max_phase": "3.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 1732.15,
+        "alogp": null,
+        "hba": null,
+        "hbd": null,
+        "psa": null,
+        "rtb": null,
+        "aromatic_rings": null,
+        "heavy_atoms": null,
+        "num_ro5_violations": null
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Selamectin",
+      "chembl_id": "CHEMBL1908325",
+      "pref_name": "SELAMECTIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 769.97,
+        "alogp": 6.07,
+        "hba": 12,
+        "hbd": 3,
+        "psa": 154.73,
+        "rtb": 4,
+        "aromatic_rings": 0,
+        "heavy_atoms": 55,
+        "num_ro5_violations": 3
+      },
+      "mechanisms": [
+        {
+          "action_type": null,
+          "target_chembl_id": null,
+          "target_name": null,
+          "references": [
+            "EMA https://www.ema.europa.eu/en/documents/scientific-discussion/stronghold-epar-scientific-discussion_en.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Albendazole",
+      "chembl_id": "CHEMBL1483",
+      "pref_name": "ALBENDAZOLE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1996,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 265.34,
+        "alogp": 3.24,
+        "hba": 4,
+        "hbd": 2,
+        "psa": 67.01,
+        "rtb": 4,
+        "aromatic_rings": 2,
+        "heavy_atoms": 18,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2364704",
+          "target_name": "Tubulin",
+          "references": [
+            "DailyMed setid=e8941166-b77d-45aa-a6e8-04f1c0afd845",
+            "ISBN 9780702034718 PP. 669",
+            "PubMed 13678839"
+          ]
+        },
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2364705",
+          "target_name": "Tubulin",
+          "references": [
+            "DailyMed setid=e8941166-b77d-45aa-a6e8-04f1c0afd845",
+            "ISBN 9780702034718 PP. 669",
+            "PubMed 13678839"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Fenbendazole",
+      "chembl_id": "CHEMBL37161",
+      "pref_name": "FENBENDAZOLE",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 299.36,
+        "alogp": 3.89,
+        "hba": 4,
+        "hbd": 2,
+        "psa": 67.01,
+        "rtb": 3,
+        "aromatic_rings": 3,
+        "heavy_atoms": 21,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "BINDING AGENT",
+          "target_chembl_id": "CHEMBL5058521",
+          "target_name": "Tubulin beta chain",
+          "references": [
+            "PubMed 4277074"
+          ]
+        },
+        {
+          "action_type": "BINDING AGENT",
+          "target_chembl_id": "CHEMBL5058522",
+          "target_name": "Tubulin beta chain",
+          "references": [
+            "PubMed 4277074"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Oxfendazole",
+      "chembl_id": "CHEMBL42442",
+      "pref_name": "OXFENDAZOLE",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 315.35,
+        "alogp": 2.91,
+        "hba": 4,
+        "hbd": 2,
+        "psa": 90.07,
+        "rtb": 3,
+        "aromatic_rings": 3,
+        "heavy_atoms": 22,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2364705",
+          "target_name": "Tubulin",
+          "references": [
+            "PubMed 32628671"
+          ]
+        },
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2364704",
+          "target_name": "Tubulin",
+          "references": [
+            "PubMed 32628671"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Mebendazole",
+      "chembl_id": "CHEMBL685",
+      "pref_name": "MEBENDAZOLE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1974,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 295.3,
+        "alogp": 2.97,
+        "hba": 4,
+        "hbd": 2,
+        "psa": 84.08,
+        "rtb": 3,
+        "aromatic_rings": 3,
+        "heavy_atoms": 22,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2364704",
+          "target_name": "Tubulin",
+          "references": [
+            "DailyMed setid=c338415f-41e0-071d-8c51-a80a02ebf2cd",
+            "ISBN 9780702034718 PP. 669",
+            "PubMed 13678839"
+          ]
+        },
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2364705",
+          "target_name": "Tubulin",
+          "references": [
+            "DailyMed setid=c338415f-41e0-071d-8c51-a80a02ebf2cd",
+            "ISBN 9780702034718 PP. 669",
+            "PubMed 13678839"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Oxibendazole",
+      "chembl_id": "CHEMBL1087630",
+      "pref_name": "OXIBENDAZOLE",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 249.27,
+        "alogp": 2.53,
+        "hba": 4,
+        "hbd": 2,
+        "psa": 76.24,
+        "rtb": 4,
+        "aromatic_rings": 2,
+        "heavy_atoms": 18,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Netobimin",
+      "chembl_id": "CHEMBL2105153",
+      "pref_name": "NETOBIMIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 420.47,
+        "alogp": 2.11,
+        "hba": 8,
+        "hbd": 3,
+        "psa": 160.23,
+        "rtb": 8,
+        "aromatic_rings": 1,
+        "heavy_atoms": 27,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Triclabendazole",
+      "chembl_id": "CHEMBL1086440",
+      "pref_name": "TRICLABENDAZOLE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 2019,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 359.67,
+        "alogp": 6.04,
+        "hba": 3,
+        "hbd": 1,
+        "psa": 37.91,
+        "rtb": 3,
+        "aromatic_rings": 3,
+        "heavy_atoms": 21,
+        "num_ro5_violations": 1
+      },
+      "mechanisms": [
+        {
+          "action_type": null,
+          "target_chembl_id": null,
+          "target_name": null,
+          "references": [
+            "FDA label/2019/208711s000lbl.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Closantel",
+      "chembl_id": "CHEMBL12131",
+      "pref_name": "CLOSANTEL",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 663.08,
+        "alogp": 7.12,
+        "hba": 3,
+        "hbd": 2,
+        "psa": 73.12,
+        "rtb": 4,
+        "aromatic_rings": 3,
+        "heavy_atoms": 30,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Rafoxanide",
+      "chembl_id": "CHEMBL287542",
+      "pref_name": "RAFOXANIDE",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 626.02,
+        "alogp": 6.95,
+        "hba": 3,
+        "hbd": 2,
+        "psa": 58.56,
+        "rtb": 4,
+        "aromatic_rings": 3,
+        "heavy_atoms": 27,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Oxyclozanide",
+      "chembl_id": "CHEMBL2105450",
+      "pref_name": "OXYCLOZANIDE",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 401.46,
+        "alogp": 5.62,
+        "hba": 3,
+        "hbd": 3,
+        "psa": 69.56,
+        "rtb": 2,
+        "aromatic_rings": 2,
+        "heavy_atoms": 22,
+        "num_ro5_violations": 1
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Niclosamide",
+      "chembl_id": "CHEMBL1448",
+      "pref_name": "NICLOSAMIDE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1982,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 327.12,
+        "alogp": 3.86,
+        "hba": 4,
+        "hbd": 2,
+        "psa": 92.47,
+        "rtb": 3,
+        "aromatic_rings": 2,
+        "heavy_atoms": 21,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2366043",
+          "target_name": "DNA",
+          "references": [
+            "PubMed 12392939",
+            "Wikipedia Niclosamide"
+          ]
+        },
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2366044",
+          "target_name": "DNA",
+          "references": [
+            "PubMed 12392939",
+            "Wikipedia Niclosamide"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Levamisole",
+      "chembl_id": "CHEMBL1454",
+      "pref_name": "LEVAMISOLE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1990,
+      "withdrawn_flag": true,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 204.3,
+        "alogp": 2.15,
+        "hba": 3,
+        "hbd": 0,
+        "psa": 15.6,
+        "rtb": 1,
+        "aromatic_rings": 1,
+        "heavy_atoms": 14,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Pyrantel",
+      "chembl_id": "CHEMBL1626223",
+      "pref_name": "PYRANTEL",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 206.31,
+        "alogp": 2.5,
+        "hba": 3,
+        "hbd": 0,
+        "psa": 15.6,
+        "rtb": 2,
+        "aromatic_rings": 1,
+        "heavy_atoms": 14,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Morantel",
+      "chembl_id": "CHEMBL1240978",
+      "pref_name": "MORANTEL",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 220.34,
+        "alogp": 2.8,
+        "hba": 3,
+        "hbd": 0,
+        "psa": 15.6,
+        "rtb": 2,
+        "aromatic_rings": 1,
+        "heavy_atoms": 15,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Piperazine",
+      "chembl_id": "CHEMBL1412",
+      "pref_name": "PIPERAZINE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": null,
+      "withdrawn_flag": true,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 86.14,
+        "alogp": -0.82,
+        "hba": 2,
+        "hbd": 2,
+        "psa": 24.06,
+        "rtb": 0,
+        "aromatic_rings": 0,
+        "heavy_atoms": 6,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Clorsulon",
+      "chembl_id": "CHEMBL1474129",
+      "pref_name": "CLORSULON",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 380.66,
+        "alogp": 0.91,
+        "hba": 5,
+        "hbd": 3,
+        "psa": 146.34,
+        "rtb": 3,
+        "aromatic_rings": 1,
+        "heavy_atoms": 20,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Praziquantel",
+      "chembl_id": "CHEMBL976",
+      "pref_name": "PRAZIQUANTEL",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1982,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 312.41,
+        "alogp": 2.53,
+        "hba": 2,
+        "hbd": 0,
+        "psa": 40.62,
+        "rtb": 1,
+        "aromatic_rings": 1,
+        "heavy_atoms": 23,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "BLOCKER",
+          "target_chembl_id": "CHEMBL2363079",
+          "target_name": "Voltage-activated calcium channel beta 1 subunit",
+          "references": [
+            "PubMed 18978535",
+            "PubMed 19554083",
+            "Wikipedia Praziquantel"
+          ]
+        },
+        {
+          "action_type": "BLOCKER",
+          "target_chembl_id": "CHEMBL2363080",
+          "target_name": "Voltage-activated calcium channel beta 2 subunit",
+          "references": [
+            "PubMed 18978535",
+            "PubMed 19554083",
+            "Wikipedia Praziquantel"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Epsiprantel",
+      "chembl_id": "CHEMBL64979",
+      "pref_name": "EPSIPRANTEL",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 326.44,
+        "alogp": 2.93,
+        "hba": 2,
+        "hbd": 0,
+        "psa": 40.62,
+        "rtb": 1,
+        "aromatic_rings": 1,
+        "heavy_atoms": 24,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Imidocarb",
+      "chembl_id": "CHEMBL427342",
+      "pref_name": "IMIDOCARB",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 348.41,
+        "alogp": 2.03,
+        "hba": 5,
+        "hbd": 4,
+        "psa": 89.91,
+        "rtb": 4,
+        "aromatic_rings": 2,
+        "heavy_atoms": 26,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Diminazene",
+      "chembl_id": "CHEMBL35241",
+      "pref_name": "DIMINAZENE",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 281.32,
+        "alogp": 2.37,
+        "hba": 4,
+        "hbd": 5,
+        "psa": 136.49,
+        "rtb": 5,
+        "aromatic_rings": 2,
+        "heavy_atoms": 21,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Isometamidium",
+      "chembl_id": "CHEMBL2111043",
+      "pref_name": "ISOMETAMIDIUM",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 460.57,
+        "alogp": 5.94,
+        "hba": 4,
+        "hbd": 4,
+        "psa": 116.52,
+        "rtb": 6,
+        "aromatic_rings": 5,
+        "heavy_atoms": 35,
+        "num_ro5_violations": 1
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Homidium",
+      "chembl_id": "CHEMBL48166",
+      "pref_name": "HOMIDIUM",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 314.41,
+        "alogp": 4.13,
+        "hba": 2,
+        "hbd": 2,
+        "psa": 55.92,
+        "rtb": 2,
+        "aromatic_rings": 4,
+        "heavy_atoms": 24,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Atovaquone",
+      "chembl_id": "CHEMBL1450",
+      "pref_name": "ATOVAQUONE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1992,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 366.84,
+        "alogp": 5.51,
+        "hba": 3,
+        "hbd": 1,
+        "psa": 54.37,
+        "rtb": 2,
+        "aromatic_rings": 2,
+        "heavy_atoms": 26,
+        "num_ro5_violations": 1
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL1777",
+          "target_name": "Cytochrome b",
+          "references": [
+            "DailyMed setid=b426b6bf-f07e-4580-97ae-dfca1ddf5b8f",
+            "PubMed 20855748"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Fipronil",
+      "chembl_id": "CHEMBL101326",
+      "pref_name": "FIPRONIL",
+      "molecule_type": "Small molecule",
+      "max_phase": "-1.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 437.15,
+        "alogp": 4.28,
+        "hba": 5,
+        "hbd": 1,
+        "psa": 90.69,
+        "rtb": 2,
+        "aromatic_rings": 2,
+        "heavy_atoms": 26,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Permethrin",
+      "chembl_id": "CHEMBL1525",
+      "pref_name": "PERMETHRIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1986,
+      "withdrawn_flag": true,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 391.29,
+        "alogp": 6.11,
+        "hba": 3,
+        "hbd": 0,
+        "psa": 35.53,
+        "rtb": 6,
+        "aromatic_rings": 2,
+        "heavy_atoms": 26,
+        "num_ro5_violations": 1
+      },
+      "mechanisms": [
+        {
+          "action_type": "BLOCKER",
+          "target_chembl_id": "CHEMBL2362985",
+          "target_name": "Voltage-sensitive sodium channel",
+          "references": [
+            "DailyMed setid=4de55a80-67d6-42c0-a6fc-57b89400c5b3",
+            "Wikipedia Pediculicide",
+            "Wikipedia Permethrin"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Deltamethrin",
+      "chembl_id": "CHEMBL1593566",
+      "pref_name": "DELTAMETHRIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "-1.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 505.21,
+        "alogp": 6.49,
+        "hba": 4,
+        "hbd": 0,
+        "psa": 59.32,
+        "rtb": 6,
+        "aromatic_rings": 2,
+        "heavy_atoms": 28,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Imidacloprid",
+      "chembl_id": "CHEMBL406819",
+      "pref_name": "IMIDACLOPRID",
+      "molecule_type": "Small molecule",
+      "max_phase": null,
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 255.66,
+        "alogp": 0.69,
+        "hba": 3,
+        "hbd": 1,
+        "psa": 83.66,
+        "rtb": 3,
+        "aromatic_rings": 1,
+        "heavy_atoms": 17,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Dinotefuran",
+      "chembl_id": "CHEMBL2228155",
+      "pref_name": "DINOTEFURAN",
+      "molecule_type": "Small molecule",
+      "max_phase": null,
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 202.21,
+        "alogp": -0.62,
+        "hba": 4,
+        "hbd": 2,
+        "psa": 88.79,
+        "rtb": 3,
+        "aromatic_rings": 0,
+        "heavy_atoms": 14,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Nitenpyram",
+      "chembl_id": "CHEMBL259728",
+      "pref_name": "NITENPYRAM",
+      "molecule_type": "Small molecule",
+      "max_phase": null,
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 270.72,
+        "alogp": 1.85,
+        "hba": 5,
+        "hbd": 1,
+        "psa": 71.3,
+        "rtb": 6,
+        "aromatic_rings": 1,
+        "heavy_atoms": 18,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Spinosad",
+      "chembl_id": "CHEMBL4297065",
+      "pref_name": "SPINOSAD",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 2011,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 1477.96,
+        "alogp": null,
+        "hba": null,
+        "hbd": null,
+        "psa": null,
+        "rtb": null,
+        "aromatic_rings": null,
+        "heavy_atoms": null,
+        "num_ro5_violations": null
+      },
+      "mechanisms": [
+        {
+          "action_type": "AGONIST",
+          "target_chembl_id": "CHEMBL2364023",
+          "target_name": "Nicotinic acetylcholine receptor",
+          "references": [
+            "Expert 2011/01/new-drug-approvals-2011-pt-i-spinosad.html"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Sarolaner",
+      "chembl_id": "CHEMBL3137302",
+      "pref_name": "SAROLANER",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 581.37,
+        "alogp": 4.33,
+        "hba": 6,
+        "hbd": 0,
+        "psa": 85.27,
+        "rtb": 4,
+        "aromatic_rings": 2,
+        "heavy_atoms": 37,
+        "num_ro5_violations": 1
+      },
+      "mechanisms": [
+        {
+          "action_type": null,
+          "target_chembl_id": null,
+          "target_name": null,
+          "references": [
+            "EMA https://www.ema.europa.eu/en/documents/product-information/simparica-epar-product-information_en.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Lotilaner",
+      "chembl_id": "CHEMBL3707310",
+      "pref_name": "LOTILANER",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 2017,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 596.76,
+        "alogp": 6.01,
+        "hba": 5,
+        "hbd": 2,
+        "psa": 79.79,
+        "rtb": 6,
+        "aromatic_rings": 2,
+        "heavy_atoms": 36,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": [
+        {
+          "action_type": null,
+          "target_chembl_id": null,
+          "target_name": null,
+          "references": [
+            "EMA https://www.ema.europa.eu/en/documents/product-information/credelio-epar-product-information_en.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Afoxolaner",
+      "chembl_id": "CHEMBL2219412",
+      "pref_name": "AFOXOLANER",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 625.88,
+        "alogp": 6.5,
+        "hba": 4,
+        "hbd": 2,
+        "psa": 79.79,
+        "rtb": 6,
+        "aromatic_rings": 3,
+        "heavy_atoms": 42,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": [
+        {
+          "action_type": null,
+          "target_chembl_id": null,
+          "target_name": null,
+          "references": [
+            "EMA https://www.ema.europa.eu/en/documents/product-information/frontpro-epar-product-information_en.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Fluralaner",
+      "chembl_id": "CHEMBL2364610",
+      "pref_name": "FLURALANER",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 556.29,
+        "alogp": 5.29,
+        "hba": 4,
+        "hbd": 2,
+        "psa": 79.79,
+        "rtb": 6,
+        "aromatic_rings": 2,
+        "heavy_atoms": 36,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": [
+        {
+          "action_type": null,
+          "target_chembl_id": null,
+          "target_name": null,
+          "references": [
+            "EMA https://www.ema.europa.eu/en/documents/product-information/exzolt-epar-product-information_en.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Ribavirin",
+      "chembl_id": "CHEMBL1643",
+      "pref_name": "RIBAVIRIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1985,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 244.21,
+        "alogp": -3.01,
+        "hba": 8,
+        "hbd": 4,
+        "psa": 143.72,
+        "rtb": 3,
+        "aromatic_rings": 1,
+        "heavy_atoms": 17,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL1822",
+          "target_name": "Inosine-5'-monophosphate dehydrogenase 1",
+          "references": [
+            "PubMed 16107837",
+            "Wikipedia Ribavirin#Mechanisms_of_action"
+          ]
+        },
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL4296320",
+          "target_name": "RNA-directed RNA polymerase",
+          "references": [
+            "PubMed 16107837",
+            "Wikipedia Ribavirin#Mechanisms_of_action"
+          ]
+        },
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2363073",
+          "target_name": "RNA",
+          "references": [
+            "PubMed 16107837",
+            "Wikipedia Ribavirin#Mechanisms_of_action"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Acyclovir",
+      "chembl_id": "CHEMBL184",
+      "pref_name": "ACYCLOVIR",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1982,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 225.21,
+        "alogp": -1.33,
+        "hba": 7,
+        "hbd": 3,
+        "psa": 119.05,
+        "rtb": 4,
+        "aromatic_rings": 2,
+        "heavy_atoms": 16,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL1872",
+          "target_name": "DNA polymerase catalytic subunit",
+          "references": [
+            "FDA label/2014/022436s004lbl.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Famciclovir",
+      "chembl_id": "CHEMBL880",
+      "pref_name": "FAMCICLOVIR",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1994,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 321.34,
+        "alogp": 0.54,
+        "hba": 9,
+        "hbd": 1,
+        "psa": 122.22,
+        "rtb": 7,
+        "aromatic_rings": 2,
+        "heavy_atoms": 23,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL1872",
+          "target_name": "DNA polymerase catalytic subunit",
+          "references": [
+            "DailyMed setid=3cd2e7f1-cbdb-47f6-b37f-830aaaef2482"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Ganciclovir",
+      "chembl_id": "CHEMBL182",
+      "pref_name": "GANCICLOVIR",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1989,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 255.23,
+        "alogp": -1.97,
+        "hba": 8,
+        "hbd": 4,
+        "psa": 139.28,
+        "rtb": 5,
+        "aromatic_rings": 2,
+        "heavy_atoms": 18,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL1872",
+          "target_name": "DNA polymerase catalytic subunit",
+          "references": [
+            "DailyMed setid=b47f5d1c-36b8-49b6-a410-3b3f4661dde7"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Foscarnet",
+      "chembl_id": "CHEMBL666",
+      "pref_name": "FOSCARNET",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1991,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 126,
+        "alogp": -0.16,
+        "hba": 2,
+        "hbd": 3,
+        "psa": 94.83,
+        "rtb": 1,
+        "aromatic_rings": 0,
+        "heavy_atoms": 7,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Amantadine",
+      "chembl_id": "CHEMBL660",
+      "pref_name": "AMANTADINE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1968,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 151.25,
+        "alogp": 1.91,
+        "hba": 1,
+        "hbd": 1,
+        "psa": 26.02,
+        "rtb": 0,
+        "aromatic_rings": 0,
+        "heavy_atoms": 11,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Rimantadine",
+      "chembl_id": "CHEMBL959",
+      "pref_name": "RIMANTADINE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1993,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 179.31,
+        "alogp": 2.55,
+        "hba": 1,
+        "hbd": 1,
+        "psa": 26.02,
+        "rtb": 1,
+        "aromatic_rings": 0,
+        "heavy_atoms": 13,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Oseltamivir",
+      "chembl_id": "CHEMBL1229",
+      "pref_name": "OSELTAMIVIR",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1999,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 312.41,
+        "alogp": 1.29,
+        "hba": 5,
+        "hbd": 2,
+        "psa": 90.65,
+        "rtb": 7,
+        "aromatic_rings": 0,
+        "heavy_atoms": 22,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Zanamivir",
+      "chembl_id": "CHEMBL222813",
+      "pref_name": "ZANAMIVIR",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1999,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 332.31,
+        "alogp": -3.58,
+        "hba": 7,
+        "hbd": 8,
+        "psa": 198.22,
+        "rtb": 6,
+        "aromatic_rings": 0,
+        "heavy_atoms": 23,
+        "num_ro5_violations": 1
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2051",
+          "target_name": "Neuraminidase",
+          "references": [
+            "DailyMed setid=12ff22f6-20b5-4fa8-9028-58f87e169ff5"
+          ]
+        },
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL3377",
+          "target_name": "Neuraminidase",
+          "references": [
+            "DailyMed setid=12ff22f6-20b5-4fa8-9028-58f87e169ff5"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Tenofovir",
+      "chembl_id": "CHEMBL3989702",
+      "pref_name": "TENOFOVIR",
+      "molecule_type": "Small molecule",
+      "max_phase": "3.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 305.23,
+        "alogp": -0.05,
+        "hba": 7,
+        "hbd": 3,
+        "psa": 136.38,
+        "rtb": 5,
+        "aromatic_rings": 2,
+        "heavy_atoms": 19,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Emtricitabine",
+      "chembl_id": "CHEMBL885",
+      "pref_name": "EMTRICITABINE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 2003,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 247.25,
+        "alogp": -0.46,
+        "hba": 7,
+        "hbd": 2,
+        "psa": 90.37,
+        "rtb": 2,
+        "aromatic_rings": 1,
+        "heavy_atoms": 16,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL247",
+          "target_name": "Human immunodeficiency virus type 1 reverse transcriptase",
+          "references": [
+            "DailyMed setid=d6599395-3944-44f9-97f2-e0424c6b6a1f"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Remdesivir",
+      "chembl_id": "CHEMBL4065616",
+      "pref_name": "REMDESIVIR",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 2020,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 602.59,
+        "alogp": 2.31,
+        "hba": 13,
+        "hbd": 4,
+        "psa": 203.55,
+        "rtb": 13,
+        "aromatic_rings": 3,
+        "heavy_atoms": 42,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL4303062",
+          "target_name": "RNA-directed RNA polymerase L",
+          "references": [
+            "FDA https://www.fda.gov/media/137566/download",
+            "Other https://www.ema.europa.eu/en/documents/other/summary-compassionate-use-remdesivir-gilead_en.pdf",
+            "PubMed 30987343"
+          ]
+        },
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL4523582",
+          "target_name": "Replicase polyprotein 1ab",
+          "references": [
+            "FDA label/2020/214787Orig1s000lbl.pdf",
+            "PubMed 30987343",
+            "PubMed 32094225"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Molnupiravir",
+      "chembl_id": "CHEMBL4650320",
+      "pref_name": "MOLNUPIRAVIR",
+      "molecule_type": "Small molecule",
+      "max_phase": "3.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 329.31,
+        "alogp": -1.72,
+        "hba": 9,
+        "hbd": 4,
+        "psa": 146.37,
+        "rtb": 4,
+        "aromatic_rings": 1,
+        "heavy_atoms": 23,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "DISRUPTING AGENT",
+          "target_chembl_id": "CHEMBL5604041",
+          "target_name": "RNA",
+          "references": [
+            "PubMed 34381216"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Favipiravir",
+      "chembl_id": "CHEMBL221722",
+      "pref_name": "FAVIPIRAVIR",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 2014,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 157.1,
+        "alogp": -0.58,
+        "hba": 4,
+        "hbd": 2,
+        "psa": 89.1,
+        "rtb": 1,
+        "aromatic_rings": 1,
+        "heavy_atoms": 11,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL4523676",
+          "target_name": "RNA-directed RNA polymerase",
+          "references": [
+            "PMDA https://www.pmda.go.jp/files/000210319.pdf",
+            "PubMed 28769016"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Nirmatrelvir",
+      "chembl_id": "CHEMBL4802135",
+      "pref_name": "NIRMATRELVIR",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 2023,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 499.53,
+        "alogp": 1.1,
+        "hba": 5,
+        "hbd": 3,
+        "psa": 131.4,
+        "rtb": 6,
+        "aromatic_rings": 0,
+        "heavy_atoms": 35,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL3927",
+          "target_name": "Replicase polyprotein 1a",
+          "references": [
+            "FDA label/2023/217188s000lbl.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Ritonavir",
+      "chembl_id": "CHEMBL163",
+      "pref_name": "RITONAVIR",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1996,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 720.96,
+        "alogp": 5.91,
+        "hba": 9,
+        "hbd": 4,
+        "psa": 145.78,
+        "rtb": 17,
+        "aromatic_rings": 4,
+        "heavy_atoms": 50,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL243",
+          "target_name": "Human immunodeficiency virus type 1 protease",
+          "references": [
+            "DailyMed setid=13b059c6-0c6c-49a5-b985-a4b05caf9ac9"
+          ]
+        },
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2364675",
+          "target_name": "Cytochrome P450 3A",
+          "references": [
+            "FDA label/2000/21226lbl.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Lopinavir",
+      "chembl_id": "CHEMBL729",
+      "pref_name": "LOPINAVIR",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 2000,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 628.81,
+        "alogp": 4.33,
+        "hba": 5,
+        "hbd": 4,
+        "psa": 120,
+        "rtb": 15,
+        "aromatic_rings": 3,
+        "heavy_atoms": 46,
+        "num_ro5_violations": 1
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL243",
+          "target_name": "Human immunodeficiency virus type 1 protease",
+          "references": [
+            "FDA label/2015/021906s042,021251s049lbl.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Daclatasvir",
+      "chembl_id": "CHEMBL2023898",
+      "pref_name": "DACLATASVIR",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 2014,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 738.89,
+        "alogp": 6.22,
+        "hba": 8,
+        "hbd": 4,
+        "psa": 174.64,
+        "rtb": 11,
+        "aromatic_rings": 4,
+        "heavy_atoms": 54,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Sofosbuvir",
+      "chembl_id": "CHEMBL1259059",
+      "pref_name": "SOFOSBUVIR",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 2013,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 529.46,
+        "alogp": 1.66,
+        "hba": 10,
+        "hbd": 3,
+        "psa": 158.18,
+        "rtb": 10,
+        "aromatic_rings": 2,
+        "heavy_atoms": 36,
+        "num_ro5_violations": 1
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL4296320",
+          "target_name": "RNA-directed RNA polymerase",
+          "references": [
+            "FDA label/2013/204671s000lbl.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Imiquimod",
+      "chembl_id": "CHEMBL1282",
+      "pref_name": "IMIQUIMOD",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1997,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 240.31,
+        "alogp": 2.82,
+        "hba": 4,
+        "hbd": 1,
+        "psa": 56.73,
+        "rtb": 2,
+        "aromatic_rings": 3,
+        "heavy_atoms": 18,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "AGONIST",
+          "target_chembl_id": "CHEMBL5936",
+          "target_name": "Toll-like receptor 7",
+          "references": [
+            "FDA label/2010/020723s022lbl.pdf",
+            "PubMed 14616337"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Meloxicam",
+      "chembl_id": "CHEMBL599",
+      "pref_name": "MELOXICAM",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 2000,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 351.41,
+        "alogp": 1.95,
+        "hba": 6,
+        "hbd": 2,
+        "psa": 99.6,
+        "rtb": 2,
+        "aromatic_rings": 2,
+        "heavy_atoms": 23,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL230",
+          "target_name": "Prostaglandin G/H synthase 2",
+          "references": [
+            "PubMed 8882380"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Carprofen",
+      "chembl_id": "CHEMBL1316",
+      "pref_name": "CARPROFEN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1987,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 273.72,
+        "alogp": 4.16,
+        "hba": 1,
+        "hbd": 2,
+        "psa": 53.09,
+        "rtb": 2,
+        "aromatic_rings": 3,
+        "heavy_atoms": 19,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL230",
+          "target_name": "Prostaglandin G/H synthase 2",
+          "references": [
+            "DailyMed archiveid=147266"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Firocoxib",
+      "chembl_id": "CHEMBL69998",
+      "pref_name": "FIROCOXIB",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 336.41,
+        "alogp": 2.56,
+        "hba": 5,
+        "hbd": 0,
+        "psa": 69.67,
+        "rtb": 5,
+        "aromatic_rings": 1,
+        "heavy_atoms": 23,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL4033",
+          "target_name": "Cyclooxygenase-2",
+          "references": [
+            "EMA https://www.ema.europa.eu/en/documents/product-information/previcox-epar-product-information_en.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Robenacoxib",
+      "chembl_id": "CHEMBL2107774",
+      "pref_name": "ROBENACOXIB",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 327.28,
+        "alogp": 4.18,
+        "hba": 2,
+        "hbd": 2,
+        "psa": 49.33,
+        "rtb": 5,
+        "aromatic_rings": 2,
+        "heavy_atoms": 23,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL4033",
+          "target_name": "Cyclooxygenase-2",
+          "references": [
+            "EMA https://www.ema.europa.eu/en/documents/product-information/onsior-epar-product-information_en.pdf"
+          ]
+        },
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL5303558",
+          "target_name": "Cyclooxygenase 2",
+          "references": [
+            "EMA https://www.ema.europa.eu/en/documents/product-information/onsior-epar-product-information_en.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Mavacoxib",
+      "chembl_id": "CHEMBL28527",
+      "pref_name": "MAVACOXIB",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 385.34,
+        "alogp": 3.34,
+        "hba": 4,
+        "hbd": 1,
+        "psa": 77.98,
+        "rtb": 3,
+        "aromatic_rings": 3,
+        "heavy_atoms": 26,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL4133",
+          "target_name": "Prostaglandin G/H synthase 1",
+          "references": [
+            "EMA https://www.ema.europa.eu/en/documents/product-information/trocoxil-epar-product-information_en.pdf"
+          ]
+        },
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL4033",
+          "target_name": "Cyclooxygenase-2",
+          "references": [
+            "EMA https://www.ema.europa.eu/en/documents/product-information/trocoxil-epar-product-information_en.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Ketoprofen",
+      "chembl_id": "CHEMBL571",
+      "pref_name": "KETOPROFEN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1986,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 254.29,
+        "alogp": 3.11,
+        "hba": 2,
+        "hbd": 1,
+        "psa": 54.37,
+        "rtb": 4,
+        "aromatic_rings": 2,
+        "heavy_atoms": 19,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2094253",
+          "target_name": "Cyclooxygenase",
+          "references": [
+            "PubMed 10377455",
+            "Wikipedia Ketoprofen",
+            "Wikipedia Nsaid"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Flunixin",
+      "chembl_id": "CHEMBL1617398",
+      "pref_name": "FLUNIXIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 296.25,
+        "alogp": 3.85,
+        "hba": 3,
+        "hbd": 2,
+        "psa": 62.22,
+        "rtb": 3,
+        "aromatic_rings": 2,
+        "heavy_atoms": 21,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Vedaprofen",
+      "chembl_id": "CHEMBL2104464",
+      "pref_name": "VEDAPROFEN",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 282.38,
+        "alogp": 5.08,
+        "hba": 1,
+        "hbd": 1,
+        "psa": 37.3,
+        "rtb": 3,
+        "aromatic_rings": 2,
+        "heavy_atoms": 21,
+        "num_ro5_violations": 1
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL5303565",
+          "target_name": "Cyclooxygenase-1",
+          "references": [
+            "EMA https://www.ema.europa.eu/en/documents/product-information/quadrisol-epar-product-information_en.pdf"
+          ]
+        },
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL5303566",
+          "target_name": "Prostaglandin G/H synthase 2",
+          "references": [
+            "EMA https://www.ema.europa.eu/en/documents/product-information/quadrisol-epar-product-information_en.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Tolfenamic Acid",
+      "chembl_id": "CHEMBL121626",
+      "pref_name": "TOLFENAMIC ACID",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 261.71,
+        "alogp": 4.09,
+        "hba": 2,
+        "hbd": 2,
+        "psa": 49.33,
+        "rtb": 3,
+        "aromatic_rings": 2,
+        "heavy_atoms": 18,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Diclofenac",
+      "chembl_id": "CHEMBL139",
+      "pref_name": "DICLOFENAC",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1988,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 296.15,
+        "alogp": 4.36,
+        "hba": 2,
+        "hbd": 2,
+        "psa": 49.33,
+        "rtb": 4,
+        "aromatic_rings": 2,
+        "heavy_atoms": 19,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2094253",
+          "target_name": "Cyclooxygenase",
+          "references": [
+            "FDA label/2013/204592s000lbl.pdf",
+            "PubMed 12534640",
+            "PubMed 12713596"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Phenylbutazone",
+      "chembl_id": "CHEMBL101",
+      "pref_name": "PHENYLBUTAZONE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1980,
+      "withdrawn_flag": true,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 308.38,
+        "alogp": 3.79,
+        "hba": 2,
+        "hbd": 0,
+        "psa": 40.62,
+        "rtb": 5,
+        "aromatic_rings": 2,
+        "heavy_atoms": 23,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2094253",
+          "target_name": "Cyclooxygenase",
+          "references": [
+            "Expert null"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Ketorolac",
+      "chembl_id": "CHEMBL469",
+      "pref_name": "KETOROLAC",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1989,
+      "withdrawn_flag": true,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 255.27,
+        "alogp": 2.29,
+        "hba": 3,
+        "hbd": 1,
+        "psa": 59.3,
+        "rtb": 3,
+        "aromatic_rings": 2,
+        "heavy_atoms": 19,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Ibuprofen",
+      "chembl_id": "CHEMBL521",
+      "pref_name": "IBUPROFEN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1974,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 206.28,
+        "alogp": 3.07,
+        "hba": 1,
+        "hbd": 1,
+        "psa": 37.3,
+        "rtb": 4,
+        "aromatic_rings": 1,
+        "heavy_atoms": 15,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2094253",
+          "target_name": "Cyclooxygenase",
+          "references": [
+            "ISBN 0443-059748 PP. 229",
+            "Wikipedia Ibuprofen"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Aspirin",
+      "chembl_id": "CHEMBL25",
+      "pref_name": "ASPIRIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1950,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 180.16,
+        "alogp": 1.31,
+        "hba": 3,
+        "hbd": 1,
+        "psa": 63.6,
+        "rtb": 2,
+        "aromatic_rings": 1,
+        "heavy_atoms": 13,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2094253",
+          "target_name": "Cyclooxygenase",
+          "references": [
+            "PubMed 17131625",
+            "PubMed 17258197",
+            "Wikipedia Aspirin#Mechanism_of_action"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Dexamethasone",
+      "chembl_id": "CHEMBL384467",
+      "pref_name": "DEXAMETHASONE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1958,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 392.47,
+        "alogp": 1.9,
+        "hba": 5,
+        "hbd": 3,
+        "psa": 94.83,
+        "rtb": 2,
+        "aromatic_rings": 0,
+        "heavy_atoms": 28,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "AGONIST",
+          "target_chembl_id": "CHEMBL2034",
+          "target_name": "Glucocorticoid receptor",
+          "references": [
+            "PubMed 16891588",
+            "PubMed 16956592",
+            "PubMed 16971495"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Prednisolone",
+      "chembl_id": "CHEMBL131",
+      "pref_name": "PREDNISOLONE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1955,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 360.45,
+        "alogp": 1.56,
+        "hba": 5,
+        "hbd": 3,
+        "psa": 94.83,
+        "rtb": 2,
+        "aromatic_rings": 0,
+        "heavy_atoms": 26,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "AGONIST",
+          "target_chembl_id": "CHEMBL2034",
+          "target_name": "Glucocorticoid receptor",
+          "references": [
+            "PubMed 19482847",
+            "PubMed 2879901"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Methylprednisolone",
+      "chembl_id": "CHEMBL650",
+      "pref_name": "METHYLPREDNISOLONE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1957,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 374.48,
+        "alogp": 1.8,
+        "hba": 5,
+        "hbd": 3,
+        "psa": 94.83,
+        "rtb": 2,
+        "aromatic_rings": 0,
+        "heavy_atoms": 27,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "AGONIST",
+          "target_chembl_id": "CHEMBL2034",
+          "target_name": "Glucocorticoid receptor",
+          "references": [
+            "PubMed 17016711",
+            "PubMed 17068119",
+            "PubMed 17251323"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Hydrocortisone",
+      "chembl_id": "CHEMBL389621",
+      "pref_name": "HYDROCORTISONE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1952,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 362.47,
+        "alogp": 1.78,
+        "hba": 5,
+        "hbd": 3,
+        "psa": 94.83,
+        "rtb": 2,
+        "aromatic_rings": 0,
+        "heavy_atoms": 26,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "AGONIST",
+          "target_chembl_id": "CHEMBL2034",
+          "target_name": "Glucocorticoid receptor",
+          "references": [
+            "PubMed 16895953",
+            "PubMed 16980198",
+            "PubMed 17038445"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Betamethasone",
+      "chembl_id": "CHEMBL632",
+      "pref_name": "BETAMETHASONE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1961,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 392.47,
+        "alogp": 1.9,
+        "hba": 5,
+        "hbd": 3,
+        "psa": 94.83,
+        "rtb": 2,
+        "aromatic_rings": 0,
+        "heavy_atoms": 28,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "AGONIST",
+          "target_chembl_id": "CHEMBL2034",
+          "target_name": "Glucocorticoid receptor",
+          "references": [
+            "PubMed 12188035",
+            "PubMed 15336699",
+            "PubMed 15866114"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Triamcinolone",
+      "chembl_id": "CHEMBL1451",
+      "pref_name": "TRIAMCINOLONE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1957,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 394.44,
+        "alogp": 0.62,
+        "hba": 6,
+        "hbd": 4,
+        "psa": 115.06,
+        "rtb": 2,
+        "aromatic_rings": 0,
+        "heavy_atoms": 28,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "AGONIST",
+          "target_chembl_id": "CHEMBL2034",
+          "target_name": "Glucocorticoid receptor",
+          "references": [
+            "PubMed 15976447",
+            "PubMed 16507850",
+            "PubMed 19744340"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Flumethasone",
+      "chembl_id": "CHEMBL1201392",
+      "pref_name": "FLUMETHASONE",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 410.46,
+        "alogp": 1.84,
+        "hba": 5,
+        "hbd": 3,
+        "psa": 94.83,
+        "rtb": 2,
+        "aromatic_rings": 0,
+        "heavy_atoms": 29,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Ketoconazole",
+      "chembl_id": "CHEMBL157101",
+      "pref_name": "KETOCONAZOLE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1981,
+      "withdrawn_flag": true,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 531.44,
+        "alogp": 4.21,
+        "hba": 7,
+        "hbd": 0,
+        "psa": 69.06,
+        "rtb": 7,
+        "aromatic_rings": 3,
+        "heavy_atoms": 36,
+        "num_ro5_violations": 1
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL1780",
+          "target_name": "Lanosterol 14-alpha demethylase",
+          "references": [
+            "FDA label/2007/021738lbl.pdf",
+            "ISBN 9780702034718 PP. 652"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Itraconazole",
+      "chembl_id": "CHEMBL64391",
+      "pref_name": "ITRACONAZOLE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1992,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 705.65,
+        "alogp": 5.58,
+        "hba": 12,
+        "hbd": 0,
+        "psa": 104.7,
+        "rtb": 11,
+        "aromatic_rings": 5,
+        "heavy_atoms": 49,
+        "num_ro5_violations": 3
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL1780",
+          "target_name": "Lanosterol 14-alpha demethylase",
+          "references": [
+            "DailyMed setid=599dcdd0-df9b-41e2-a767-b1f44f466fbd"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Fluconazole",
+      "chembl_id": "CHEMBL106",
+      "pref_name": "FLUCONAZOLE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1990,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 306.28,
+        "alogp": 0.74,
+        "hba": 7,
+        "hbd": 1,
+        "psa": 81.65,
+        "rtb": 5,
+        "aromatic_rings": 3,
+        "heavy_atoms": 22,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL1780",
+          "target_name": "Lanosterol 14-alpha demethylase",
+          "references": [
+            "DailyMed setid=f694c617-3383-416c-91b6-b94fda371204"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Voriconazole",
+      "chembl_id": "CHEMBL638",
+      "pref_name": "VORICONAZOLE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 2002,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 349.32,
+        "alogp": 2.18,
+        "hba": 6,
+        "hbd": 1,
+        "psa": 76.72,
+        "rtb": 5,
+        "aromatic_rings": 3,
+        "heavy_atoms": 25,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL1780",
+          "target_name": "Lanosterol 14-alpha demethylase",
+          "references": [
+            "DailyMed setid=dac26bcd-7a59-401f-9f66-a0649767cece"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Terbinafine",
+      "chembl_id": "CHEMBL822",
+      "pref_name": "TERBINAFINE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1992,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 291.44,
+        "alogp": 4.88,
+        "hba": 1,
+        "hbd": 0,
+        "psa": 3.24,
+        "rtb": 4,
+        "aromatic_rings": 2,
+        "heavy_atoms": 22,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2364679",
+          "target_name": "Squalene monooxygenase",
+          "references": [
+            "FDA label/2012/020539s021lbl.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Griseofulvin",
+      "chembl_id": "CHEMBL562",
+      "pref_name": "GRISEOFULVIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1962,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 352.77,
+        "alogp": 2.81,
+        "hba": 6,
+        "hbd": 0,
+        "psa": 71.06,
+        "rtb": 3,
+        "aromatic_rings": 1,
+        "heavy_atoms": 24,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2364703",
+          "target_name": "Tubulin",
+          "references": [
+            "ISBN 9780702034718 PP. 651",
+            "PubMed 18095085",
+            "PubMed 2878792"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Amphotericin B",
+      "chembl_id": "CHEMBL267345",
+      "pref_name": "AMPHOTERICIN B",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1964,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 924.09,
+        "alogp": 0.71,
+        "hba": 17,
+        "hbd": 12,
+        "psa": 319.61,
+        "rtb": 3,
+        "aromatic_rings": 0,
+        "heavy_atoms": 65,
+        "num_ro5_violations": 3
+      },
+      "mechanisms": [
+        {
+          "action_type": "SEQUESTERING AGENT",
+          "target_chembl_id": "CHEMBL2364028",
+          "target_name": "Ergosterol",
+          "references": [
+            "PubMed 19689243"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Nystatin",
+      "chembl_id": "CHEMBL5465559",
+      "pref_name": "NYSTATIN",
+      "molecule_type": "Unknown",
+      "max_phase": "4.0",
+      "first_approval": 1964,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": null,
+      "mechanisms": [
+        {
+          "action_type": "SEQUESTERING AGENT",
+          "target_chembl_id": "CHEMBL2364028",
+          "target_name": "Ergosterol",
+          "references": [
+            "FDA anda/98/64142ap_appltr_prntlbl_chemr.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Digoxin",
+      "chembl_id": "CHEMBL1751",
+      "pref_name": "DIGOXIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1975,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 780.95,
+        "alogp": 2.22,
+        "hba": 14,
+        "hbd": 6,
+        "psa": 203.06,
+        "rtb": 7,
+        "aromatic_rings": 0,
+        "heavy_atoms": 55,
+        "num_ro5_violations": 3
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2095186",
+          "target_name": "Sodium/potassium-transporting ATPase",
+          "references": [
+            "DailyMed setid=8a919762-ede5-4aa9-8688-65010c9a5641",
+            "Wikipedia Digoxin"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Furosemide",
+      "chembl_id": "CHEMBL35",
+      "pref_name": "FUROSEMIDE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1966,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 330.75,
+        "alogp": 1.89,
+        "hba": 5,
+        "hbd": 3,
+        "psa": 122.63,
+        "rtb": 5,
+        "aromatic_rings": 2,
+        "heavy_atoms": 21,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL1874",
+          "target_name": "Solute carrier family 12 member 1",
+          "references": [
+            "DailyMed setid=c794c95a-654e-48fe-9596-201fc122ff75",
+            "DOI 10.1056/NEJMra0907219",
+            "Wikipedia Furosemide"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Spironolactone",
+      "chembl_id": "CHEMBL1393",
+      "pref_name": "SPIRONOLACTONE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1960,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 416.58,
+        "alogp": 4.85,
+        "hba": 5,
+        "hbd": 0,
+        "psa": 60.44,
+        "rtb": 1,
+        "aromatic_rings": 0,
+        "heavy_atoms": 29,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "ANTAGONIST",
+          "target_chembl_id": "CHEMBL1994",
+          "target_name": "Mineralocorticoid receptor",
+          "references": [
+            "DailyMed setid=fb66327e-8261-46ae-b39a-4fa79d520844",
+            "Wikipedia Spironolactone"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Enalapril",
+      "chembl_id": "CHEMBL578",
+      "pref_name": "ENALAPRIL",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1985,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 376.45,
+        "alogp": 1.6,
+        "hba": 5,
+        "hbd": 2,
+        "psa": 95.94,
+        "rtb": 9,
+        "aromatic_rings": 1,
+        "heavy_atoms": 27,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Benazepril",
+      "chembl_id": "CHEMBL838",
+      "pref_name": "BENAZEPRIL",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1991,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 424.5,
+        "alogp": 2.57,
+        "hba": 5,
+        "hbd": 2,
+        "psa": 95.94,
+        "rtb": 9,
+        "aromatic_rings": 2,
+        "heavy_atoms": 31,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Pimobendan",
+      "chembl_id": "CHEMBL24646",
+      "pref_name": "PIMOBENDAN",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 334.38,
+        "alogp": 3.1,
+        "hba": 4,
+        "hbd": 2,
+        "psa": 79.37,
+        "rtb": 3,
+        "aromatic_rings": 3,
+        "heavy_atoms": 25,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Sildenafil",
+      "chembl_id": "CHEMBL192",
+      "pref_name": "SILDENAFIL",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1998,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 474.59,
+        "alogp": 1.61,
+        "hba": 8,
+        "hbd": 1,
+        "psa": 113.42,
+        "rtb": 7,
+        "aromatic_rings": 3,
+        "heavy_atoms": 33,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Theophylline",
+      "chembl_id": "CHEMBL1355736",
+      "pref_name": "THEOPHYLLINE",
+      "molecule_type": "Protein",
+      "max_phase": "4.0",
+      "first_approval": 1976,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 198.18,
+        "alogp": -1.04,
+        "hba": 5,
+        "hbd": 1,
+        "psa": 72.68,
+        "rtb": 0,
+        "aromatic_rings": 2,
+        "heavy_atoms": 13,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2093863",
+          "target_name": "Phosphodiesterase 4",
+          "references": [
+            "DailyMed setid=25b2fdbe-2f18-4153-835a-7a67bff83ef8",
+            "Wikipedia Theophylline#Mechanisms_of_action"
+          ]
+        },
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2094125",
+          "target_name": "Phosphodiesterase 3",
+          "references": [
+            "DailyMed setid=25b2fdbe-2f18-4153-835a-7a67bff83ef8",
+            "Wikipedia Theophylline#Mechanisms_of_action"
+          ]
+        },
+        {
+          "action_type": "ANTAGONIST",
+          "target_chembl_id": "CHEMBL2111329",
+          "target_name": "Adenosine receptor",
+          "references": [
+            "PubMed 12954362",
+            "PubMed 14992338",
+            "PubMed 15980878"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Acepromazine",
+      "chembl_id": "CHEMBL39560",
+      "pref_name": "ACEPROMAZINE",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 326.47,
+        "alogp": 4.44,
+        "hba": 4,
+        "hbd": 0,
+        "psa": 23.55,
+        "rtb": 5,
+        "aromatic_rings": 2,
+        "heavy_atoms": 23,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Dexmedetomidine",
+      "chembl_id": "CHEMBL778",
+      "pref_name": "DEXMEDETOMIDINE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1999,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 200.28,
+        "alogp": 3.18,
+        "hba": 1,
+        "hbd": 1,
+        "psa": 28.68,
+        "rtb": 2,
+        "aromatic_rings": 2,
+        "heavy_atoms": 15,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Propofol",
+      "chembl_id": "CHEMBL526",
+      "pref_name": "PROPOFOL",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1989,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 178.27,
+        "alogp": 3.64,
+        "hba": 1,
+        "hbd": 1,
+        "psa": 20.23,
+        "rtb": 2,
+        "aromatic_rings": 1,
+        "heavy_atoms": 13,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "POSITIVE ALLOSTERIC MODULATOR",
+          "target_chembl_id": "CHEMBL2093872",
+          "target_name": "GABA-A receptor; anion channel",
+          "references": [
+            "PubMed 10637364",
+            "PubMed 16402123"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Ketamine",
+      "chembl_id": "CHEMBL742",
+      "pref_name": "KETAMINE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1970,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 237.73,
+        "alogp": 2.9,
+        "hba": 2,
+        "hbd": 1,
+        "psa": 29.1,
+        "rtb": 2,
+        "aromatic_rings": 1,
+        "heavy_atoms": 16,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Xylazine",
+      "chembl_id": "CHEMBL297362",
+      "pref_name": "XYLAZINE",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 220.34,
+        "alogp": 3.21,
+        "hba": 3,
+        "hbd": 1,
+        "psa": 24.39,
+        "rtb": 1,
+        "aromatic_rings": 1,
+        "heavy_atoms": 15,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Atipamezole",
+      "chembl_id": "CHEMBL353972",
+      "pref_name": "ATIPAMEZOLE",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 212.3,
+        "alogp": 2.86,
+        "hba": 1,
+        "hbd": 1,
+        "psa": 28.68,
+        "rtb": 2,
+        "aromatic_rings": 2,
+        "heavy_atoms": 16,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Naloxone",
+      "chembl_id": "CHEMBL80",
+      "pref_name": "NALOXONE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1971,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 327.38,
+        "alogp": 1.3,
+        "hba": 5,
+        "hbd": 2,
+        "psa": 70,
+        "rtb": 2,
+        "aromatic_rings": 1,
+        "heavy_atoms": 24,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Iron Dextran",
+      "chembl_id": "CHEMBL1201544",
+      "pref_name": "IRON DEXTRAN",
+      "molecule_type": "Unknown",
+      "max_phase": "3.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": null,
+      "mechanisms": [
+        {
+          "action_type": null,
+          "target_chembl_id": null,
+          "target_name": null,
+          "references": [
+            "BNF https://bnf.nice.org.uk/drug/iron-dextran.html"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Cyanocobalamin",
+      "chembl_id": "CHEMBL2110563",
+      "pref_name": "CYANOCOBALAMIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1982,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 1356.4,
+        "alogp": null,
+        "hba": null,
+        "hbd": null,
+        "psa": null,
+        "rtb": null,
+        "aromatic_rings": null,
+        "heavy_atoms": null,
+        "num_ro5_violations": null
+      },
+      "mechanisms": [
+        {
+          "action_type": null,
+          "target_chembl_id": null,
+          "target_name": null,
+          "references": [
+            "DailyMed setid=2fb653d6-e2b2-4969-831b-c0dc37b9c0cc"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Folic Acid",
+      "chembl_id": "CHEMBL1622",
+      "pref_name": "FOLIC ACID",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1982,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 441.4,
+        "alogp": -0.04,
+        "hba": 9,
+        "hbd": 6,
+        "psa": 213.28,
+        "rtb": 9,
+        "aromatic_rings": 3,
+        "heavy_atoms": 32,
+        "num_ro5_violations": 1
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Ascorbic Acid",
+      "chembl_id": "CHEMBL196",
+      "pref_name": "ASCORBIC ACID",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1985,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 176.12,
+        "alogp": -1.41,
+        "hba": 6,
+        "hbd": 4,
+        "psa": 107.22,
+        "rtb": 2,
+        "aromatic_rings": 0,
+        "heavy_atoms": 12,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": null,
+          "target_chembl_id": null,
+          "target_name": null,
+          "references": [
+            "FDA label/2017/209112s000lbl.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Selenium",
+      "chembl_id": "CHEMBL6068503",
+      "pref_name": "SELENIUM",
+      "molecule_type": "Small molecule",
+      "max_phase": "3.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 78.96,
+        "alogp": null,
+        "hba": null,
+        "hbd": null,
+        "psa": null,
+        "rtb": null,
+        "aromatic_rings": null,
+        "heavy_atoms": null,
+        "num_ro5_violations": null
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Monensin",
+      "chembl_id": "CHEMBL256105",
+      "pref_name": "MONENSIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 670.88,
+        "alogp": 4.27,
+        "hba": 10,
+        "hbd": 4,
+        "psa": 153.37,
+        "rtb": 10,
+        "aromatic_rings": 0,
+        "heavy_atoms": 47,
+        "num_ro5_violations": 1
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Salinomycin",
+      "chembl_id": "CHEMBL1208572",
+      "pref_name": "SALINOMYCIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 751.01,
+        "alogp": 6.19,
+        "hba": 10,
+        "hbd": 4,
+        "psa": 161.21,
+        "rtb": 12,
+        "aromatic_rings": 0,
+        "heavy_atoms": 53,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Lasalocid",
+      "chembl_id": "CHEMBL145347",
+      "pref_name": "LASALOCID",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 590.8,
+        "alogp": 5.84,
+        "hba": 7,
+        "hbd": 4,
+        "psa": 133.52,
+        "rtb": 13,
+        "aromatic_rings": 1,
+        "heavy_atoms": 42,
+        "num_ro5_violations": 2
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Decoquinate",
+      "chembl_id": "CHEMBL416230",
+      "pref_name": "DECOQUINATE",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 417.55,
+        "alogp": 6.04,
+        "hba": 6,
+        "hbd": 1,
+        "psa": 77.88,
+        "rtb": 14,
+        "aromatic_rings": 2,
+        "heavy_atoms": 30,
+        "num_ro5_violations": 1
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Diclazuril",
+      "chembl_id": "CHEMBL284733",
+      "pref_name": "DICLAZURIL",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 407.64,
+        "alogp": 3.54,
+        "hba": 5,
+        "hbd": 1,
+        "psa": 91.54,
+        "rtb": 3,
+        "aromatic_rings": 3,
+        "heavy_atoms": 26,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Toltrazuril",
+      "chembl_id": "CHEMBL2104931",
+      "pref_name": "TOLTRAZURIL",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 425.39,
+        "alogp": 2.94,
+        "hba": 7,
+        "hbd": 1,
+        "psa": 86.09,
+        "rtb": 4,
+        "aromatic_rings": 3,
+        "heavy_atoms": 29,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Ponazuril",
+      "chembl_id": "CHEMBL2104856",
+      "pref_name": "PONAZURIL",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 457.39,
+        "alogp": 1.62,
+        "hba": 8,
+        "hbd": 1,
+        "psa": 120.23,
+        "rtb": 4,
+        "aromatic_rings": 3,
+        "heavy_atoms": 31,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Amprolium",
+      "chembl_id": "CHEMBL1318296",
+      "pref_name": "AMPROLIUM",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 315.25,
+        "alogp": 1.66,
+        "hba": 3,
+        "hbd": 1,
+        "psa": 55.68,
+        "rtb": 4,
+        "aromatic_rings": 2,
+        "heavy_atoms": 18,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Midazolam",
+      "chembl_id": "CHEMBL655",
+      "pref_name": "MIDAZOLAM",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1985,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 325.77,
+        "alogp": 4.32,
+        "hba": 3,
+        "hbd": 0,
+        "psa": 30.18,
+        "rtb": 1,
+        "aromatic_rings": 3,
+        "heavy_atoms": 23,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "POSITIVE ALLOSTERIC MODULATOR",
+          "target_chembl_id": "CHEMBL2093872",
+          "target_name": "GABA-A receptor; anion channel",
+          "references": [
+            "ISBN 9780702034718 PP. 497, 533",
+            "Wikipedia Benzodiazepine",
+            "Wikipedia GABAA_receptor"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Diazepam",
+      "chembl_id": "CHEMBL12",
+      "pref_name": "DIAZEPAM",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1963,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 284.75,
+        "alogp": 3.15,
+        "hba": 2,
+        "hbd": 0,
+        "psa": 32.67,
+        "rtb": 1,
+        "aromatic_rings": 2,
+        "heavy_atoms": 20,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "POSITIVE ALLOSTERIC MODULATOR",
+          "target_chembl_id": "CHEMBL2093872",
+          "target_name": "GABA-A receptor; anion channel",
+          "references": [
+            "PubMed 15926867",
+            "PubMed 2886589",
+            "Wikipedia Benzodiazepine"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Acepromazine Maleate",
+      "chembl_id": "CHEMBL1883146",
+      "pref_name": "ACEPROMAZINE MALEATE",
+      "molecule_type": "Small molecule",
+      "max_phase": "-1.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 442.54,
+        "alogp": 4.44,
+        "hba": 4,
+        "hbd": 0,
+        "psa": 23.55,
+        "rtb": 5,
+        "aromatic_rings": 2,
+        "heavy_atoms": 23,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Buprenorphine",
+      "chembl_id": "CHEMBL511142",
+      "pref_name": "BUPRENORPHINE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1981,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 467.65,
+        "alogp": 4.41,
+        "hba": 5,
+        "hbd": 2,
+        "psa": 62.16,
+        "rtb": 4,
+        "aromatic_rings": 1,
+        "heavy_atoms": 34,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "AGONIST",
+          "target_chembl_id": "CHEMBL233",
+          "target_name": "Mu-type opioid receptor",
+          "references": [
+            "DailyMed setid=b086772e-d15a-4d13-b1a2-38bfbde1f18c#nlm34090-1"
+          ]
+        },
+        {
+          "action_type": "AGONIST",
+          "target_chembl_id": "CHEMBL237",
+          "target_name": "Kappa-type opioid receptor",
+          "references": [
+            "DailyMed setid=b086772e-d15a-4d13-b1a2-38bfbde1f18c#nlm34090-1",
+            "PubMed 18997874"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Butorphanol",
+      "chembl_id": "CHEMBL33986",
+      "pref_name": "BUTORPHANOL",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1978,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 327.47,
+        "alogp": 3.37,
+        "hba": 3,
+        "hbd": 2,
+        "psa": 43.7,
+        "rtb": 2,
+        "aromatic_rings": 1,
+        "heavy_atoms": 24,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Tramadol",
+      "chembl_id": "CHEMBL1237044",
+      "pref_name": "TRAMADOL",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1995,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 263.38,
+        "alogp": 2.63,
+        "hba": 3,
+        "hbd": 1,
+        "psa": 32.7,
+        "rtb": 4,
+        "aromatic_rings": 1,
+        "heavy_atoms": 19,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Gabapentin",
+      "chembl_id": "CHEMBL940",
+      "pref_name": "GABAPENTIN",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1993,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 171.24,
+        "alogp": 1.37,
+        "hba": 2,
+        "hbd": 2,
+        "psa": 63.32,
+        "rtb": 3,
+        "aromatic_rings": 0,
+        "heavy_atoms": 12,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "MODULATOR",
+          "target_chembl_id": "CHEMBL2363032",
+          "target_name": "Voltage-gated calcium channel",
+          "references": [
+            "FDA label/2012/022544s008lbl.pdf",
+            "ISBN 0-12-184453-6 PP. 124",
+            "PubMed 18299583"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Maropitant",
+      "chembl_id": "CHEMBL2111099",
+      "pref_name": "MAROPITANT",
+      "molecule_type": "Small molecule",
+      "max_phase": "2.0",
+      "first_approval": null,
+      "withdrawn_flag": false,
+      "therapeutic_flag": false,
+      "oral": false,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 468.69,
+        "alogp": 6.38,
+        "hba": 3,
+        "hbd": 1,
+        "psa": 24.5,
+        "rtb": 7,
+        "aromatic_rings": 3,
+        "heavy_atoms": 35,
+        "num_ro5_violations": 1
+      },
+      "mechanisms": [
+        {
+          "action_type": "ANTAGONIST",
+          "target_chembl_id": "CHEMBL5303554",
+          "target_name": "Substance-P receptor",
+          "references": [
+            "EMA https://www.ema.europa.eu/en/documents/product-information/prevomax-epar-product-information_en.pdf"
+          ]
+        },
+        {
+          "action_type": "ANTAGONIST",
+          "target_chembl_id": "CHEMBL5303555",
+          "target_name": "Substance-P receptor",
+          "references": [
+            "EMA https://www.ema.europa.eu/en/documents/product-information/prevomax-epar-product-information_en.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Methimazole",
+      "chembl_id": "CHEMBL1515",
+      "pref_name": "METHIMAZOLE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1950,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 114.17,
+        "alogp": 0.71,
+        "hba": 3,
+        "hbd": 1,
+        "psa": 17.82,
+        "rtb": 0,
+        "aromatic_rings": 1,
+        "heavy_atoms": 7,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL1839",
+          "target_name": "Thyroid peroxidase",
+          "references": [
+            "DailyMed setid=2d70b747-314c-4baa-95c4-1734855a1556"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Methocarbamol",
+      "chembl_id": "CHEMBL1201117",
+      "pref_name": "METHOCARBAMOL",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1957,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 241.24,
+        "alogp": 0.53,
+        "hba": 5,
+        "hbd": 2,
+        "psa": 91.01,
+        "rtb": 6,
+        "aromatic_rings": 1,
+        "heavy_atoms": 17,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL261",
+          "target_name": "Carbonic anhydrase 1",
+          "references": [
+            "PubMed 1460006"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Apomorphine",
+      "chembl_id": "CHEMBL53",
+      "pref_name": "APOMORPHINE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 2001,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": false,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 267.33,
+        "alogp": 2.85,
+        "hba": 3,
+        "hbd": 2,
+        "psa": 43.7,
+        "rtb": 0,
+        "aromatic_rings": 2,
+        "heavy_atoms": 20,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": []
+    },
+    {
+      "inn": "Sucralfate",
+      "chembl_id": "CHEMBL6067980",
+      "pref_name": "SUCRALFATE",
+      "molecule_type": "Unknown",
+      "max_phase": "4.0",
+      "first_approval": 1981,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": null,
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL3295",
+          "target_name": "Pepsin A",
+          "references": [
+            "DailyMed setid=0fb67b1c-b4c0-46f2-8a81-df1510e006aa#nlm34090-1",
+            "ISBN 0443-059748 PP. 376"
+          ]
+        },
+        {
+          "action_type": "CROSS-LINKING AGENT",
+          "target_chembl_id": "CHEMBL2363054",
+          "target_name": "Glycoproteins",
+          "references": [
+            "DailyMed setid=0fb67b1c-b4c0-46f2-8a81-df1510e006aa#nlm34090-1",
+            "ISBN 0443-059748 PP. 376"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Omeprazole",
+      "chembl_id": "CHEMBL1503",
+      "pref_name": "OMEPRAZOLE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1989,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": false,
+      "properties": {
+        "full_mwt": 345.42,
+        "alogp": 2.9,
+        "hba": 5,
+        "hbd": 1,
+        "psa": 83.09,
+        "rtb": 5,
+        "aromatic_rings": 3,
+        "heavy_atoms": 24,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "INHIBITOR",
+          "target_chembl_id": "CHEMBL2095173",
+          "target_name": "Potassium-transporting ATPase",
+          "references": [
+            "FDA label/2012/019810s095,022056s011lbl.pdf",
+            "PubMed 10411559",
+            "PubMed 18925391"
+          ]
+        }
+      ]
+    },
+    {
+      "inn": "Famotidine",
+      "chembl_id": "CHEMBL902",
+      "pref_name": "FAMOTIDINE",
+      "molecule_type": "Small molecule",
+      "max_phase": "4.0",
+      "first_approval": 1986,
+      "withdrawn_flag": false,
+      "therapeutic_flag": true,
+      "oral": true,
+      "parenteral": true,
+      "properties": {
+        "full_mwt": 337.46,
+        "alogp": -0.77,
+        "hba": 6,
+        "hbd": 4,
+        "psa": 175.83,
+        "rtb": 7,
+        "aromatic_rings": 1,
+        "heavy_atoms": 20,
+        "num_ro5_violations": 0
+      },
+      "mechanisms": [
+        {
+          "action_type": "ANTAGONIST",
+          "target_chembl_id": "CHEMBL1941",
+          "target_name": "Histamine H2 receptor",
+          "references": [
+            "DailyMed setid=1893ed5d-eddc-49ea-94d0-b839e0b1bfc9"
+          ]
+        }
+      ]
+    }
+  ]
+}

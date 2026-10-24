@@ -4,6 +4,17 @@ import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
 import { simulatePK, computePD, DRUG_PK_PROFILES } from "@/lib/pkpd";
+import {
+  chemblIndex,
+  chemblUrl,
+  findChembl,
+  loadChemblData,
+  mechanismLines,
+  phaseLabelRu,
+  approvalYear,
+  type ChemblData,
+  type ChemblDrug,
+} from "@/lib/chembl";
 import { cloudShare, cloudGetShare } from "@/lib/cloud";
 import {
   parseShareHash,
@@ -14,9 +25,31 @@ import {
   type PkpdScenario,
 } from "@/lib/share";
 
+// Русское имя профиля → INN для сверки с ChEMBL (6 профилей)
+const PKPD_CHEMBL_INN: Record<string, string> = {
+  "Энрофлоксацин": "Enrofloxacin",
+  "Амоксициллин": "Amoxicillin",
+  "Гентамицин": "Gentamicin",
+  "Доксициклин": "Doxycycline",
+  "Марбофлоксацин": "Marbofloxacin",
+  "Цефтиофур": "Ceftiofur",
+};
+
 export default function PKPDPage() {
   const [profileIdx, setProfileIdx] = useState(0);
   const profile = DRUG_PK_PROFILES[profileIdx];
+  const [chembl, setChembl] = useState<ChemblData | null>(null);
+
+  // ChEMBL-канал: статический срез из недельного CI-рана (может отсутствовать)
+  useEffect(() => {
+    let alive = true;
+    loadChemblData().then((d) => { if (alive) setChembl(d); });
+    return () => { alive = false; };
+  }, []);
+  const chemblRow: ChemblDrug | null = useMemo(() => {
+    const inn = PKPD_CHEMBL_INN[profile.name];
+    return inn ? findChembl(chemblIndex(chembl), inn) ?? null : null;
+  }, [chembl, profile.name]);
 
   const [dose, setDose] = useState(5); // mg/kg
   const [interval, setInterval] = useState(24); // h
@@ -170,6 +203,29 @@ export default function PKPDPage() {
                 </button>
               ))}
             </div>
+
+            {chemblRow && (
+              <div className="rounded-lg border border-sky-200 dark:border-sky-800 bg-sky-50/50 dark:bg-sky-950/20 p-3 mb-4 text-xs">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <a href={chemblUrl(chemblRow)} target="_blank" rel="noopener" className="font-semibold text-sky-700 dark:text-sky-300 hover:underline">
+                    ChEMBL {chemblRow.chembl_id} ↗
+                  </a>
+                  <span className="px-1.5 py-0.5 rounded bg-sky-600 text-white text-[10px] font-semibold uppercase tracking-wide">
+                    {phaseLabelRu(chemblRow)}
+                  </span>
+                  {approvalYear(chemblRow) && <span className="text-sky-700 dark:text-sky-300">с {approvalYear(chemblRow)}</span>}
+                  {chemblRow.withdrawn_flag && (
+                    <span className="px-1.5 py-0.5 rounded bg-red-600 text-white text-[10px] font-semibold uppercase">отозван</span>
+                  )}
+                </div>
+                {mechanismLines(chemblRow).length > 0 && (
+                  <div className="mt-1.5 text-sky-800/80 dark:text-sky-200/80">
+                    {mechanismLines(chemblRow).slice(0, 3).join("; ")}
+                  </div>
+                )}
+                <div className="mt-1 text-[10px] text-sky-600/70 dark:text-sky-400/70">срез {chembl?.version}</div>
+              </div>
+            )}
 
             <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 mb-3 mt-4">
               Режим дозирования

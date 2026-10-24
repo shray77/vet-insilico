@@ -1,0 +1,78 @@
+name: ChEMBL reference refresh (weekly)
+
+# Зачем: ADMET/PK страницы сверяют наши эвристические дескрипторы с реальной
+# базой ChEMBL (свойства RDKit, фазы одобрения, механизмы действия). Живой
+# API из РФ нестабилен → держим статический срез public/data/chembl-reference.json,
+# обновляемый этим раном. ChEMBL релизится ~2 раза в год — weekly достаточно.
+
+on:
+  schedule:
+    - cron: "10 4 * * 1"   # пн 07:10 МСК
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: chembl-refresh
+  cancel-in-progress: false
+
+jobs:
+  chembl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Fetch ChEMBL snapshot (202 INN, ~3 min)
+        run: node scripts/chembl/fetch_chembl.mjs
+        env:
+          CHEMBL_DELAY_MS: "280"
+
+      - name: Sanity-check output JSON
+        run: |
+          node -e "
+            const d = JSON.parse(require('fs').readFileSync('public/data/chembl-reference.json', 'utf8'));
+            if (!d.version || !Array.isArray(d.drugs) || d.drugs.length < 100) {
+              console.error('bad chembl snapshot:', d.version, d.drugs && d.drugs.length);
+              process.exit(1);
+            }
+            const withProps = d.drugs.filter(x => x.properties);
+            console.log('chembl ok:', d.version, d.drugs.length, 'drugs,', withProps.length, 'with properties');
+          "
+
+      - name: Commit (only if changed)
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/chembl-reference.json
+          if git diff --cached --quiet; then
+            echo "Срез не изменился — коммит не нужен"
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          V=$(node -e "console.log(JSON.parse(require('fs').readFileSync('public/data/chembl-reference.json','utf8')).version)")
+          git commit -m "chore(data): ChEMBL reference snapshot $V
+
+          Weekly refresh of molecule properties / approval phases / mechanisms.
+          Updated: $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger site deploy
+        if: steps.commit.outputs.pushed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'deploy.yml',
+              ref: 'main'
+            });
