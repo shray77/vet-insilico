@@ -1,17 +1,211 @@
 {
   "model": "boltz-2",
-  "generated": null,
+  "generated": "2026-10-25T18:38:07Z",
   "params": {
     "recycling_steps": 3,
     "sampling_steps": 200,
     "diffusion_samples": 1,
-    "msa": "single-sequence (no MSA server)",
-    "accelerator": "cpu (GitHub Actions)"
+    "msa": "MMSeqs2 server (--use_msa_server)",
+    "accelerator": "cpu (GitHub Actions, 4 vCPU)"
   },
   "units": {
     "affinity_pred_value": "log10(IC50 [uM]), Boltz-2 affinity head",
     "delta_g_kcal_mol": "(6 - y) * 1.364 (kcal/mol, RT*ln10 per log unit @298K)",
     "note": "меньше IC50 / меньше (более отрицательный) dG = сильнее связывание"
   },
-  "pairs": []
+  "pairs": [
+    {
+      "drug_id": "drug-110-rimantadine",
+      "inn": "Rimantadine",
+      "target_id": "hpai-m2",
+      "target_name": "Ионный канал M2 (Influenza A)",
+      "pdb_id": "2RLF",
+      "chains": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "kind": "validated",
+      "reference": {
+        "ic50_um": 60,
+        "note": "2RLF — NMR-структура M2 именно в комплексе с римантадином; Ki десятки мкМ в липидных бислоях, EC50 ~0.1-1 мкМ в вирусных ассаях"
+      },
+      "hypothesis": null,
+      "status": "ok",
+      "affinity_pred_value": 0.404296875,
+      "affinity_probability_binary": 0.125,
+      "ic50_um_est": 2.536862,
+      "delta_g_kcal_mol": 7.63,
+      "confidence": {
+        "confidence_score": 0.7580477595329285,
+        "iptm": 0.7031537294387817,
+        "ligand_iptm": 0.7936649322509766,
+        "complex_plddt": 0.7717713117599487
+      },
+      "runtime_s": 817.4
+    },
+    {
+      "drug_id": "drug-109-amantadine",
+      "inn": "Amantadine",
+      "target_id": "hpai-m2",
+      "target_name": "Ионный канал M2 (Influenza A)",
+      "pdb_id": "2RLF",
+      "chains": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "kind": "validated",
+      "reference": {
+        "ic50_um": 16,
+        "note": "Классика: амантадин блокирует пору M2 (Schnell & Chou 2008; PDB 6BKK); EC50 0.2-1 мкМ, Ki сильно зависит от ассая и субтипа"
+      },
+      "hypothesis": null,
+      "status": "ok",
+      "affinity_pred_value": 1.5078125,
+      "affinity_probability_binary": 0.08251953125,
+      "ic50_um_est": 32.196784,
+      "delta_g_kcal_mol": 6.13,
+      "confidence": {
+        "confidence_score": 0.7471511363983154,
+        "iptm": 0.7384728789329529,
+        "ligand_iptm": 0.8146516680717468,
+        "complex_plddt": 0.7493206858634949
+      },
+      "runtime_s": 758.5
+    },
+    {
+      "drug_id": "drug-111-oseltamivir",
+      "inn": "Oseltamivir",
+      "target_id": "hpai-na",
+      "target_name": "Нейраминидаза NA (Influenza A H5N1)",
+      "pdb_id": "2HTY",
+      "chains": [
+        "A"
+      ],
+      "kind": "validated",
+      "reference": {
+        "ic50_um": 0.002,
+        "note": "2HTY — кристалл N1 именно с осельтамивиром (Russell 2006); IC50 1-3 нМ для N1 чувствительных штаммов"
+      },
+      "hypothesis": null,
+      "status": "ok",
+      "affinity_pred_value": -0.2431640625,
+      "affinity_probability_binary": 0.625,
+      "ic50_um_est": 0.571263,
+      "delta_g_kcal_mol": 8.52,
+      "confidence": {
+        "confidence_score": 0.9447406530380249,
+        "iptm": 0.9226149916648865,
+        "ligand_iptm": 0.9226149916648865,
+        "complex_plddt": 0.9502721428871155
+      },
+      "runtime_s": 2477.9
+    },
+    {
+      "drug_id": "drug-112-zanamivir",
+      "inn": "Zanamivir",
+      "target_id": "hpai-na",
+      "target_name": "Нейраминидаза NA (Influenza A H5N1)",
+      "pdb_id": "2HTY",
+      "chains": [
+        "A"
+      ],
+      "kind": "validated",
+      "reference": {
+        "ic50_um": 0.001,
+        "note": "Занамивир — второй клинический ингибитор NA; IC50 0.5-3 нМ для N1"
+      },
+      "hypothesis": null,
+      "status": "ok",
+      "affinity_pred_value": -0.83203125,
+      "affinity_probability_binary": 0.78125,
+      "ic50_um_est": 0.147221,
+      "delta_g_kcal_mol": 9.32,
+      "confidence": {
+        "confidence_score": 0.9427933692932129,
+        "iptm": 0.8953201770782471,
+        "ligand_iptm": 0.8953201770782471,
+        "complex_plddt": 0.9546616673469543
+      },
+      "runtime_s": 2454.4
+    },
+    {
+      "drug_id": "drug-116-remdesivir",
+      "inn": "Remdesivir",
+      "target_id": "asfv-polx",
+      "target_name": "ДНК-полимераза X (ASFV)",
+      "pdb_id": "1JQR",
+      "chains": [
+        "A"
+      ],
+      "kind": "hypothesis",
+      "reference": null,
+      "hypothesis": "АЧС не имеет терапии; PolX — уникальная репаративная полимераза ASFV (нет гомолога у свиньи), ремдесивир — нуклеозидный аналог. Прямых данных нет — гипотеза для in vitro.",
+      "status": "ok",
+      "affinity_pred_value": 0.91796875,
+      "affinity_probability_binary": 0.1953125,
+      "ic50_um_est": 8.278826,
+      "delta_g_kcal_mol": 6.93,
+      "confidence": {
+        "confidence_score": 0.8349025845527649,
+        "iptm": 0.7026678919792175,
+        "ligand_iptm": 0.7026678919792175,
+        "complex_plddt": 0.8679612278938293
+      },
+      "runtime_s": 1048.5
+    },
+    {
+      "drug_id": "drug-118-favipiravir",
+      "inn": "Favipiravir",
+      "target_id": "asfv-polx",
+      "target_name": "ДНК-полимераза X (ASFV)",
+      "pdb_id": "1JQR",
+      "chains": [
+        "A"
+      ],
+      "kind": "hypothesis",
+      "reference": null,
+      "hypothesis": "Фавипиравир — синтетический аналог пуриновой нуклеобазы с широким противовирусным профилем РНК-полимераз. Прямых данных по PolX нет — гипотеза.",
+      "status": "ok",
+      "affinity_pred_value": 1.734375,
+      "affinity_probability_binary": 0.546875,
+      "ic50_um_est": 54.246909,
+      "delta_g_kcal_mol": 5.82,
+      "confidence": {
+        "confidence_score": 0.9337772130966187,
+        "iptm": 0.8391924500465393,
+        "ligand_iptm": 0.8391924500465393,
+        "complex_plddt": 0.9574234485626221
+      },
+      "runtime_s": 808.5
+    },
+    {
+      "drug_id": "drug-018-doxycycline",
+      "inn": "Doxycycline",
+      "target_id": "leptospira-lip32",
+      "target_name": "Липопротеин LipL32 (Leptospira interrogans)",
+      "pdb_id": "2ZZ8",
+      "chains": [
+        "A"
+      ],
+      "kind": "hypothesis",
+      "reference": null,
+      "hypothesis": "Доксициклин — препарат выбора при лептоспирозе (in vivo мишень — рибосома), но связывание с поверхностным LipL32 не изучено. Пара сравнивает реальный ИИ-докинг с упрощённым скорером витрины.",
+      "status": "ok",
+      "affinity_pred_value": 1.046875,
+      "affinity_probability_binary": 0.53125,
+      "ic50_um_est": 11.139739,
+      "delta_g_kcal_mol": 6.76,
+      "confidence": {
+        "confidence_score": 0.778744101524353,
+        "iptm": 0.6663434505462646,
+        "ligand_iptm": 0.6663434505462646,
+        "complex_plddt": 0.8068442344665527
+      },
+      "runtime_s": 1332.9
+    }
+  ]
 }
