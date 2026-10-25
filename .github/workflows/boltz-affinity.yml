@@ -8,9 +8,13 @@ name: Boltz-2 affinity pilot (nightly)
 # доксициклин × LipL32 2ZZ8). Результат — статический
 # public/data/boltz-affinities.json (колонка «Boltz-2» в витрине).
 #
-# CPU-ран: ~2.5-5 ч на ubuntu-latest (7 пар, ≤400 остатков). Веса (~3.3 ГБ)
-# кэшируются. Пара упавшая по OOM/таймауту пишется в JSON со status=error
-# и не роняет ран (см. scripts/boltz_pilot/run_pilot.py).
+# CPU-ран: ожидаемо ~2.5-4.5 ч на ubuntu-latest (7 пар, ≤400 остатков;
+# M2/PolX ~15-30 мин/пара, NA ~40-90 мин). MSA генерится MMSeqs2-сервером
+# (--use_msa_server в run_pilot.py — ГРАБЛЯ Task 151b: без MSA boltz 2.2.1
+# молча «пропускает» вход, rc=0, ноль файлов — так умерли два первых рана).
+# Веса (~4.2 ГБ) кэшируются; битые/обрезанные чекпойнты самолечатся
+# (heal_cache: zipfile-проверка → перезаливка). Пара, упавшая по OOM/таймауту
+# (100 мин/пара), пишется в JSON со status=error и не роняет ран.
 
 on:
   schedule:

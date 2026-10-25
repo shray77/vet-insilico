@@ -22,6 +22,8 @@ import subprocess
 import sys
 import time
 import urllib.request
+import zipfile
+from pathlib import Path
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(HERE))
@@ -29,9 +31,13 @@ OUT_JSON = os.path.join(REPO, "public", "data", "boltz-affinities.json")
 WORK = os.environ.get("BOLTZ_WORK", "/tmp/boltz_pilot")
 
 FASTA_URL = "https://www.rcsb.org/fasta/entry/{}"
-# Explicit inference params (defaults today; pinned for reproducibility)
+# Explicit inference params (defaults today; pinned for reproducibility).
+# --use_msa_server ОБЯЗАТЕЛЕН: boltz 2.2.1 без MSA тихо «пропускает» вход
+# (RuntimeError: Missing MSA's ... Skipping, rc=0) — корневая причина провала
+# первых двух CI-ранов (Task 151b).
 PREDICT_ARGS = [
     "--accelerator", "cpu",
+    "--use_msa_server",
     "--recycling_steps", "3",
     "--sampling_steps", "200",
     "--diffusion_samples", "1",
@@ -40,6 +46,40 @@ PREDICT_ARGS = [
 ]
 MODEL_TAG = os.environ.get("BOLTZ_MODEL_TAG", "boltz-2")
 BOLTZ_BIN = os.environ.get("BOLTZ_BIN", "boltz")
+
+
+def _boltz_cache() -> Path:
+    """Cache dir boltz itself uses ($BOLTZ_CACHE or ~/.boltz)."""
+    env = os.environ.get("BOLTZ_CACHE")
+    return Path(env).expanduser() if env else Path("~/.boltz").expanduser()
+
+
+def heal_cache() -> list[str]:
+    """Self-heal partially downloaded checkpoints (poisoned cache).
+
+    boltz re-downloads a ckpt only if it does NOT exist; a run cancelled
+    mid-download leaves a truncated zip that survives forever in the
+    actions/cache and fails every later run with
+    'PytorchStreamReader failed reading zip archive'. We open each ckpt
+    as a zip (central-directory parse, cheap) and delete bad files so
+    boltz re-downloads them.
+    """
+    fixed: list[str] = []
+    cache = _boltz_cache()
+    for name in ("boltz2_conf.ckpt", "boltz2_aff.ckpt"):
+        ckpt = cache / name
+        if not ckpt.exists() or ckpt.stat().st_size < 10_000_000:
+            if ckpt.exists():
+                ckpt.unlink()
+                fixed.append(f"{name}: undersized, removed")
+            continue
+        try:
+            with zipfile.ZipFile(ckpt):
+                pass
+        except zipfile.BadZipFile:
+            ckpt.unlink()
+            fixed.append(f"{name}: corrupt zip, removed")
+    return fixed
 
 
 def fetch_fasta(pdb_id: str) -> dict[str, str]:
@@ -132,13 +172,20 @@ def run_pair(pair: dict) -> dict:
     cmd = [BOLTZ_BIN, "predict", yaml_path, "--out_dir", os.path.join(pair_dir, "out")] + PREDICT_ARGS
     print(f"[{name}] chains={wanted} tokens={sum(len(s) for s in seqs)}", flush=True)
     print(f"[{name}] $ {' '.join(cmd)}", flush=True)
-    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=60 * 200)
+    # 100 мин/пара: 7 пар обязаны влезть в job-timeout 350 мин с запасом
+    # на MSA-генерацию (~20 мин) и докачку весов при холодном кэше
+    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=60 * 100)
     runtime_s = round(time.time() - t0, 1)
+    tail = (proc.stderr or "")[-1200:] or (proc.stdout or "")[-1200:]
     if proc.returncode != 0:
-        tail = (proc.stderr or proc.stdout or "")[-1500:]
         raise RuntimeError(f"boltz rc={proc.returncode}; tail: {tail}")
 
-    parsed = parse_outputs(os.path.join(pair_dir, "out"), name)
+    try:
+        parsed = parse_outputs(os.path.join(pair_dir, "out"), name)
+    except Exception as e:  # noqa: BLE001 - attach boltz output for debugging
+        # boltz «Skip»-ает плохие входы с rc=0 — без вывода такой провал
+        # выглядит как «ничего не произошло» (урок первого CI-рана)
+        raise RuntimeError(f"{e}; boltz tail: {tail}") from e
     parsed["runtime_s"] = runtime_s
     return parsed
 
@@ -147,6 +194,9 @@ def main() -> int:
     pairs = json.load(open(os.path.join(HERE, "pairs.json")))["pairs"]
     os.makedirs(WORK, exist_ok=True)
     os.makedirs(os.path.dirname(OUT_JSON), exist_ok=True)
+
+    for msg in heal_cache():
+        print(f"[CACHE-HEAL] {msg}", flush=True)
 
     results = []
     for pair in pairs:
@@ -180,7 +230,7 @@ def main() -> int:
             "recycling_steps": 3,
             "sampling_steps": 200,
             "diffusion_samples": 1,
-            "msa": "single-sequence (no MSA server)",
+            "msa": "MMSeqs2 server (--use_msa_server)",
             "accelerator": os.environ.get("BOLTZ_ACCEL_TAG", "cpu (GitHub Actions)"),
         },
         "units": {
