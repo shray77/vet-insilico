@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
-import { ChevronDown, Menu, Monitor, Moon, Sun } from "lucide-react";
+import { ChevronDown, Dna, Menu, Monitor, Moon, Sun } from "lucide-react";
 import HfTokenModal from "./HfTokenModal";
 import { ToolIcon } from "./ToolIcon";
 import { getHfToken } from "@/lib/hf";
@@ -117,8 +117,14 @@ export default function HubHeader() {
     <>
       <header className="sticky top-0 z-40 backdrop-blur-lg bg-white/80 dark:bg-zinc-950/80 border-b border-zinc-200 dark:border-zinc-800">
         <div className="max-w-7xl mx-auto px-3 h-12 flex items-center gap-2">
-          <Link href="/" className="flex items-center gap-1.5 font-bold text-base shrink-0">
-            <span className="hidden sm:inline">VetInSilico <span className="text-teal-500">Hub</span></span>
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            {/* Лого-плитка — ДНК мастхед-паттерна v2.2 (якорь + характер) */}
+            <span className="brand-logo">
+              <Dna size={15} strokeWidth={2} aria-hidden="true" />
+            </span>
+            <span className="hidden sm:inline font-display text-lg leading-none tracking-tight">
+              VetInSilico <span className="text-teal-500">Hub</span>
+            </span>
           </Link>
 
           {/* Desktop: top 4 tools as direct icons + all tools dropdown */}

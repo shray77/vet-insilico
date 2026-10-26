@@ -48,7 +48,7 @@ export default function MolecularClockPage() {
               {MOLECULAR_CLOCK_SAMPLES.map((s, i) => (
                 <button key={i} onClick={() => loadSample(i)}
                   className={`w-full text-left p-3 rounded-lg text-sm transition border ${
-                    sampleIdx === i ? "bg-zinc-700 text-white border-zinc-700"
+                    sampleIdx === i ? "bg-teal-600 text-white border-teal-600"
                     : "border-zinc-200 dark:border-zinc-800 hover:border-slate-300 text-zinc-700 dark:text-zinc-300"
                   }`}>
                   <div className="font-medium">{s.name}</div>

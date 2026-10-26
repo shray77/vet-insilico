@@ -138,7 +138,7 @@ export default function SequenceIDPage() {
         {/* Results */}
         <div className="lg:col-span-2">
           {!result && !loading && !error && (
-            <div className="rounded-xl border border-dashed border-zinc-300 dark:border-zinc-700 p-8 text-center text-zinc-400">
+            <div className="rounded-xl border border-dashed border-zinc-300 dark:border-zinc-800 p-8 text-center text-zinc-400">
               <Dna className="h-12 w-12 mx-auto mb-3 opacity-40" />
               <div className="text-sm">Введите последовательность для идентификации</div>
               <div className="text-xs mt-1">BLAST найдёт closest matches в NCBI GenBank</div>
@@ -202,7 +202,7 @@ export default function SequenceIDPage() {
                   </thead>
                   <tbody>
                     {result.hits.map((hit, i) => (
-                      <tr key={i} className="border-b border-zinc-100 dark:border-zinc-900 hover:bg-accent/30">
+                      <tr key={i} className="border-b border-zinc-200 dark:border-zinc-800 hover:bg-teal-500/15">
                         <td className="py-2 px-2 text-zinc-400">{i + 1}</td>
                         <td className="py-2 px-2">
                           <div className="font-medium truncate max-w-[200px]" title={hit.title}>

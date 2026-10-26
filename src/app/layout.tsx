@@ -60,15 +60,33 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         {children}
-        <footer className="border-t border-zinc-200 py-5 text-center text-xs text-zinc-500">
-          Информационный сервис · не ветеринарная консультация ·{" "}
-          <a className="underline underline-offset-2 hover:text-zinc-600" href={`${basePath}/terms/`}>
-            условия использования и дисклеймер
-          </a>{" "}
-          ·{" "}
-          <a className="underline underline-offset-2 hover:text-zinc-600" href="https://shray77.github.io/terms.html">
-            условия экосистемы
-          </a>
+        {/* v2.2-паттерн: левый редакционный колофон + хаб экосистемы пилюлями */}
+        <footer className="ds-footer ds-footer--meta">
+          <div className="max-w-7xl mx-auto px-4 min-w-0 w-full">
+            <nav className="ds-hub" aria-label="Экосистема">
+              <a href="https://shray77.github.io/">Визитка</a>
+              <a href="https://shray77.github.io/vettools/">VetTools</a>
+              <a href="https://shray77.github.io/vet-heatmap/">ВетКарта</a>
+              <a href="https://shray77.github.io/vetflu-site/">VetFlu</a>
+              <a href="https://shray77.github.io/vetdigest-site/">Дайджест науки</a>
+            </nav>
+            <span className="ds-footer__legal">
+              VetInSilico — 26 in silico-инструментов для ветеринарной патологии · информационный
+              сервис, не ветеринарная консультация ·{" "}
+              <a href={`${basePath}/terms/`}>условия использования</a> ·{" "}
+              <a href="https://shray77.github.io/terms.html">условия экосистемы</a>
+            </span>
+            <span>
+              гибрид эвристик и FOSS ML (ESM-2 в браузере, HuggingFace) · данные и вычисления
+              локальны, без аккаунтов ·{" "}
+              <a href="https://github.com/shray77/vet-insilico">репозиторий</a>
+            </span>
+            <span className="ds-footer__legal">
+              дизайн —{" "}
+              <a href="https://github.com/shray77/vet-ds">vet-ds v2.3.1</a>, голос A «Научная
+              периодика» · бирюзовый характер поверх ядра
+            </span>
+          </div>
         </footer>
       </body>
     </html>

@@ -69,7 +69,7 @@ export default function VaccineDesignerPage() {
               {SAMPLE_SEQUENCES.map((s, i) => (
                 <button key={i} onClick={() => loadSample(i)}
                   className={`px-2 py-1 rounded-md text-xs border transition-colors ${
-                    i === sampleIdx ? "bg-emerald-500 text-white border-emerald-500" : "border-zinc-200 dark:border-zinc-700 hover:bg-accent"
+                    i === sampleIdx ? "bg-emerald-500 text-white border-emerald-500" : "border-zinc-200 dark:border-zinc-800 hover:bg-teal-500/10"
                   }`}>{s.name}</button>
               ))}
             </div>
@@ -180,7 +180,7 @@ function ConstructView({ construct }: { construct: VaccineConstruct }) {
           </tr></thead>
           <tbody>
             {construct.epitopes.map((ep, i) => (
-              <tr key={i} className="border-b border-zinc-100 dark:border-zinc-900">
+              <tr key={i} className="border-b border-zinc-200 dark:border-zinc-800">
                 <td className="py-1 text-zinc-400">{i + 1}</td>
                 <td className="py-1"><span className="px-1.5 py-0.5 rounded text-[9px] text-white"
                   style={{ backgroundColor: ep.type === "B-cell" ? "#3b82f6" : "#db2777" }}>
@@ -209,7 +209,7 @@ function ConstructView({ construct }: { construct: VaccineConstruct }) {
           <span className="text-xs font-semibold text-zinc-500">GenBank</span>
           <div className="flex gap-2">
             <button onClick={() => setShowGenBank(!showGenBank)}
-              className="px-2 py-1 rounded-md text-xs border border-zinc-200 dark:border-zinc-700 hover:bg-accent">
+              className="px-2 py-1 rounded-md text-xs border border-zinc-200 dark:border-zinc-800 hover:bg-teal-500/10">
               {showGenBank ? "Скрыть" : "Показать"}
             </button>
             <CopyButton text={construct.genBank || ""} label="GenBank" />

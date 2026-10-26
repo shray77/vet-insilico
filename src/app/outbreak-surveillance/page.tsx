@@ -78,7 +78,7 @@ export default function OutbreakSurveillancePage() {
           </div>
 
           {/* Add new isolate */}
-          <div className="rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 p-3 space-y-2">
+          <div className="rounded-lg border border-dashed border-zinc-300 dark:border-zinc-800 p-3 space-y-2">
             <div className="text-xs font-semibold text-zinc-500">Добавить изолят</div>
             <SequenceSearch compact onSelect={(seq) => setNewSeq(seq)} />
             <input type="text" value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Название"
@@ -183,7 +183,7 @@ export default function OutbreakSurveillancePage() {
                   </thead>
                   <tbody>
                     {report.pairwise.slice(0, 15).map((p, i) => (
-                      <tr key={i} className="border-b border-zinc-100 dark:border-zinc-900">
+                      <tr key={i} className="border-b border-zinc-200 dark:border-zinc-800">
                         <td className="py-1 text-[11px]">{p.a} ↔ {p.b}</td>
                         <td className="text-center tabular-nums" style={{ color: p.identity >= 95 ? "#16a34a" : p.identity >= 80 ? "#eab308" : "#dc2626" }}>
                           {p.identity.toFixed(1)}%
@@ -240,7 +240,7 @@ export default function OutbreakSurveillancePage() {
                   </thead>
                   <tbody>
                     {report.isolates.map((iso, i) => (
-                      <tr key={i} className="border-b border-zinc-100 dark:border-zinc-900">
+                      <tr key={i} className="border-b border-zinc-200 dark:border-zinc-800">
                         <td className="py-1 font-medium">{iso.name}</td>
                         <td className="py-1 text-zinc-500">{iso.date}</td>
                         <td className="py-1 text-zinc-500">{iso.location}</td>

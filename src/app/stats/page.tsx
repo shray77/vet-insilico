@@ -132,7 +132,7 @@ export default function StatsPage() {
 
           <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-3 bg-white dark:bg-zinc-900">
             <div className="text-[10px] uppercase tracking-wide text-zinc-400 mb-1">Вспышек в зеркале</div>
-            <div className="text-lg font-bold text-zinc-800 dark:text-zinc-100">
+            <div className="text-lg font-bold text-zinc-700">
               {status?.outbreaks ?? "—"}
             </div>
             <p className="text-[10px] text-zinc-400 mt-1">
@@ -142,7 +142,7 @@ export default function StatsPage() {
 
           <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-3 bg-white dark:bg-zinc-900">
             <div className="text-[10px] uppercase tracking-wide text-zinc-400 mb-1">Сегодня расчётов</div>
-            <div className="text-lg font-bold text-zinc-800 dark:text-zinc-100">
+            <div className="text-lg font-bold text-zinc-700">
               {stats ? Number(stats.today.aiChat) + Number(stats.today.aiChatHits) : "—"}
             </div>
             <p className="text-[10px] text-zinc-400 mt-1">

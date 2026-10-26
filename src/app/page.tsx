@@ -381,7 +381,7 @@ export default function HubPage() {
             placeholder="Поиск инструмента... (docking, CRISPR, primer, ELISA, ...)"
             className="w-full px-4 py-2.5 pr-16 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-sm focus:outline-none focus:border-teal-400 transition-colors"
           />
-          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-400 border border-zinc-200 dark:border-zinc-700 hidden sm:block">
+          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-400 border border-zinc-200 dark:border-zinc-800 hidden sm:block">
             /
           </kbd>
         </div>

@@ -153,7 +153,7 @@ export default function VariantEffectPage() {
                   </thead>
                   <tbody>
                     {result.variants.map((v, i) => (
-                      <tr key={i} className="border-b border-zinc-100 dark:border-zinc-900">
+                      <tr key={i} className="border-b border-zinc-200 dark:border-zinc-800">
                         <td className="py-2 px-3">
                           <span className="font-mono font-bold">
                             {v.wildType}{v.position}{v.mutant}

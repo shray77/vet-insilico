@@ -1,8 +1,24 @@
 @import "tailwindcss";
 @import "./vet-ds.css";
 
+/* Характер поверх ядра (4-е применение паттерна экосистемы: оливковый ветрадар →
+   бирюза VetOS → оранж обещатора → БИРЮЗА ин-силико): историческая идентичность
+   проекта zinc+teal — акцент возвращён из терракоты голоса A в глубокую бирюзу,
+   обе темы, гейт contrast_v2.py AA. Блок ПОСЛЕ ядра — побеждает специфичность;
+   все производные (focus, selection, color-mix утилит, em в дисплее) едут сами. */
+:root {
+  --ds-accent:        #0F766E;   /* бирюза-700: текст на бумаге/поверхностях — AA */
+  --ds-accent-strong: #0B5D57;   /* hover / заливки активных состояний */
+  --ds-accent-ink:    #F0FDFA;   /* текст на заливке бирюзой */
+}
+[data-theme="dark"] {
+  --ds-accent:        #2DD4BF;   /* бирюза-400 на тёплом графите */
+  --ds-accent-strong: #5EEAD4;   /* hover — светлее на тёмном */
+  --ds-accent-ink:    #062622;   /* чернила на заливке бирюзой */
+}
+
 /* ==========================================================================
-   vet-insilico × vet-ds v2.1.1 «Научная периодика» (DS A, Task 149)
+   vet-insilico × vet-ds v2.3.1 «Научная периодика» (ядро v2.3 + бирюзовый характер, Task 169)
    --------------------------------------------------------------------------
    Стратегия: утилиты Tailwind остаются в разметке, но их ЦВЕТА
    перегружены на токены ДС через @theme inline → theme-flip идёт
@@ -83,7 +99,7 @@
   --color-neutral-900: var(--ds-text);
   --color-neutral-950: var(--ds-bg);
 
-  /* -- акцент: teal → эпидемиологический красный периодики ----------------- */
+  /* -- акцент: teal → характер «бирюза ин-силико» (--ds-accent оверрайд) ---- */
   --color-teal-50: color-mix(in srgb, var(--ds-accent) 6%, var(--ds-bg));
   --color-teal-100: color-mix(in srgb, var(--ds-accent) 12%, var(--ds-bg));
   --color-teal-200: color-mix(in srgb, var(--ds-accent) 22%, var(--ds-bg));
@@ -337,6 +353,16 @@
 
 /* 3Dmol viewer fills container */
 .viewer-3d > div { width: 100% !important; height: 100% !important; }
+
+/* Лого-плитка вордмарка — ДНК мастхед-паттерна v2.2 (якорь + характер бирюзы) */
+.brand-logo {
+  width: 28px; height: 28px; flex: none;
+  display: grid; place-items: center;
+  color: var(--ds-accent);
+  background: color-mix(in srgb, var(--ds-accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ds-accent) 25%, transparent);
+  border-radius: var(--ds-radius-s);
+}
 
 /* Hub card hover: бумажный ambient, без цветного свечения */
 .hub-card {

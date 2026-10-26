@@ -55,6 +55,7 @@
 ## Stack
 
 - **Frontend**: Next.js 16 (static export) + React 19 + Tailwind CSS 4 + TypeScript
+- **Design**: [vet-ds](https://github.com/shray77/vet-ds) v2.3.1 «Научная периодика» — голос A (бумага/вечерний номер) + бирюзовый характер поверх ядра; утилиты Tailwind перегружены на токены DS через `@theme inline` (`src/app/globals.css`), ядро — копия `src/app/vet-ds.css` + самохост Prata (`src/app/fonts/`), контраст-гейт `contrast_v2.py` AA
 - **Package manager**: Bun
 - **3D viewer**: 3Dmol.js (CDN)
 - **Molecular toolkit**: RDKit.js WASM (CDN, 4MB)

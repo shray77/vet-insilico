@@ -77,7 +77,7 @@ export function ToolPageLayout({ name, description, color = "teal", children }: 
 export function LoadingPanel({ message = "Загрузка..." }: { message?: string }) {
   return (
     <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-8 text-center text-zinc-400">
-      <div className="inline-block animate-spin h-6 w-6 border-2 border-zinc-300 dark:border-zinc-700 border-t-teal-500 rounded-full mb-3" />
+      <div className="inline-block animate-spin h-6 w-6 border-2 border-zinc-300 dark:border-zinc-800 border-t-teal-500 rounded-full mb-3" />
       <div className="text-sm">{message}</div>
     </div>
   );
@@ -86,7 +86,7 @@ export function LoadingPanel({ message = "Загрузка..." }: { message?: st
 // ─── EmptyPanel ─────────────────────────────────────────────────────
 export function EmptyPanel({ message = "Заполните параметры для расчёта..." }: { message?: string }) {
   return (
-    <div className="rounded-xl border border-dashed border-zinc-300 dark:border-zinc-700 p-8 text-center text-zinc-400">
+    <div className="rounded-xl border border-dashed border-zinc-300 dark:border-zinc-800 p-8 text-center text-zinc-400">
       <div className="font-mono text-2xl font-bold tracking-widest text-zinc-400 mb-2">⧉</div>
       <div className="text-sm">{message}</div>
     </div>
@@ -122,7 +122,7 @@ export function SampleSelector({ samples, currentIdx, onSelect, label = "При�
             className={`px-2 py-1 rounded-md text-xs border transition-colors ${
               i === currentIdx
                 ? "bg-teal-500 text-white border-teal-500"
-                : "bg-transparent border-zinc-200 dark:border-zinc-700 hover:bg-accent"
+                : "bg-transparent border-zinc-200 dark:border-zinc-800 hover:bg-teal-500/10"
             }`}
           >
             {s.name}
@@ -212,7 +212,7 @@ export function CopyButton({ text, label = "Копировать" }: { text: str
   return (
     <button
       onClick={handleCopy}
-      className="px-2 py-1 rounded-md text-xs border border-zinc-200 dark:border-zinc-700 hover:bg-accent transition-colors"
+      className="px-2 py-1 rounded-md text-xs border border-zinc-200 dark:border-zinc-800 hover:bg-teal-500/10 transition-colors"
     >
       {label}
     </button>

@@ -58,7 +58,7 @@ export default function ToxicityMLPage() {
             <div className="flex flex-wrap gap-1.5">
               {SAMPLE_SMILES.map((s, i) => (
                 <button key={i} onClick={() => setSmiles(s.smiles)}
-                  className="px-2 py-1 rounded-md text-xs border border-zinc-200 dark:border-zinc-700 hover:bg-accent">
+                  className="px-2 py-1 rounded-md text-xs border border-zinc-200 dark:border-zinc-800 hover:bg-teal-500/10">
                   {s.name}
                 </button>
               ))}
@@ -138,7 +138,7 @@ export default function ToxicityMLPage() {
                       const isToxic = r.label.toLowerCase().includes("toxic") || r.label === "1";
                       const isUnknown = r.label === "UNKNOWN" || r.label === "ERROR";
                       return (
-                        <tr key={i} className="border-b border-zinc-100 dark:border-zinc-900">
+                        <tr key={i} className="border-b border-zinc-200 dark:border-zinc-800">
                           <td className="py-2 px-3 font-medium">{r.endpoint}</td>
                           <td className="py-2 px-3 text-center">
                             {isUnknown ? (

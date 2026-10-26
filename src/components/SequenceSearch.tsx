@@ -94,7 +94,7 @@ export function SequenceSearch({ onSelect, compact = false }: SequenceSearchProp
     return (
       <button
         onClick={() => setExpanded(true)}
-        className="flex items-center gap-1.5 px-2 py-1 rounded-md text-xs border border-zinc-200 dark:border-zinc-700 hover:bg-accent transition-colors"
+        className="flex items-center gap-1.5 px-2 py-1 rounded-md text-xs border border-zinc-200 dark:border-zinc-800 hover:bg-teal-500/10 transition-colors"
       >
         <Search className="h-3.5 w-3.5" />
         Найти в базе данных
@@ -140,7 +140,7 @@ export function SequenceSearch({ onSelect, compact = false }: SequenceSearchProp
               key={`${r.source}-${r.id}-${i}`}
               onClick={() => handleSelect(r)}
               disabled={fetchingId === r.id}
-              className="w-full text-left px-2 py-1.5 rounded-md hover:bg-accent/50 transition-colors flex items-start gap-2 group"
+              className="w-full text-left px-2 py-1.5 rounded-md hover:bg-teal-500/15 transition-colors flex items-start gap-2 group"
             >
               <span
                 className="text-[9px] px-1 py-0.5 rounded text-white shrink-0 mt-0.5"

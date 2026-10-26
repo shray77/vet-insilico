@@ -65,7 +65,7 @@ export default function HfTokenModal({ open, onClose }: { open: boolean; onClose
 
         <div className="space-y-3">
           {/* ─── Облако (vet-api) ─── */}
-          <div className="rounded-lg bg-zinc-100 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 p-3 text-xs">
+          <div className="rounded-lg bg-zinc-100 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-800 p-3 text-xs">
             <div className="flex items-center gap-2 mb-1.5">
               <span
                 className={`inline-block h-2 w-2 rounded-full ${
@@ -99,7 +99,7 @@ export default function HfTokenModal({ open, onClose }: { open: boolean; onClose
                   className={`flex-1 px-2 py-1 rounded text-[11px] transition ${
                     route === r
                       ? "bg-teal-600 text-white"
-                      : "bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 hover:border-teal-400 text-zinc-600 dark:text-zinc-300"
+                      : "bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-teal-400 text-zinc-600 dark:text-zinc-300"
                   }`}
                 >
                   {r === "auto" ? "Авто" : r === "cloud" ? "Только облако" : "Свой токен"}
@@ -159,7 +159,7 @@ export default function HfTokenModal({ open, onClose }: { open: boolean; onClose
             <button
               onClick={handleValidate}
               disabled={!token.trim() || status === "validating"}
-              className="flex-1 px-3 py-2 rounded-lg bg-zinc-200 dark:bg-zinc-800 text-sm font-medium disabled:opacity-50 hover:bg-zinc-300 dark:hover:bg-zinc-700 transition"
+              className="flex-1 px-3 py-2 rounded-lg bg-zinc-200 dark:bg-zinc-800 text-sm font-medium disabled:opacity-50 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
             >
               {status === "validating" ? "Проверка..." : "Проверить"}
             </button>

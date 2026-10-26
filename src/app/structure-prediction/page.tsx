@@ -72,7 +72,7 @@ export default function StructurePredictionPage() {
               {SAMPLE_SEQUENCES.slice(0, 4).map((s, i) => (
                 <button key={i} onClick={() => { setSampleIdx(i); setSequence(s.seq.slice(0, 300)); }}
                   className={`px-2 py-1 rounded-md text-xs border transition-colors ${
-                    i === sampleIdx ? "bg-blue-500 text-white border-blue-500" : "border-zinc-200 dark:border-zinc-700 hover:bg-accent"
+                    i === sampleIdx ? "bg-blue-500 text-white border-blue-500" : "border-zinc-200 dark:border-zinc-800 hover:bg-teal-500/10"
                   }`}>{s.name}</button>
               ))}
             </div>
@@ -146,7 +146,7 @@ export default function StructurePredictionPage() {
                   <span className="text-xs font-semibold text-zinc-500">3D структура (ESMFold)</span>
                   <div className="flex gap-2">
                     <button onClick={downloadPdb}
-                      className="flex items-center gap-1 px-2 py-1 rounded text-xs border border-zinc-200 dark:border-zinc-700 hover:bg-accent">
+                      className="flex items-center gap-1 px-2 py-1 rounded text-xs border border-zinc-200 dark:border-zinc-800 hover:bg-teal-500/10">
                       <Download className="h-3 w-3" /> PDB
                     </button>
                     <CopyButton text={result.pdb} label="" />
@@ -195,7 +195,7 @@ export default function StructurePredictionPage() {
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs font-semibold text-zinc-500">PDB файл ({result.pdb.length} символов)</span>
                   <button onClick={() => setShowPdb(!showPdb)}
-                    className="px-2 py-1 rounded text-xs border border-zinc-200 dark:border-zinc-700 hover:bg-accent">
+                    className="px-2 py-1 rounded text-xs border border-zinc-200 dark:border-zinc-800 hover:bg-teal-500/10">
                     {showPdb ? "Скрыть" : "Показать"}
                   </button>
                 </div>
