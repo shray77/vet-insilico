@@ -69,6 +69,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <a href="https://shray77.github.io/vet-heatmap/">ВетКарта</a>
               <a href="https://shray77.github.io/vetflu-site/">VetFlu</a>
               <a href="https://shray77.github.io/vetdigest-site/">Дайджест науки</a>
+              <a href="https://shray77.github.io/vetrecall-site/">Отзывы и вспышки РФ</a>
+              <a href="https://shray77.github.io/biothreat-site/">Биоугрозы мира</a>
+              <a href="https://shray77.github.io/rss-core-site/">Статус ядра</a>
+              <a href="https://shray77.github.io/vetfecrt-site/">ФЭКРТ</a>
             </nav>
             <span className="ds-footer__legal">
               VetInSilico — 26 in silico-инструментов для ветеринарной патологии · информационный
