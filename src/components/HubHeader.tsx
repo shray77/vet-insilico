@@ -68,7 +68,11 @@ export default function HubHeader() {
   const [mlOpen, setMlOpen] = useState(false);
   const [hasToken, setHasToken] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  // Task 183 (M2): два отдельных ref — раньше один menuRef указывал на мобильный
+  // дропдаун (последний mount), и на десктопе outside-click не «видел» открытый
+  // дропдаун: кнопка «Все» не закрывала меню, клики по пустым зонам схлопывали его.
+  const desktopMenuRef = useRef<HTMLDivElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
   const themeTouched = useRef(false);
 
   // Тема ДС: init-скрипт в layout уже поставил data-theme до гидрации —
@@ -91,12 +95,12 @@ export default function HubHeader() {
     setHasToken(!!getHfToken());
   }, [mlOpen]);
 
-  // Close menu on outside click
+  // Close menu on outside click (оба меню: десктопное и мобильное)
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setMenuOpen(false);
-      }
+      const t = e.target as Node;
+      if (desktopMenuRef.current?.contains(t) || mobileMenuRef.current?.contains(t)) return;
+      setMenuOpen(false);
     };
     document.addEventListener("mousedown", onClick);
     return () => document.removeEventListener("mousedown", onClick);
@@ -128,25 +132,32 @@ export default function HubHeader() {
           </Link>
 
           {/* Desktop: top 4 tools as direct icons + all tools dropdown */}
-          <nav className="hidden md:flex gap-0.5 ml-auto items-center overflow-x-auto thin-scroll">
-            {TOP_TOOLS.map((t) => (
-              <Link
-                key={t.href}
-                href={t.href}
-                className={`px-2 py-1 rounded-md text-xs font-medium transition whitespace-nowrap ${
-                  isActive(t.href)
-                    ? "bg-teal-600 text-white"
-                    : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
-                }`}
-                title={t.label}
-              >
-                <ToolIcon href={t.href} size={13} className="mr-0.5 shrink-0" />
-                <span className="hidden lg:inline">{t.label}</span>
-              </Link>
-            ))}
+          {/* Task 183 (M2, доп.): overflow-x-auto жило на самом nav — Tailwind
+              превращает visible в auto по второй оси → absolute-дропдаун,
+              свисающий из nav, ОБРЕЗАЛСЯ по боксу nav (hit-test мимо, пункты
+              меню физически некликабельны на десктопе). Скролл-контейнер
+              теперь обнимает только TOP_TOOLS, дропдаун-контейнер — вне clip. */}
+          <nav className="hidden md:flex gap-0.5 ml-auto items-center">
+            <div className="flex gap-0.5 items-center overflow-x-auto thin-scroll">
+              {TOP_TOOLS.map((t) => (
+                <Link
+                  key={t.href}
+                  href={t.href}
+                  className={`px-2 py-1 rounded-md text-xs font-medium transition whitespace-nowrap ${
+                    isActive(t.href)
+                      ? "bg-teal-600 text-white"
+                      : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                  }`}
+                  title={t.label}
+                >
+                  <ToolIcon href={t.href} size={13} className="mr-0.5 shrink-0" />
+                  <span className="hidden lg:inline">{t.label}</span>
+                </Link>
+              ))}
+            </div>
 
             {/* All tools dropdown */}
-            <div className="relative" ref={menuRef}>
+            <div className="relative" ref={desktopMenuRef}>
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
                 className={`px-2 py-1 rounded-md text-xs font-medium transition flex items-center gap-0.5 ${
@@ -182,7 +193,7 @@ export default function HubHeader() {
 
           {/* Mobile: just the hamburger menu */}
           <nav className="md:hidden ml-auto flex items-center gap-0.5">
-            <div className="relative" ref={menuRef}>
+            <div className="relative" ref={mobileMenuRef}>
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
                 className="p-1.5 rounded-md text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"

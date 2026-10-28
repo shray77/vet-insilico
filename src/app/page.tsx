@@ -67,8 +67,8 @@ const CATEGORIES: Category[] = [
         href: "/dose-calculator",
         title: "Antibiotic Dose Calculator",
         tagline: "Дозировка по весу/виду/возрасту",
-        desc: "36 схем дозирования для 6 видов животных (свинья, КРС, птица, собака, кошка, лошадь). Расчёт по весу, коррекция на возраст, концентрацию, стоимость курса. Plumb's + РФ реестр.",
-        stats: ["36 схем", "6 видов", "с коррекцией"],
+        desc: "39 схем дозирования для 6 видов животных (свинья, КРС, птица, собака, кошка, лошадь). Расчёт по весу, коррекция на возраст, концентрацию, стоимость курса. Plumb's + РФ реестр.",
+        stats: ["39 схем", "6 видов", "с коррекцией"],
         accent: "cyan",
         badge: null,
       },
@@ -352,7 +352,7 @@ export default function HubPage() {
             { v: PATHOGEN_COUNT, label: "Патогенов", icon: Biohazard },
             { v: DRUG_COUNT, label: "Препаратов", icon: Pill },
             { v: "23", label: "Инструментов", icon: Wrench },
-            { v: "137", label: "Тестов pass", icon: CheckCircle2 },
+            { v: "183", label: "Тестов pass", icon: CheckCircle2 },
           ].map((s) => {
             const StatIcon = s.icon;
             return (

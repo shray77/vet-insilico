@@ -65,9 +65,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="max-w-7xl mx-auto px-4 min-w-0 w-full">
             <nav className="ds-hub" aria-label="Экосистема">
               <a href="https://shray77.github.io/">Визитка</a>
-              <a href="https://shray77.github.io/vettools/">VetTools</a>
+              <a href="https://shray77.github.io/vettools/">ВетТулзы</a>
               <a href="https://shray77.github.io/vet-heatmap/">ВетКарта</a>
-              <a href="https://shray77.github.io/vetflu-site/">VetFlu</a>
+              <a href="https://shray77.github.io/vetflu-site/">Окна риска ВПГП</a>
               <a href="https://shray77.github.io/vetdigest-site/">Дайджест науки</a>
               <a href="https://shray77.github.io/vetrecall-site/">Отзывы и вспышки РФ</a>
               <a href="https://shray77.github.io/biothreat-site/">Биоугрозы мира</a>
@@ -75,7 +75,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <a href="https://shray77.github.io/vetfecrt-site/">ФЭКРТ</a>
             </nav>
             <span className="ds-footer__legal">
-              VetInSilico — 26 in silico-инструментов для ветеринарной патологии · информационный
+              VetInSilico — 23 in silico-инструмента для ветеринарной патологии · информационный
               сервис, не ветеринарная консультация ·{" "}
               <a href={`${basePath}/terms/`}>условия использования</a> ·{" "}
               <a href="https://shray77.github.io/terms.html">условия экосистемы</a>
@@ -87,7 +87,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </span>
             <span className="ds-footer__legal">
               дизайн —{" "}
-              <a href="https://github.com/shray77/vet-ds">vet-ds v2.3.1</a>, голос A «Научная
+              <a href="https://github.com/shray77/vet-ds">vet-ds v2.4.1</a>, голос A «Научная
               периодика» · бирюзовый характер поверх ядра
             </span>
           </div>

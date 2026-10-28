@@ -4,7 +4,7 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Live](https://img.shields.io/badge/Live-shray77.github.io%2Fvet--insilico-teal.svg)](https://shray77.github.io/vet-insilico/)
-[![Tests](https://img.shields.io/badge/Tests-170%20pass-green.svg)](#)
+[![Tests](https://img.shields.io/badge/Tests-183%20pass-green.svg)](#)
 [![Tools](https://img.shields.io/badge/Tools-23-purple.svg)](#)
 
 ## Tools (23)
@@ -55,13 +55,13 @@
 ## Stack
 
 - **Frontend**: Next.js 16 (static export) + React 19 + Tailwind CSS 4 + TypeScript
-- **Design**: [vet-ds](https://github.com/shray77/vet-ds) v2.3.1 «Научная периодика» — голос A (бумага/вечерний номер) + бирюзовый характер поверх ядра; утилиты Tailwind перегружены на токены DS через `@theme inline` (`src/app/globals.css`), ядро — копия `src/app/vet-ds.css` + самохост Prata (`src/app/fonts/`), контраст-гейт `contrast_v2.py` AA
+- **Design**: [vet-ds](https://github.com/shray77/vet-ds) v2.4.1 «Научная периодика» — голос A (бумага/вечерний номер) + бирюзовый характер поверх ядра; утилиты Tailwind перегружены на токены DS через `@theme inline` (`src/app/globals.css`), ядро — копия `src/app/vet-ds.css` + самохост Prata (`src/app/fonts/`), контраст-гейт `contrast_v2.py` AA
 - **Package manager**: Bun
 - **3D viewer**: 3Dmol.js (CDN)
 - **Molecular toolkit**: RDKit.js WASM (CDN, 4MB)
 - **ML**: HuggingFace Inference API (Qwen2.5-Coder-3B-Instruct via nscale, ESM-2 35M via hf-inference)
 - **Hosting**: GitHub Pages (static) + **полу-динамика через [vet-api](https://github.com/shray77/vet-api)** (Cloudflare Worker)
-- **Tests**: Vitest, 176 tests, 17 test files
+- **Tests**: Vitest, 183 tests, 18 test files
 - **Boltz-2**: ночной GitHub Actions-ран (CPU) — предсказания аффинности (IC50/ΔG) для пилотных пар «препарат × мишень», статический JSON без внешних зависимостей
 
 ## Полу-динамика (static + vet-api)
@@ -84,7 +84,7 @@
 - **196 drugs with SMILES** (from PubChem)
 - **28 restriction enzymes**
 - **12 molecular clock rates** (published)
-- **36 antibiotic dose schemes** (Plumb's + РФ реестр)
+- **39 antibiotic dose schemes** (Plumb's + РФ реестр)
 
 ## Boltz-2 аффинности (ночной CI-ран)
 
@@ -137,7 +137,7 @@ ML features (LLM analysis, ESM-2 naturalness, RDKit descriptors) require a free 
 bun install
 bun run dev          # http://localhost:3000
 bun run build        # → out/ (static export)
-bun run test         # 158 tests
+bun run test         # 183 tests
 bun run test:coverage # with coverage report
 ```
 

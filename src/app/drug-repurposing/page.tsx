@@ -552,7 +552,7 @@ export default function DrugRepurposingPage() {
             {/* Path B: Real molecular descriptors via RDKit.js */}
             {selectedResult.drug.smiles && (
               <div className="border-t border-zinc-200 dark:border-zinc-800 pt-3 mt-3">
-                <RDKitDescriptors drug={selectedResult.drug} targetName={selectedResult.target.name_ru} />
+                <RDKitDescriptors drug={selectedResult.drug} targetName={selectedResult.target.name_ru} pdbId={selectedResult.target.pdb_id} />
               </div>
             )}
 
@@ -699,7 +699,7 @@ Respond ONLY as JSON:
   );
 }
 
-function RDKitDescriptors({ drug, targetName }: { drug: DockingResult["drug"]; targetName: string }) {
+function RDKitDescriptors({ drug, targetName, pdbId }: { drug: DockingResult["drug"]; targetName: string; pdbId?: string }) {
   const [result, setResult] = useState<Awaited<ReturnType<typeof dockWithRDKit>> | null>(null);
   const [backendResult, setBackendResult] = useState<DockingAPIResult | null>(null);
   const [vinaResult, setVinaResult] = useState<VinaDockingResult | null>(null);
@@ -739,13 +739,18 @@ function RDKitDescriptors({ drug, targetName }: { drug: DockingResult["drug"]; t
   };
 
   const runVina = async () => {
+    // Task 183 (M1): Vina docking идёт против ВЫБРАННОЙ мишени — раньше здесь
+    // читался никогда не устанавливаемый window.__currentPdbId и всегда
+    // докалось против hardcoded 3QZJ.
+    if (!pdbId) {
+      setVinaError("У выбранной мишени нет PDB-структуры — Vina docking недоступен");
+      return;
+    }
     setVinaLoading(true);
     setVinaError("");
     setVinaResult(null);
     try {
-      // Find PDB ID from the selected result's target
-      const pdbId = (window as any).__currentPdbId || "3QZJ";
-      const r = await apiVinaDocking(pdbId, drug.smiles!, drug.name, targetName);
+      const r = await apiVinaDocking(pdbId.toUpperCase(), drug.smiles!, drug.name, targetName);
       setVinaResult(r);
     } catch (e: any) {
       setVinaError(e.message || "Vina error");
@@ -765,9 +770,15 @@ function RDKitDescriptors({ drug, targetName }: { drug: DockingResult["drug"]; t
           </div>
           {!vinaResult && !vinaLoading && (
             <div>
-              <button onClick={runVina} className="px-3 py-2 rounded-lg bg-purple-600 text-white text-xs font-medium hover:bg-purple-700 transition">
-                Запустить real Vina docking (1-2 мин)
-              </button>
+              {pdbId ? (
+                <button onClick={runVina} className="px-3 py-2 rounded-lg bg-purple-600 text-white text-xs font-medium hover:bg-purple-700 transition">
+                  Запустить real Vina docking (1-2 мин)
+                </button>
+              ) : (
+                <div className="text-[10px] text-zinc-500 dark:text-zinc-400">
+                  Vina docking требует PDB-структуру мишени — у этой мишени её нет.
+                </div>
+              )}
               <div className="text-[10px] text-zinc-400 mt-1">
                 Скачать PDB → подготовить receptor+ligand → Vina simulation → реальный ΔG
               </div>
