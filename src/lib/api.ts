@@ -10,6 +10,8 @@
 // Backend URL — can be overridden via NEXT_PUBLIC_BACKEND_URL env var
 // (useful when the default HF Space is down or cold-starting).
 // Also check localStorage for runtime override (set via HfTokenModal).
+// Base резолвится на КАЖДЫЙ вызов (по образцу cloudUrl() в cloud.ts) —
+// смена override в рантайме подхватывается без перезагрузки страницы.
 const DEFAULT_BACKEND = "https://shrayyyy-vet-insilico-backend.hf.space";
 function getBackendUrl(): string {
   // Check localStorage for runtime override first
@@ -19,7 +21,6 @@ function getBackendUrl(): string {
   }
   return process.env.NEXT_PUBLIC_BACKEND_URL || DEFAULT_BACKEND;
 }
-const API_BASE = getBackendUrl();
 const TIMEOUT_MS = 30000; // 30s — HF Spaces cold start can take 30-60s
 
 async function fetchWithTimeout(url: string, opts: RequestInit = {}, timeout = TIMEOUT_MS): Promise<Response> {
@@ -52,7 +53,7 @@ export interface DockingAPIResult {
 }
 
 export async function apiDocking(smiles: string, drugName?: string, targetName?: string): Promise<DockingAPIResult> {
-  const res = await fetchWithTimeout(`${API_BASE}/api/docking`, {
+  const res = await fetchWithTimeout(`${getBackendUrl()}/api/docking`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ smiles, drug_name: drugName, target_name: targetName }),
@@ -91,7 +92,7 @@ export async function apiVinaDocking(
   targetName?: string,
   opts: { boxSize?: number[]; exhaustiveness?: number; numPoses?: number } = {},
 ): Promise<VinaDockingResult> {
-  const res = await fetchWithTimeout(`${API_BASE}/api/vina-docking`, {
+  const res = await fetchWithTimeout(`${getBackendUrl()}/api/vina-docking`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

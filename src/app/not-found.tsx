@@ -1,6 +1,8 @@
 /**
  * Custom 404 page — friendlier than Next.js default.
  */
+import { BASE_PATH } from "@/lib/base-path";
+
 export default function NotFound() {
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-zinc-50 text-zinc-700">
@@ -11,7 +13,7 @@ export default function NotFound() {
           Страница не найдена. Возможно, ссылка устарела или была введена с ошибкой.
         </p>
         <a
-          href="/vet-insilico/"
+          href={`${BASE_PATH}/`}
           className="inline-block px-4 py-2 rounded-md bg-teal-600 text-white text-sm font-medium hover:bg-teal-700 transition-colors"
         >
           На главную

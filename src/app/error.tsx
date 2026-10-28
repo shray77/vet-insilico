@@ -1,5 +1,7 @@
 "use client";
 
+import { BASE_PATH } from "@/lib/base-path";
+
 /**
  * Global error boundary — catches unhandled exceptions in any route segment.
  * Without this, a single bad `.slice()` or undefined access brings down
@@ -42,7 +44,7 @@ export default function Error({
             Попробовать снова
           </button>
           <a
-            href="/vet-insilico/"
+            href={`${BASE_PATH}/`}
             className="px-4 py-2 rounded-md border border-zinc-200 text-sm font-medium hover:bg-zinc-100 transition-colors"
           >
             На главную

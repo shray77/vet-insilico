@@ -385,8 +385,11 @@
   animation: fadeIn var(--ds-dur) var(--ds-ease);
 }
 
-/* Spinner for loading states */
-@keyframes spin {
+/* Spinner for loading states. Кастомные keyframes под собственным именем
+   (spinnerRotate): имя `spin` дублировало бы Tailwind-овские keyframes класса
+   animate-spin — двойное определение в сборке. Потребители .spinner —
+   Viewer3D и drug-repurposing. */
+@keyframes spinnerRotate {
   to { transform: rotate(360deg); }
 }
 .spinner {
@@ -396,7 +399,7 @@
   border: 2px solid currentColor;
   border-top-color: transparent;
   border-radius: 50%;
-  animation: spin 0.6s linear infinite;
+  animation: spinnerRotate 0.6s linear infinite;
 }
 
 /* Плавная смена тем — единая спецификация движения ДС */

@@ -95,7 +95,7 @@ export default function AIVetPage() {
           <h2 className="font-semibold text-rose-900 dark:text-rose-100 mb-1">AI Veterinarian — Diagnostic Assistant</h2>
           <p className="text-sm text-rose-800 dark:text-rose-300">
             Дифференциальный диагноз на основе симптомов. LLM (Qwen-Coder-3B) анализирует ввод и предлагает
-            вероятные диагнозы, рекомендуемые тесты, уровень срочности. требует ИИ.
+            вероятные диагнозы, рекомендуемые тесты, уровень срочности. Требует ИИ.
           </p>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

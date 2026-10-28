@@ -563,9 +563,10 @@ export default function DrugRepurposingPage() {
         </div>
       )}
 
-      <footer className="max-w-6xl mx-auto px-4 py-6 border-t border-zinc-200 dark:border-zinc-800 mt-8 text-center text-xs text-zinc-400">
+      {/* <section>, а не <footer> — глобальный подвал уже рендерит layout. */}
+      <section className="max-w-6xl mx-auto px-4 py-6 border-t border-zinc-200 dark:border-zinc-800 mt-8 text-center text-xs text-zinc-400">
         VetInSilico Hub • Drug Repurposing • ML-powered
-      </footer>
+      </section>
     </div>
   );
 }

@@ -1,19 +1,18 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-
-const basePath = process.env.NODE_ENV === "production" ? "/vet-insilico" : "";
+import { BASE_PATH } from "@/lib/base-path";
 
 export const metadata: Metadata = {
-  title: "VetInSilico Hub — In silico tools for veterinary pathogens",
+  title: "VetInSilico Hub — in silico-инструменты для ветеринарии",
   description:
     "In silico инструменты для ветеринарии: drug repurposing, ADMET, эпитопы вакцин, дизайн праймеров, alignment, филогения. Гибрид: эвристики + FOSS ML через HuggingFace.",
-  manifest: `${basePath}/manifest.webmanifest`,
+  manifest: `${BASE_PATH}/manifest.webmanifest`,
   icons: {
     icon: [
-      { url: `${basePath}/favicon.png`, sizes: "32x32", type: "image/png" },
-      { url: `${basePath}/icon.svg`, type: "image/svg+xml" },
+      { url: `${BASE_PATH}/favicon.png`, sizes: "32x32", type: "image/png" },
+      { url: `${BASE_PATH}/icon.svg`, type: "image/svg+xml" },
     ],
-    apple: `${basePath}/icon-192.png`,
+    apple: `${BASE_PATH}/icon-192.png`,
   },
   applicationName: "VetInSilico Hub",
   appleWebApp: {
@@ -77,7 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <span className="ds-footer__legal">
               VetInSilico — 23 in silico-инструмента для ветеринарной патологии · информационный
               сервис, не ветеринарная консультация ·{" "}
-              <a href={`${basePath}/terms/`}>условия использования</a> ·{" "}
+              <a href={`${BASE_PATH}/terms/`}>условия использования</a> ·{" "}
               <a href="https://shray77.github.io/terms.html">условия экосистемы</a>
             </span>
             <span>

@@ -514,12 +514,14 @@ export default function HubPage() {
         </section>
       </main>
 
-      <footer className="max-w-6xl mx-auto px-4 py-6 border-t border-zinc-200 dark:border-zinc-800 mt-8 text-center text-xs text-zinc-400">
+      {/* Колофон источников: <section>, а не <footer> — глобальный подвал уже
+          рендерит layout (иначе на проде два подвала подряд). */}
+      <section className="max-w-6xl mx-auto px-4 py-6 border-t border-zinc-200 dark:border-zinc-800 mt-8 text-center text-xs text-zinc-400">
         VetInSilico Hub • Open-source in silico tools for veterinary pathogens • Apache 2.0
         <div className="mt-1">
           Источники: RCSB PDB • Российский реестр ветпрепаратов • DrugBank Open • PubChem • HuggingFace • CARD
         </div>
-      </footer>
+      </section>
     </div>
   );
 }

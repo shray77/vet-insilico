@@ -51,7 +51,7 @@ export default function CloudStatsStrip() {
           <span>
             <b className="text-teal-700 dark:text-teal-300">{shares}</b> ссылок-сценариев
           </span>
-          <span className="text-zinc-400 hidden sm:inline">считается на CF Workers ·vet-api</span>
+          <span className="text-zinc-400 hidden sm:inline">считается на CF Workers · vet-api</span>
           <Link href="/stats" className="text-teal-700 dark:text-teal-300 hover:underline font-medium whitespace-nowrap">
             вся статистика →
           </Link>

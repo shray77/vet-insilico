@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { BASE_PATH } from "@/lib/base-path";
+
 export const metadata: Metadata = {
   title: "Условия использования и дисклеймер",
   description:
@@ -66,10 +68,12 @@ const SECTIONS: { id: string; title: string; body: React.ReactNode }[] = [
     title: "Приватность",
     body: (
       <p>
-        Сайт статичен и работает в браузере: расчёты выполняются локально; персональные данные не
-        собираются, регистрация отсутствует. Обращения к внешним сервисам (например, HuggingFace
-        Inference API для ML-инструментов) передают туда только переданные вами входные данные —
-        не отправляйте туда конфиденциальную информацию.
+        Сайт статичен и работает в браузере: расчёты выполняются локально; персональные данные
+        не собираются, регистрация отсутствует. Обращения к внешним сервисам — например,
+        HuggingFace Inference API для ML-инструментов, а также публичные LLM-прокси
+        (text.pollinations.ai) для безключевых AI-расчётов — передают туда только переданные
+        вами входные данные, включая полный текст запроса к ИИ. Не отправляйте туда
+        конфиденциальную информацию.
       </p>
     ),
   },
@@ -91,7 +95,7 @@ export default function TermsPage() {
     <div className="min-h-screen bg-zinc-50 text-zinc-500">
       <div className="mx-auto max-w-3xl px-5 pb-16">
         <a
-          href="/vet-insilico/"
+          href={`${BASE_PATH}/`}
           className="mt-6 inline-block text-xs text-zinc-500 transition-colors hover:text-zinc-600"
         >
           ← VetInSilico Hub
@@ -171,7 +175,7 @@ export default function TermsPage() {
         </section>
 
         <p className="mt-5 font-mono text-xs text-zinc-600">
-          Версия от 10.10.2026 (ред. 2) · VetInSilico
+          Версия от 28.10.2026 (ред. 3) · VetInSilico
         </p>
       </div>
     </div>
