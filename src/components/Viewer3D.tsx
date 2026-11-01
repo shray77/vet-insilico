@@ -1,10 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { BASE_PATH } from "@/lib/base-path";
 
 /**
- * 3D protein-ligand viewer using 3Dmol.js (loaded via CDN).
+ * 3D protein-ligand viewer using 3Dmol.js.
  * Loads PDB structure by ID from RCSB and renders in WebGL.
+ *
+ * 3Dmol.js самохостится в public/vendor/3Dmol-min.js (аудит SW-28, находка 1:
+ * чужой CDN без SRI — единственный вектор кражи HF-токена из localStorage;
+ * при самохостинге integrity не нужен). Файл снят с https://3Dmol.org/build/3Dmol-min.js
+ * (Last-Modified 2026-09-12, sha256 4ab374e1830bccec950b280fd285a430e05e91bd13c9ef0097c611c66de6cb36).
  *
  * Style options: cartoon / stick / sphere / surface / lines
  *
@@ -27,7 +33,8 @@ declare global {
   }
 }
 
-const CDN_URL = "https://3Dmol.org/build/3Dmol-min.js";
+// Самохостинг (SW-28): public/vendor/3Dmol-min.js вместо https://3Dmol.org/build/3Dmol-min.js
+const SCRIPT_URL = `${BASE_PATH}/vendor/3Dmol-min.js`;
 
 let loadPromise: Promise<void> | null = null;
 
@@ -38,13 +45,13 @@ function load3Dmol(): Promise<void> {
 
   loadPromise = new Promise((resolve, reject) => {
     const script = document.createElement("script");
-    script.src = CDN_URL;
+    script.src = SCRIPT_URL;
     script.async = true;
     script.onload = () => {
       if (window.$3Dmol) resolve();
       else reject(new Error("$3Dmol not loaded"));
     };
-    script.onerror = () => reject(new Error("CDN failed"));
+    script.onerror = () => reject(new Error("Не удалось загрузить 3Dmol.js (самохостинг vendor/)"));
     document.head.appendChild(script);
   });
   return loadPromise;

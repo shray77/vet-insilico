@@ -140,8 +140,8 @@ function calcTm(seq: string): number {
   const ct = 250e-9;
   const x = s === reverseComplement(s) ? 1 : 4;
   const tmKelvin = (dh * 1000) / (ds + R * Math.log(ct / x));
-  // Salt correction (Owczarzy 2004 simplified): +16.6 * log10([Na+])
-  // assume 50 mM Na+
+  // Salt correction: +16.6 * log10([Na+]) — форма из SantaLucia 1998 (Biopython saltcorr=1);
+  // ранее ошибочно приписана Owczarzy 2004 (аудит SW-12). Assume 50 mM Na+.
   const tm = tmKelvin - 273.15 + 16.6 * Math.log10(0.05);
   return Number(tm.toFixed(1));
 }

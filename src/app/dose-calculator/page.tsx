@@ -41,7 +41,7 @@ export default function DoseCalculatorPage() {
           <span>Antibiotic Dose Calculator</span>
         </div>
         <div className="rounded-xl bg-cyan-50 dark:bg-cyan-950/30 border border-cyan-200 dark:border-cyan-800 p-4 mb-6">
-          <h2 className="font-semibold text-cyan-900 dark:text-cyan-100 mb-1">Antibiotic Dose Calculator (ветеринарный)</h2>
+          <h1 className="font-semibold text-cyan-900 dark:text-cyan-100 mb-1">Antibiotic Dose Calculator (ветеринарный)</h1>
           <p className="text-sm text-cyan-800 dark:text-cyan-300">
             Калькулятор дозировки антибиотиков для 6 видов животных. База: {DOSE_DATABASE.length} схем дозирования.
             Расчёт по весу, коррекция на возраст, концентрацию препарата, стоимость курса.

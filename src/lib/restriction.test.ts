@@ -11,6 +11,16 @@ describe("findCutSites", () => {
     expect(sites[1].position).toBe(13);
   });
 
+  it("HincII матчится через IUPAC GTYRAC (аудит SW-12: «GTPyPuAC» не находил ни одного сайта)", () => {
+    const hincII = RESTRICTION_ENZYMES.find((e) => e.name === "HincII")!;
+    expect(hincII.recognition).toBe("GTYRAC");
+    // GTTAAC = GTYRAC при Y=T, R=A; GTCAAC — при Y=C, R=A
+    const sites = findCutSites("GGGTTAACGGGTCAACGG", [hincII]);
+    expect(sites.length).toBe(2);
+    expect(sites[0].matchSeq).toBe("GTTAAC");
+    expect(sites[1].matchSeq).toBe("GTCAAC");
+  });
+
   it("returns empty array when no sites found", () => {
     const seq = "ATGCATGCATGC";
     const ecoRI = RESTRICTION_ENZYMES.find((e) => e.name === "EcoRI")!;

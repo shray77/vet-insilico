@@ -38,6 +38,8 @@ export interface OptimizationResult {
   hairpins: number;
   /** Length (bp). */
   length: number;
+  /** Нуклеотиды хвоста, не образующие полный кодон (вход % 3): не переносятся в вывод (аудит SW-13, Б4). */
+  droppedBases: number;
   /** Per-position codon mapping. */
   codonMap: { position: number; aa: string; codon: string; fraction: number }[];
 }
@@ -302,6 +304,15 @@ export function optimizeCodons(
   const resolvedSpecies = SPECIES_ALIASES[species] || species;
   const usage = CODON_USAGE[resolvedSpecies] || CODON_USAGE["E. coli"];
   const dna = inputDNA.toUpperCase().replace(/[^ACGT]/g, "");
+  // Гвард (аудит SW-13, Б3): невалидный ввод прежде молча давал GC% NaN — теперь честная ошибка.
+  if (dna.length === 0) {
+    throw new Error("Входная последовательность не содержит валидных нуклеотидов (A/C/G/T)");
+  }
+  if (dna.length < 3) {
+    throw new Error("Последовательность короче одного кодона (минимум 3 п.о. A/C/G/T)");
+  }
+  // Хвост, не кратный 3, не образует кодон — считаем честно, а не молча (аудит SW-13, Б4).
+  const droppedBases = dna.length % 3;
   const protein = translateDNA(dna);
 
   // Build reverse lookup: for each AA, get sorted codons by frequency
@@ -408,6 +419,7 @@ export function optimizeCodons(
     restrictionSitesAvoided: [...new Set(restrictionSitesAvoided)],
     hairpins,
     length: optimized.length,
+    droppedBases,
     codonMap,
   };
 }

@@ -70,9 +70,9 @@ export default function RestrictionMapPage() {
         </div>
 
         <div className="rounded-xl bg-lime-50 dark:bg-lime-950/30 border border-lime-200 dark:border-lime-800 p-4 mb-6">
-          <h2 className="font-semibold text-lime-900 dark:text-lime-100 mb-1">
+          <h1 className="font-semibold text-lime-900 dark:text-lime-100 mb-1">
             Restriction Map — карта сайтов рестриктаз
-          </h2>
+          </h1>
           <p className="text-sm text-green-700">
             Находим сайты разрезания для 30+ рестриктаз (EcoRI, BamHI, HindIII, SmaI...) в ДНК-последовательности.
             Считаем позиции разрезов, размеры фрагментов, симулируем гель-электрофорез.

@@ -43,6 +43,8 @@ export interface ClockRate {
   rate: number;
   /** Description / source. */
   source: string;
+  /** Опциональная оговорка о неоднозначности ставки (аудит SW-12). */
+  note?: string;
 }
 
 /**
@@ -59,8 +61,10 @@ export const CLOCK_RATES: ClockRate[] = [
   { gene: "BVDV E2", organism: "Bovine Viral Diarrhea Virus", rate: 1e-3, source: "Vilcek et al. 2001" },
   { gene: "Brucella omp2b", organism: "Brucella spp.", rate: 1e-7, source: "Whatmore 2009" },
   { gene: "E. coli 16S rRNA", organism: "E. coli", rate: 1e-8, source: "Ochman et al. 1999" },
-  { gene: "mtDNA cyt b", organism: "Vertebrate mitochondria", rate: 2e-8, source: "Brown et al. 1979" },
-  { gene: "mtDNA COI", organism: "Vertebrate mitochondria", rate: 1.5e-8, source: "Brown et al. 1979" },
+  { gene: "mtDNA cyt b", organism: "Vertebrate mitochondria", rate: 2e-8, source: "Brown et al. 1979",
+    note: "Brown et al. 1979 (PNAS 76:1967) приводит 0.02 subst/bp/Myr из ПОПАРНЫХ расхождений: если это попарная скорость, per-lineage r вдвое ниже (1×10⁻⁸) и возрасты по T = d/(2r) получаются вдвое старше. Трактовка в первоисточнике двусмысленна — для точных оценок берите калибровку по своему таксону." },
+  { gene: "mtDNA COI", organism: "Vertebrate mitochondria", rate: 1.5e-8, source: "Brown et al. 1979",
+    note: "Та же двусмысленность трактовки Brown 1979, что и для cyt b: возможна ×2-коррекция возрастов." },
 ];
 
 /**
@@ -75,6 +79,14 @@ export function calculateDivergenceTime(
   clockRate: number,
   confidenceInterval?: number,
 ): MolecularClockResult {
+  // Гвард (аудит SW-13, Б2): d ≥ 0 по определению; отрицательные/NaN значения
+  // прежде молча давали мусор вида «−50 000 лет» — теперь честная ошибка.
+  if (!Number.isFinite(geneticDistance) || geneticDistance < 0) {
+    throw new Error("Генетическое расстояние должно быть неотрицательным числом (subs/site)");
+  }
+  if (!Number.isFinite(clockRate) || clockRate <= 0) {
+    throw new Error("Clock rate должна быть положительным числом (subs/site/год)");
+  }
   // T = d / (2r) — both lineages accumulate mutations
   const divergenceTimeYears = geneticDistance / (2 * clockRate);
 

@@ -59,12 +59,12 @@ export function ToolPageLayout({ name, description, color = "teal", children }: 
           <span className="mx-1">/</span>
           <span>{name}</span>
         </div>
-        {/* Hero */}
+        {/* Hero (аудит SW-13, П6: заголовок тулзы — <h1>, не <h2>) */}
         <div className={`rounded-xl ${c.bg} border ${c.border} p-4 mb-6`}>
-          <h2 className={`font-semibold ${c.title} mb-1 flex items-center gap-2`}>
+          <h1 className={`font-semibold ${c.title} mb-1 flex items-center gap-2`}>
             <ToolIcon href={pathname} size={18} className={c.text} />
             <span>{name}</span>
-          </h2>
+          </h1>
           <p className={`text-sm ${c.text}`}>{description}</p>
         </div>
         {children}

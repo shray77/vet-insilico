@@ -156,9 +156,9 @@ export default function PKPDPage() {
         <div className="rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 p-4 mb-6">
           <div className="flex items-start gap-3 flex-wrap">
             <div className="flex-1 min-w-[260px]">
-              <h2 className="font-semibold text-rose-900 dark:text-rose-100 mb-1">
+              <h1 className="font-semibold text-rose-900 dark:text-rose-100 mb-1">
                 PK/PD Simulator — фармакокинетика + фармакодинамика
-              </h2>
+              </h1>
               <p className="text-sm text-rose-800 dark:text-rose-300">
                 Однокомпартментная модель с first-order absorption. Считаем Cmax, AUC, t½, Css.
                 PD-индексы: AUC₂₄/MIC (фторхинолоны), Cmax/MIC (аминогликозиды), T&gt;MIC (β-лактамы).

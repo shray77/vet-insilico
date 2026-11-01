@@ -57,11 +57,11 @@
 - **Frontend**: Next.js 16 (static export) + React 19 + Tailwind CSS 4 + TypeScript
 - **Design**: [vet-ds](https://github.com/shray77/vet-ds) v2.4.1 «Научная периодика» — голос A (бумага/вечерний номер) + бирюзовый характер поверх ядра; утилиты Tailwind перегружены на токены DS через `@theme inline` (`src/app/globals.css`), ядро — копия `src/app/vet-ds.css` + самохост Prata (`src/app/fonts/`), контраст-гейт `contrast_v2.py` AA
 - **Package manager**: Bun
-- **3D viewer**: 3Dmol.js (CDN)
+- **3D viewer**: 3Dmol.js — самохостинг `public/vendor/3Dmol-min.js` (снят с 3Dmol.org 2026-09-12; аудит SW-28: чужой CDN без SRI был единственным вектором кражи HF-токена)
 - **Molecular toolkit**: RDKit.js WASM (CDN, 4MB)
 - **ML**: HuggingFace Inference API (Qwen2.5-Coder-3B-Instruct via nscale, ESM-2 35M via hf-inference)
 - **Hosting**: GitHub Pages (static) + **полу-динамика через [vet-api](https://github.com/shray77/vet-api)** (Cloudflare Worker)
-- **Tests**: Vitest, 197 tests, 18 test files
+- **Tests**: Vitest, 212 tests, 19 test files
 - **Boltz-2**: ночной GitHub Actions-ран (CPU) — предсказания аффинности (IC50/ΔG) для пилотных пар «препарат × мишень», статический JSON без внешних зависимостей
 
 ## Полу-динамика (static + vet-api)
@@ -83,7 +83,7 @@
 - **202 drugs** with molecular properties
 - **196 drugs with SMILES** (from PubChem)
 - **28 restriction enzymes**
-- **12 molecular clock rates** (published)
+- **12 molecular clock rates** (published; ⚠ mtDNA-ставки Brown 1979 двусмысленны — возможна ×2-коррекция возрастов, см. пометку в тулзе Molecular Clock)
 - **39 antibiotic dose schemes** (Plumb's + РФ реестр)
 
 ## Boltz-2 аффинности (ночной CI-ран)

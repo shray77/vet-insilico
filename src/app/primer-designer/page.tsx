@@ -117,9 +117,9 @@ export default function PrimerDesignerPage() {
 
         <div className="rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-4 mb-6 flex items-start gap-3 flex-wrap">
           <div className="flex-1 min-w-[260px]">
-            <h2 className="font-semibold text-amber-900 dark:text-amber-100 mb-1">
+            <h1 className="font-semibold text-amber-900 dark:text-amber-100 mb-1">
               PCR Primer Designer — ML-powered
-            </h2>
+            </h1>
             <p className="text-sm text-amber-800 dark:text-amber-300">
               Дизайн пар праймеров с детальной термодинамикой (SantaLucia 1998 NN, hairpin DP, dimers) +
               опциональный LLM-анализ специфичности и рисков через Qwen2.5-Coder-3B-Instruct (HuggingFace).

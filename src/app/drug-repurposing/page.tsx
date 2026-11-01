@@ -163,9 +163,9 @@ export default function DrugRepurposingPage() {
         {tab === "screening" && (
           <div className="space-y-6">
             <div className="rounded-xl bg-teal-50 dark:bg-teal-950/30 border border-teal-200 dark:border-teal-800 p-4">
-              <h2 className="font-semibold text-teal-700 mb-1">
+              <h1 className="font-semibold text-teal-700 mb-1">
                 In Silico Drug Repurposing
-              </h2>
+              </h1>
               <p className="text-sm text-teal-700">
                 Подберём существующие препараты, которые могут связаться с белком патогена и заблокировать его.
                 Выбираем патоген → запускаем скрининг → смотрим топ кандидатов с оценкой сродства.

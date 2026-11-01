@@ -36,6 +36,25 @@ describe("calculateDivergenceTime", () => {
     const result = calculateDivergenceTime(0.01, 1e-3);
     expect(result.method).toBe("T = d / (2r)");
   });
+
+  it("гвард (аудит SW-13 Б2): отрицательное d кидает ошибку, а не «−50 000 лет»", () => {
+    expect(() => calculateDivergenceTime(-1, 1e-5)).toThrow(/неотрицательным/);
+  });
+
+  it("гвард: NaN/Infinity d кидает ошибку", () => {
+    expect(() => calculateDivergenceTime(NaN, 1e-5)).toThrow(/неотрицательным/);
+    expect(() => calculateDivergenceTime(Infinity, 1e-5)).toThrow(/неотрицательным/);
+  });
+
+  it("гвард: неположительная clock rate кидает ошибку", () => {
+    expect(() => calculateDivergenceTime(0.01, 0)).toThrow(/положительным/);
+    expect(() => calculateDivergenceTime(0.01, -1e-5)).toThrow(/положительным/);
+  });
+
+  it("d = 0 валиден → T = 0", () => {
+    const result = calculateDivergenceTime(0, 1e-5);
+    expect(result.divergenceTimeYears).toBe(0);
+  });
 });
 
 describe("CLOCK_RATES", () => {

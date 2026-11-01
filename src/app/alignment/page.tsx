@@ -84,9 +84,9 @@ export default function AlignmentPage() {
 
         <div className="rounded-xl bg-cyan-50 dark:bg-cyan-950/30 border border-cyan-200 dark:border-cyan-800 p-4 mb-6 flex items-start gap-3 flex-wrap">
           <div className="flex-1 min-w-[260px]">
-            <h2 className="font-semibold text-cyan-900 dark:text-cyan-100 mb-1">
+            <h1 className="font-semibold text-cyan-900 dark:text-cyan-100 mb-1">
               Sequence Alignment — Needleman-Wunsch + Smith-Waterman
-            </h2>
+            </h1>
             <p className="text-sm text-cyan-800 dark:text-cyan-300">
               Попарное выравнивание последовательностей. Глобальное (NW, для гомологичных       seqов) или локальное (SW, для поиска консервативных доменов).
               Скоринг: BLOSUM62 (белки) или match/mismatch (ДНК).

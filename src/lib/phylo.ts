@@ -145,9 +145,9 @@ export function neighborJoining(labels: string[], inputD: number[][]): PhyloResu
     label: l,
   }));
   const D = inputD.map((row) => [...row]);
-  const clusterNames = [...labels];
 
-  while (clusters.length > 2) {
+  // Канонический NJ останавливается при 3 кластерах — финал тройной звездой
+  while (clusters.length > 3) {
     const n = clusters.length;
     // Compute row sums
     const r: number[] = clusters.map((_, i) => {
@@ -168,8 +168,10 @@ export function neighborJoining(labels: string[], inputD: number[][]): PhyloResu
       }
     }
 
-    // Branch lengths
-    const delta = (r[minI] - r[minJ]) / (n - 2);
+    // Branch lengths — канонический Saitou-Nei: limbI = d/2 + (Σᵢ−Σⱼ)/(2(n−2)).
+    // r[i] = Σᵢ/(n−2), поэтому Δ = r̄ᵢ−r̄ⱼ и есть (Σᵢ−Σⱼ)/(n−2) — без лишнего деления
+    // (аудит SW-12: прежний delta/(n−2) занижал член в (n−2) раза — C=1.333 вместо 1).
+    const delta = r[minI] - r[minJ];
     const limbI = 0.5 * D[minI][minJ] + 0.5 * delta;
     const limbJ = D[minI][minJ] - limbI;
 
@@ -224,18 +226,32 @@ export function neighborJoining(labels: string[], inputD: number[][]): PhyloResu
     D.push(...newD.map((r) => [...r]));
   }
 
-  // Last 2 clusters — join with branch length = D[0][1]
-  const lastD = D[0][1];
-  const finalRoot: PhyloNode = {
-    name: `(${clusters[0].node.name},${clusters[1].node.name})`,
-    length: 0,
-    depth: 0,
-    children: [
-      { ...clusters[0].node, length: Math.max(0, lastD / 2) },
-      { ...clusters[1].node, length: Math.max(0, lastD / 2) },
-    ],
-    isLeaf: false,
-  };
+  // Last join (аудит SW-12): при 3 кластерах — тройная звезда Saitou-Nei
+  // lₖ = (dₘₙ+dₘₖ−dₙₖ)/2 (прежде — бинарный join + lastD/2 → нарушение аддитивности).
+  const finalRoot: PhyloNode =
+    clusters.length === 3
+      ? {
+          name: `(${clusters[0].node.name},${clusters[1].node.name},${clusters[2].node.name})`,
+          length: 0,
+          depth: 0,
+          children: [
+            { ...clusters[0].node, length: Math.max(0, (D[0][1] + D[0][2] - D[1][2]) / 2) },
+            { ...clusters[1].node, length: Math.max(0, (D[0][1] + D[1][2] - D[0][2]) / 2) },
+            { ...clusters[2].node, length: Math.max(0, (D[0][2] + D[1][2] - D[0][1]) / 2) },
+          ],
+          isLeaf: false,
+        }
+      : {
+          // 2 кластера (вход из 2 таксонов) — пара с ветвями d/2
+          name: `(${clusters[0].node.name},${clusters[1].node.name})`,
+          length: 0,
+          depth: 0,
+          children: [
+            { ...clusters[0].node, length: Math.max(0, D[0][1] / 2) },
+            { ...clusters[1].node, length: Math.max(0, D[0][1] / 2) },
+          ],
+          isLeaf: false,
+        };
 
   const maxDepth = computeDepths(finalRoot, 0);
   const leaves = collectLeaves(finalRoot);

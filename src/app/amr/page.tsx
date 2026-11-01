@@ -42,9 +42,9 @@ export default function AMRPage() {
         </div>
 
         <div className="rounded-xl bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800 p-4 mb-6">
-          <h2 className="font-semibold text-orange-900 dark:text-orange-100 mb-1">
+          <h1 className="font-semibold text-orange-900 dark:text-orange-100 mb-1">
             Antimicrobial Resistance Predictor
-          </h2>
+          </h1>
           <p className="text-sm text-orange-800 dark:text-orange-300">
             По последовательности гена-мишени (GyrA, RpoB, PBP, 16S rRNA) предсказываем резистентность к классам антибиотиков.
             Rule-based поиск известных точечных мутаций по контекстным мотивам (CARD/ResFinder; ARO-акцессии выверены по онтологии card.mcmaster.ca).

@@ -50,6 +50,30 @@ describe("optimizeCodons", () => {
     expect(result.codonMap.length).toBe(8);
     expect(result.codonMap[7].aa).toBe("*"); // stop
   });
+
+  it("гвард (аудит SW-13 Б3): ввод без A/C/G/T кидает ошибку, а не GC% NaN", () => {
+    expect(() => optimizeCodons("а".repeat(200), "Sus scrofa")).toThrow(/A\/C\/G\/T/);
+    expect(() => optimizeCodons("NNNNNN", "Sus scrofa")).toThrow(/A\/C\/G\/T/);
+  });
+
+  it("гвард: короче одного кодона — честная ошибка", () => {
+    expect(() => optimizeCodons("AC", "Sus scrofa")).toThrow(/кодона/);
+  });
+
+  it("неполный кодон честно репортится: 301×A → droppedBases=1, вывод 300 (аудит SW-13 Б4)", () => {
+    const result = optimizeCodons("A".repeat(301), "Sus scrofa");
+    expect(result.droppedBases).toBe(1);
+    expect(result.optimizedDNA.length).toBe(300);
+    expect(result.length).toBe(300);
+  });
+
+  it("дефолтный сэмпл ASFV p72 (307 п.о.): 1 отброшенный нуклеотид виден в результате, не молча", () => {
+    const s = CODON_OPTIMIZATION_SAMPLES[0];
+    expect(s.seq.length % 3).toBe(1); // 307 п.о.
+    const result = optimizeCodons(s.seq, s.species);
+    expect(result.droppedBases).toBe(1);
+    expect(result.optimizedDNA.length).toBe(s.seq.length - 1);
+  });
 });
 
 describe("AVAILABLE_SPECIES", () => {

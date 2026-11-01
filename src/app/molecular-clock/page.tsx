@@ -12,7 +12,16 @@ export default function MolecularClockPage() {
   const [ci, setCi] = useState(0.002);
 
   const clockRate = CLOCK_RATES[clockRateIdx];
-  const result = useMemo(() => calculateDivergenceTime(distance, clockRate.rate, ci), [distance, clockRate, ci]);
+  // Аудит SW-13 (Б2): отрицательное/невалидное d прежде молча рисовало «−50 000 лет» —
+  // теперь честная ошибка вместо мусорного результата.
+  const calc = useMemo(() => {
+    try {
+      return { result: calculateDivergenceTime(distance, clockRate.rate, ci), error: null as string | null };
+    } catch (e: any) {
+      return { result: null, error: e?.message || "Ошибка расчёта" };
+    }
+  }, [distance, clockRate, ci]);
+  const result = calc.result;
 
   const loadSample = (idx: number) => {
     setSampleIdx(idx);
@@ -35,7 +44,7 @@ export default function MolecularClockPage() {
           <span>Molecular Clock Calculator</span>
         </div>
         <div className="rounded-xl bg-slate-50 dark:bg-slate-950/30 border border-slate-200 dark:border-slate-800 p-4 mb-6">
-          <h2 className="font-semibold text-slate-900 dark:text-slate-100 mb-1">Molecular Clock Calculator</h2>
+          <h1 className="font-semibold text-slate-900 dark:text-slate-100 mb-1">Molecular Clock Calculator</h1>
           <p className="text-sm text-zinc-700 dark:text-zinc-300">
             Оценка времени расхождения по генетическому расстоянию. Формула: T = d / (2r).
             12 опубликованных clock rates для ветеринарии (ASFV, Influenza, Rabies, FMDV, BVDV, Brucella, mtDNA...).
@@ -78,30 +87,46 @@ export default function MolecularClockPage() {
             </label>
           </div>
           <div className="lg:col-span-2 space-y-6">
-            <div className="rounded-xl border-2 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-6 text-center">
-              <div className="text-xs text-slate-500 mb-1">Время расхождения</div>
-              <div className="text-4xl font-bold text-zinc-700 dark:text-zinc-300">{result.humanReadable}</div>
-              <div className="text-sm text-slate-500 mt-2">{result.divergenceTimeYears.toLocaleString()} лет</div>
-              <div className="text-xs text-slate-400 mt-1">
-                95% CI: {result.lowerBoundYears.toLocaleString()} — {result.upperBoundYears.toLocaleString()} лет
+            {result ? (
+              <div className="rounded-xl border-2 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-6 text-center">
+                <div className="text-xs text-slate-500 mb-1">Время расхождения</div>
+                <div className="text-4xl font-bold text-zinc-700 dark:text-zinc-300">{result.humanReadable}</div>
+                <div className="text-sm text-slate-500 mt-2">{result.divergenceTimeYears.toLocaleString()} лет</div>
+                <div className="text-xs text-slate-400 mt-1">
+                  95% CI: {result.lowerBoundYears.toLocaleString()} — {result.upperBoundYears.toLocaleString()} лет
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="rounded-xl border-2 border-red-300 dark:border-red-800 bg-red-50 dark:bg-red-950/30 p-6 text-center">
+                <div className="text-xl mb-1">⚠</div>
+                <div className="font-medium text-red-700 dark:text-red-300 mb-1">Расчёт невозможен</div>
+                <div className="text-sm text-red-600 dark:text-red-400">{calc.error}</div>
+                <div className="text-xs text-zinc-500 mt-2">Генетическое расстояние d ≥ 0 по определению (subs/site)</div>
+              </div>
+            )}
 
-            <div className="grid grid-cols-2 gap-3 text-sm">
-              <div className="rounded-lg bg-zinc-100 dark:bg-zinc-900 p-3">
-                <div className="text-xs text-zinc-400">Формула</div>
-                <div className="font-mono text-lg">{result.method}</div>
+            {result && (
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="rounded-lg bg-zinc-100 dark:bg-zinc-900 p-3">
+                  <div className="text-xs text-zinc-400">Формула</div>
+                  <div className="font-mono text-lg">{result.method}</div>
+                </div>
+                <div className="rounded-lg bg-zinc-100 dark:bg-zinc-900 p-3">
+                  <div className="text-xs text-zinc-400">Clock rate</div>
+                  <div className="font-mono text-lg">{result.clockRate.toExponential(2)}</div>
+                </div>
               </div>
-              <div className="rounded-lg bg-zinc-100 dark:bg-zinc-900 p-3">
-                <div className="text-xs text-zinc-400">Clock rate</div>
-                <div className="font-mono text-lg">{result.clockRate.toExponential(2)}</div>
-              </div>
-            </div>
+            )}
 
             <div className="rounded-lg bg-zinc-100 dark:bg-zinc-900 p-3">
               <div className="text-xs text-zinc-500 mb-1">Источник clock rate:</div>
               <div className="text-sm">{clockRate.gene} — {clockRate.organism}</div>
               <div className="text-xs text-zinc-400">{clockRate.source}</div>
+              {clockRate.note && (
+                <div className="mt-2 text-xs text-amber-700 dark:text-amber-400 border-t border-zinc-200 dark:border-zinc-800 pt-2">
+                  <b>⚠ Неоднозначность ставки:</b> {clockRate.note}
+                </div>
+              )}
             </div>
 
             {MOLECULAR_CLOCK_SAMPLES[sampleIdx].pairs.length > 0 && (

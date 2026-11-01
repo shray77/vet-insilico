@@ -114,9 +114,9 @@ export default function AdmetPage() {
         </div>
 
         <div className="rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 p-4 mb-6">
-          <h2 className="font-semibold text-blue-900 dark:text-blue-100 mb-1">
+          <h1 className="font-semibold text-blue-900 dark:text-blue-100 mb-1">
             ADMET Predictor — фармакокинетика и токсичность
-          </h2>
+          </h1>
           <p className="text-sm text-blue-800 dark:text-blue-300">
             Выбираем препарат → получаем 12 параметров: всасывание, распределение, метаболизм,
             выведение, токсичность. Все расчёты по молекулярным дескрипторам (rule-based эвристики).

@@ -77,9 +77,9 @@ export default function PhylogenyPage() {
 
         <div className="rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 p-4 mb-6 flex items-start gap-3 flex-wrap">
           <div className="flex-1 min-w-[260px]">
-            <h2 className="font-semibold text-emerald-900 dark:text-emerald-100 mb-1">
+            <h1 className="font-semibold text-emerald-900 dark:text-emerald-100 mb-1">
               Phylogenetic Tree Builder — UPGMA + Neighbor-Joining
-            </h2>
+            </h1>
             <p className="text-sm text-emerald-700">
               Строит филогенетическое дерево из набора гомологичных последовательностей. Сначала считается попарная
               distance matrix (Kimura 2-parameter для ДНК, p-distance для белков), затем — UPGMA (ultrametric)

@@ -34,7 +34,7 @@ export default function PlasmidMapPage() {
           <span>Plasmid Map Designer</span>
         </div>
         <div className="rounded-xl bg-stone-50 dark:bg-stone-950/30 border border-stone-200 dark:border-stone-800 p-4 mb-6">
-          <h2 className="font-semibold text-stone-900 dark:text-stone-100 mb-1">Plasmid Map Designer — ORF + restriction sites</h2>
+          <h1 className="font-semibold text-stone-900 dark:text-stone-100 mb-1">Plasmid Map Designer — ORF + restriction sites</h1>
           <p className="text-sm text-zinc-700 dark:text-zinc-300">
             Анализ плазмидных последовательностей: поиск ORF (ATG/GTG/TTG → stop на обеих цепях),
             сайты рестриктаз, GC content. Визуализация circular map.

@@ -12,14 +12,17 @@ export default function CodonOptimizerPage() {
   const [avoidRS, setAvoidRS] = useState(true);
   const [avoidHP, setAvoidHP] = useState(true);
 
-  const result = useMemo(() => {
-    if (!inputDNA || inputDNA.length < 6) return null;
+  // Аудит SW-13 (Б3/Б4): невалидный ввод (GC% NaN) и молчаливое усечение 307→306 —
+  // теперь честная ошибка валидации и явное предупреждение о неполном кодоне.
+  const calc = useMemo(() => {
+    if (!inputDNA || inputDNA.length < 6) return { result: null, error: null as string | null };
     try {
-      return optimizeCodons(inputDNA, species, { avoidRestrictionSites: avoidRS, avoidHairpins: avoidHP });
+      return { result: optimizeCodons(inputDNA, species, { avoidRestrictionSites: avoidRS, avoidHairpins: avoidHP }), error: null as string | null };
     } catch (e: any) {
-      return null;
+      return { result: null, error: e?.message || "Ошибка оптимизации" };
     }
   }, [inputDNA, species, avoidRS, avoidHP]);
+  const result = calc.result;
 
   const loadSample = (idx: number) => {
     setSampleIdx(idx);
@@ -37,7 +40,7 @@ export default function CodonOptimizerPage() {
           <span>Codon Optimization</span>
         </div>
         <div className="rounded-xl bg-fuchsia-50 dark:bg-fuchsia-950/30 border border-fuchsia-200 dark:border-fuchsia-800 p-4 mb-6">
-          <h2 className="font-semibold text-fuchsia-900 dark:text-fuchsia-100 mb-1">Codon Optimization Tool</h2>
+          <h1 className="font-semibold text-fuchsia-900 dark:text-fuchsia-100 mb-1">Codon Optimization Tool</h1>
           <p className="text-sm text-fuchsia-800 dark:text-fuchsia-300">
             Оптимизация кодонов под экспрессию в организме-хозяине. Таблицы Kazusa для свиньи, КРС, курицы, E. coli.
             CAI (Codon Adaptation Index), избегание сайтов рестриктаз и шпилек.
@@ -81,10 +84,21 @@ export default function CodonOptimizerPage() {
             <div className="text-xs text-zinc-400 mt-1">Длина: {inputDNA.length} bp</div>
           </div>
           <div className="lg:col-span-2 space-y-6">
-            {!result ? (
+            {calc.error ? (
+              <div className="rounded-xl border-2 border-red-300 dark:border-red-800 bg-red-50 dark:bg-red-950/30 p-6 text-center">
+                <div className="text-xl mb-1">⚠</div>
+                <div className="font-medium text-red-700 dark:text-red-300 mb-1">Невалидная входная последовательность</div>
+                <div className="text-sm text-red-600 dark:text-red-400">{calc.error}</div>
+              </div>
+            ) : !result ? (
               <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-8 text-center text-zinc-400">Введите ДНК последовательность</div>
             ) : (
               <>
+                {result.droppedBases > 0 && (
+                  <div className="rounded-xl border border-amber-300 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/30 p-4 text-sm text-amber-800 dark:text-amber-300">
+                    <b>⚠ Неполный последний кодон:</b> входная CDS не кратна 3 — последние {result.droppedBases} нуклеотид{result.droppedBases === 1 ? "" : "а"} не образуют кодон и НЕ переносятся в оптимизированную последовательность (для синтеза). Обрежьте вход или допишите полные кодоны.
+                  </div>
+                )}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   <div className="rounded-lg bg-zinc-100 dark:bg-zinc-900 p-3 text-center">
                     <div className="text-xs text-zinc-400">CAI</div>

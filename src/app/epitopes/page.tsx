@@ -104,9 +104,9 @@ export default function EpitopesPage() {
         </div>
 
         <div className="rounded-xl bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 p-4 mb-6">
-          <h2 className="font-semibold text-purple-900 dark:text-purple-100 mb-1">
+          <h1 className="font-semibold text-purple-900 dark:text-purple-100 mb-1">
             Vaccine Epitope Predictor
-          </h2>
+          </h1>
           <p className="text-sm text-purple-800 dark:text-purple-300">
             Из аминокислотной последовательности белка находим B-клеточные (линейные) и T-клеточные (MHC-I) эпитопы.
             Готовый кандидат для пептидной вакцины. Алгоритмы: Hopp-Woods, Chou-Fasman, Karplus-Schulz, Emini.

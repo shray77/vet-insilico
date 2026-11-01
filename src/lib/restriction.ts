@@ -84,7 +84,7 @@ export const RESTRICTION_ENZYMES: RestrictionEnzyme[] = [
   // Common blunt cutters
   { name: "EcoRV", recognition: "GATATC", cutTop: 3, cutBottom: 3, cutType: "blunt", source: "E. coli", tempC: 37, palindromic: true },
   { name: "SmaI", recognition: "CCCGGG", cutTop: 3, cutBottom: 3, cutType: "blunt", source: "S. marcescens", tempC: 25, palindromic: true },
-  { name: "HincII", recognition: "GTPyPuAC", cutTop: 4, cutBottom: 4, cutType: "blunt", source: "H. influenzae", tempC: 37, palindromic: true },
+  { name: "HincII", recognition: "GTYRAC", cutTop: 3, cutBottom: 3, cutType: "blunt", source: "H. influenzae", tempC: 37, palindromic: true }, // GTY^RAC (аудит SW-12: «GTPyPuAC» не матчилось — P/y/P/u вне IUPAC-таблицы)
   { name: "PvuII", recognition: "CAGCTG", cutTop: 3, cutBottom: 3, cutType: "blunt", source: "P. vulgaris", tempC: 37, palindromic: true },
   { name: "AluI", recognition: "AGCT", cutTop: 2, cutBottom: 2, cutType: "blunt", source: "Arthrobacter luteus", tempC: 37, palindromic: true },
   { name: "HaeIII", recognition: "GGCC", cutTop: 2, cutBottom: 2, cutType: "blunt", source: "H. aegyptius", tempC: 37, palindromic: true },
