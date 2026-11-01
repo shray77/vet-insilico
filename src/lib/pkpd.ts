@@ -275,7 +275,9 @@ export const DRUG_PK_PROFILES: {
   },
   {
     name: "Гентамицин", group: "Аминогликозид", species: "Собака",
-    params: { F: 1.0, Vd: 0.25, ka: 0, ke: 0.23, route: "IV", duration: 48, dt: 0.05 },
+    // ke 0.23/ч (t½≈3 ч) — расхождение ~3× с JVPT 2004;27:21-5
+    // (MRT 1.48-1.77 ч → t½ ≈ 1 ч → ke ≈ 0.7/ч) — аудит SW-11 §2.2/§4.6.
+    params: { F: 1.0, Vd: 0.25, ka: 0, ke: 0.7, route: "IV", duration: 48, dt: 0.05 },
     mic: 2.0, pdType: "cmax_mic", pdTarget: 10,
   },
   {

@@ -5,18 +5,21 @@
  * rotatable bonds, charge). All in browser, no API.
  *
  * Sources of heuristic rules:
- *   - Lipinski CA (2004) — Rule of Five
+ *   - Lipinski CA (1997, Adv Drug Deliv Rev 23:3-25) — Rule of Five
  *   - Veber DF (2002) — rotatable bonds / PSA
  *   - Egan WJ, Lauri G (2002) — BBB permeability
  *   - Hughes JD (2008) — Caco-2 / oral bioavailability
- *   - Wang J et al. — logS estimation
- *   - hERG blocker rules (Dsouza 2011)
+ *   - Delaney JS (2004, JCICS 44:1000) — ESOL logS (замена искажённого GSE,
+ *     где вместо температуры плавления стоял MW — аудит SW-11: занижение
+ *     растворимости 3–10×; ESOL использует только структурные дескрипторы)
+ *   - hERG blocker rules (Dsouza 2011 — источник в аудите не подтверждён)
  *
  * Output is a qualitative panel (LOW/MODERATE/HIGH) + numeric estimate where applicable.
  * NOT for clinical use — for hypothesis generation only.
  */
 
 import type { Drug } from "@/data/drugs";
+import { ESOL_AROMATIC_PROPORTION } from "@/data/esol-ap";
 
 export type AdmetLevel = "low" | "moderate" | "high";
 
@@ -147,9 +150,17 @@ export function predictADMET(drug: Drug): AdmetResult {
   renal = clamp(renal, 0.05, 0.9);
 
   // ──────── LOG S (solubility) ────────
-  // General solubility equation: logS ≈ 0.5 - 0.01(MW-20) - LogP
-  let logS = 0.5 - 0.01 * (drug.mw - 20) - drug.logp;
-  if (drug.charge !== 0) logS += 2; // salts dissolve well
+  // ESOL (Delaney 2004, JCICS 44:1000 — рекомендация аудита SW-11 вместо
+  // искажённого «GSE» c MW вместо температуры плавления):
+  //   logS = 0.16 − 0.63·cLogP − 0.0062·MW + 0.066·RB − 0.74·AP
+  // AP (aromatic proportion = ароматические/тяжёлые атомы) предвычислен
+  // RDKit по SMILES (src/data/esol-ap.ts); без SMILES — AP=0 и честный alert.
+  const apKnown = drug.id !== undefined && ESOL_AROMATIC_PROPORTION[drug.id] !== undefined;
+  const ap = apKnown ? ESOL_AROMATIC_PROPORTION[drug.id] : 0;
+  if (!apKnown) {
+    alerts.push("logS (ESOL): ароматическая доля неизвестна (нет SMILES/записи в esol-ap) — AP принят за 0");
+  }
+  const logS = 0.16 - 0.63 * drug.logp - 0.0062 * drug.mw + 0.066 * (drug.rotatable_bonds ?? 0) - 0.74 * ap;
 
   // ──────── hERG RISK ────────
   // Basic amines + high LogP + aromatic = hERG blockers (Dsouza 2011)

@@ -47,7 +47,7 @@ export default function ToxicityMLPage() {
     <ToolPageLayout
       name="ML Toxicity"
       color="rose"
-      description="Реальные ML-классификаторы токсичности (ChemBERTa fine-tunes на MoleculeNet). Ames, hERG, DILI, ClinTox, сенсибилизация кожи. 5 эндпоинтов, бесплатный HF API."
+      description="ML-панель токсичности: Ames, hERG, DILI, ClinTox, сенсибилизация кожи. ⚠ Указанные ChemBERTa fine-tune модели отсутствуют на HuggingFace (аудит SW-11) — панель честно сообщает «недоступна», а не выдаёт «низкий риск»."
     >
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1">
@@ -96,7 +96,16 @@ export default function ToxicityMLPage() {
         <div className="lg:col-span-2">
           {loading && <LoadingPanel message="ChemBERTa классификаторы анализируют молекулу..." />}
           {!result && !loading && !error && <EmptyPanel message="Введите SMILES для анализа токсичности" />}
-          {result && (
+          {result && !result.available && (
+            <div className="rounded-xl border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/30 p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <AlertTriangle className="h-5 w-5 text-amber-500" />
+                <span className="text-sm font-bold text-amber-700 dark:text-amber-300">Панель недоступна — риск НЕ оценён</span>
+              </div>
+              <div className="text-xs text-amber-700 dark:text-amber-300">{result.summary}</div>
+            </div>
+          )}
+          {result && result.available && (
             <div className="space-y-4">
               {/* Overall risk */}
               <div className="rounded-xl border p-4" style={{
@@ -165,7 +174,7 @@ export default function ToxicityMLPage() {
               </div>
 
               <div className="text-[10px] text-zinc-400">
-                Модели: ChemBERTa-zinc-base-v1 fine-tunes (MoleculeNet). Бесплатный HF Inference API.
+                ⚠ Целевые модели: ChemBERTa fine-tunes (MoleculeNet). По аудиту SW-11 (2026-11-01) указанные modelId не размещены на HuggingFace — пока замены нет, панель деградирует в явное «недоступна».
               </div>
             </div>
           )}

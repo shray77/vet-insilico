@@ -47,7 +47,7 @@ export default function AMRPage() {
           </h2>
           <p className="text-sm text-orange-800 dark:text-orange-300">
             По последовательности гена-мишени (GyrA, RpoB, PBP, 16S rRNA) предсказываем резистентность к классам антибиотиков.
-            Rule-based поиск известных мутаций (CARD/ResFinder) + motif search для резистентных генов (blaTEM, ermB, tetM...).
+            Rule-based поиск известных точечных мутаций по контекстным мотивам (CARD/ResFinder; ARO-акцессии выверены по онтологии card.mcmaster.ca).
           </p>
         </div>
 
@@ -206,10 +206,10 @@ export default function AMRPage() {
 
                 <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 text-xs text-zinc-500 dark:text-zinc-400">
                   <b>Алгоритм:</b><br/>
-                  • Rule-based поиск известных мутаций (CARD/ResFinder subset) — для GyrA, RpoB, PBP, 23S rRNA, FolP.<br/>
-                  • Motif search для резистентных генов: blaTEM, blaSHV, blaCTX-M, tetM, ermB, aac(3)-IV, qnrA.<br/>
+                  • Rule-based поиск известных точечных мутаций (CARD/ResFinder subset) — контекстные мотивы для GyrA, RpoB, PBP2x, 23S rRNA, 16S rRNA, FolP.<br/>
+                  • ARO-акцессии выверены по онтологии card.mcmaster.ca (аудит SW-11: все 14 прежних были неверны; синтетические «мотивные подписи» генов blaTEM/tetM/ermB и др. удалены как неверифицируемые).<br/>
                   • Confidence 75-95% для каноничных мутаций.<br/>
-                  <b>⚠</b> Упрощённая база (~10 генов + ~7 motifs). Реальная AMR-прогнозизация требует WGS + CARD/ResFinder + фенотипическую валидацию.
+                  <b>⚠</b> Упрощённая база (~9 мутаций). Реальная AMR-прогнозизация требует WGS + CARD/ResFinder + фенотипическую валидацию.
                 </div>
               </>
             )}

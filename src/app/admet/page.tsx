@@ -514,9 +514,9 @@ export default function AdmetPage() {
             </div>
 
             <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 text-xs text-zinc-500 dark:text-zinc-400">
-              <b>Источники правил:</b> Lipinski 2004 (Rule of Five), Veber 2002 (PSA/RB),
+              <b>Источники правил:</b> Lipinski 1997 (Rule of Five), Veber 2002 (PSA/RB),
               Egan & Lauri 2002 (BBB), Hughes 2008 (oral bioavailability), Dsouza 2011 (hERG),
-              Wang 1999 (logS), BIMAS-derived PSSM (MHC).<br/>
+              Delaney 2004 (ESOL logS, AP из RDKit по SMILES).<br/>
               <b>Не для клинического применения</b> — упрощённая оценка для генерации гипотез.
             </div>
           </div>

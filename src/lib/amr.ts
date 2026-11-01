@@ -10,9 +10,14 @@
  * 3. Drug-class specific: different resistance mechanisms per class
  *
  * Sources of resistance rules:
- *   - CARD (Comprehensive Antibiotic Resistance Database) — selected motifs
+ *   - CARD (Comprehensive Antibiotic Resistance Database) — point mutation
+ *     contexts, ARO-акцессии выверены по онтологии card.mcmaster.ca (аудит SW-11
+ *     2026-11-01: все 14 прежних акцессий были неверны — исправлены/удалены)
  *   - ResFinder point mutations
- *   - Lahey Clinic β-lactamase classifications
+ *
+ * Синтетические «мотивные подписи» генов (blaTEM/SHV/CTX-M, tetM, ermB,
+ * aac(3)-IV, qnrA) удалены по аудиту SW-11: не соответствуют реальным
+ * подписям CARD и содержат IUPAC-вырожденные коды.
  *
  * Output: per-drug-class resistance score, detected mutations, recommendation.
  *
@@ -89,7 +94,7 @@ const RESISTANCE_MUTATIONS: {
     motifAfter: "DG",
     mechanism: "Мутация S83 в QRDR GyrA снижает сродство фторхинолонов к ДНК-гиразе",
     confidence: 90,
-    source: "CARD: ARO:3000062",
+    source: "CARD: ARO:3003292", // fluoroquinolone resistant gyrA (было ARO:3000062 — не существует)
   },
   // D87 context: motifBefore=IY, motifAfter=AL → pattern IY[D]AL (WT) / IY[N]AL (D87N)
   {
@@ -103,7 +108,7 @@ const RESISTANCE_MUTATIONS: {
     motifAfter: "AL",
     mechanism: "Мутация D87 в QRDR GyrA",
     confidence: 85,
-    source: "CARD: ARO:3000062",
+    source: "CARD: ARO:3003292", // fluoroquinolone resistant gyrA (было ARO:3000062 — не существует)
   },
   // Rifampin resistance — RpoB RRDR (resistance determining region)
   // M. tuberculosis RpoB: ...Lys-Arg-Pro-[H526]-Leu-Asp-Val...
@@ -118,7 +123,7 @@ const RESISTANCE_MUTATIONS: {
     motifAfter: "LDV",
     mechanism: "Мутация H526 в RpoB RRDR снижает связывание рифампицина",
     confidence: 95,
-    source: "CARD: ARO:3000166",
+    source: "CARD: ARO:3003283", // rpoB M. tuberculosis (было ARO:3000166 = tet(B))
   },
   // M. tuberculosis RpoB: ...Thr-[S531]-Phe-Leu...
   {
@@ -132,7 +137,7 @@ const RESISTANCE_MUTATIONS: {
     motifAfter: "FLE",
     mechanism: "Мутация S531L в RpoB — частая причина резистентности M. tuberculosis",
     confidence: 95,
-    source: "CARD: ARO:3000166",
+    source: "CARD: ARO:3003283", // rpoB M. tuberculosis (было ARO:3000166 = tet(B))
   },
   // β-lactam resistance — PBPs (S. pneumoniae PBP2x)
   // Active site: ...Ser-Asn-[T338]-Phe-Lys...
@@ -147,7 +152,7 @@ const RESISTANCE_MUTATIONS: {
     motifAfter: "FKG",
     mechanism: "Мутация T338 в PBP2x снижает связывание β-лактамов",
     confidence: 80,
-    source: "CARD: ARO:3000051",
+    source: "CARD: ARO:3003043", // pbp2x S. pneumoniae (было ARO:3000051 — не существует)
   },
   // Macrolide resistance — 23S rRNA peptidyl transferase loop
   // E. coli 23S: ...G-[A2058]-G...
@@ -163,7 +168,7 @@ const RESISTANCE_MUTATIONS: {
     motifAfter: "GCG",
     mechanism: "Мутация A2058 в 23S rRNA снижает связывание макролидов с рибосомой",
     confidence: 88,
-    source: "CARD: ARO:3000080",
+    source: "CARD: ARO:3004125", // 23S rRNA A2058 (было ARO:3000080 = aminonucleoside antibiotic)
   },
   // Tetracycline — ribosomal protection (TetM-like)
   {
@@ -177,7 +182,7 @@ const RESISTANCE_MUTATIONS: {
     motifAfter: "UGG",
     mechanism: "Мутация G965 в 16S rRNA снижает связывание тетрациклина",
     confidence: 75,
-    source: "CARD: ARO:3000070",
+    source: "CARD: ARO:3003211", // 16S rRNA mutation (было ARO:3000070 — не существует)
   },
   // Aminoglycoside — 16S rRNA
   {
@@ -189,101 +194,25 @@ const RESISTANCE_MUTATIONS: {
     mutants: ["T", "A", "G"],
     motifBefore: "GCGG",
     motifAfter: "ACAG",
-    mechanism: "Метилирование 16S rRNA (ArmA-like) снижает связывание аминогликозидов",
+    mechanism: "Точечная мутация C1401 в 16S rRNA снижает связывание аминогликозидов",
     confidence: 85,
-    source: "CARD: ARO:3000085",
+    source: "CARD: ARO:3003211", // 16S rRNA mutation (было ARO:3000085; механизм «метилирование ArmA-like» — путаница: мутация ≠ метилирование)
   },
   // Sulfonamide — FolP mutations
-  // E. coli FolP: ...Ile-[P28]-Pro-Val...
+  // S. Gallinarum FolP: ...Ile-[F28]-Pro-Val... (Int J Antimicrob Agents 2009+
+  // — подтверждена замена F28L/I; было P28 с мутантами A/S/L — дикий тип расходился)
   {
     drugClass: "Сульфаниламиды",
     drugExamples: ["Сульфадиазин", "Сульфаметоксазол"],
     gene: "folP",
     position: 28,
-    wildType: "P",
-    mutants: ["A", "S", "L"],
+    wildType: "F",
+    mutants: ["L", "I"],
     motifBefore: "IYR",
     motifAfter: "PVA",
-    mechanism: "Мутация P28 в FolP снижает сродство к сульфаниламидам",
+    mechanism: "Мутация F28 в FolP снижает сродство к сульфаниламидам",
     confidence: 78,
-    source: "CARD: ARO:3000090",
-  },
-];
-
-/**
- * Resistance motifs (sequence signatures).
- */
-const RESISTANCE_MOTIFS: {
-  pattern: string;
-  gene: string;
-  drugClass: string;
-  drugExamples: string[];
-  mechanism: string;
-  confidence: number;
-  source: string;
-}[] = [
-  {
-    pattern: "RTGCAGYCTGAA",
-    gene: "blaTEM-1",
-    drugClass: "β-лактамы",
-    drugExamples: ["Амоксициллин", "Ампициллин"],
-    mechanism: "TEM-1 β-лактамаза гидролизует пенициллины",
-    confidence: 92,
-    source: "CARD: ARO:3000007",
-  },
-  {
-    pattern: "CGTACGGTTGGCGA",
-    gene: "blaSHV-1",
-    drugClass: "β-лактамы",
-    drugExamples: ["Ампициллин"],
-    mechanism: "SHV-1 β-лактамаза",
-    confidence: 90,
-    source: "CARD: ARO:3000008",
-  },
-  {
-    pattern: "AAGCAACGCGTGGC",
-    gene: "blaCTX-M",
-    drugClass: "β-лактамы",
-    drugExamples: ["Цефалексин", "Цефтиофур"],
-    mechanism: "CTX-M ESBL — расширенный спектр (цефалоспорины)",
-    confidence: 95,
-    source: "CARD: ARO:3000167",
-  },
-  {
-    pattern: "GGCACCGCCATC",
-    gene: "tetM",
-    drugClass: "Тетрациклины",
-    drugExamples: ["Доксициклин", "Окситетрациклин"],
-    mechanism: "TetM — рибосомальная защита от тетрациклинов",
-    confidence: 85,
-    source: "CARD: ARO:3000072",
-  },
-  {
-    pattern: "GACAAGCCGTACGA",
-    gene: "ermB",
-    drugClass: "Макролиды",
-    drugExamples: ["Эритромицин", "Тилозин"],
-    mechanism: "ErmB — метилаза 23S rRNA → MLS-резистентность",
-    confidence: 92,
-    source: "CARD: ARO:3000081",
-  },
-  {
-    pattern: "AACGACATCCGCGT",
-    gene: "aac(3)-IV",
-    drugClass: "Аминогликозиды",
-    drugExamples: ["Гентамицин"],
-    mechanism: "AAC(3)-IV — ацетилтрансфераза, инактивирует гентамицин",
-    confidence: 88,
-    source: "CARD: ARO:3000086",
-  },
-  {
-    pattern: "TGGCGCGAACGCAT",
-    gene: "qnrA",
-    drugClass: "Фторхинолоны",
-    drugExamples: ["Энрофлоксацин", "Ципрофлоксацин"],
-    mechanism: "QnrA — защита ДНК-гиразы от фторхинолонов",
-    confidence: 87,
-    source: "CARD: ARO:3000063",
+    source: "CARD: ARO:3003386", // folP (было ARO:3000090 = Bla1)
   },
 ];
 
@@ -304,29 +233,6 @@ export function predictAMR(sequence: string): AMRResult {
   const seq = sequence.toUpperCase().replace(/[^ACDEFGHIKLMNPQRSTVWY]/g, "");
   const hits: ResistanceHit[] = [];
   const resistanceGenes: string[] = [];
-
-  // ── Scan for motifs (DNA-style patterns translated to AAs) ──
-  // For simplicity, we look for these as literal substring matches (case-insensitive)
-  for (const motif of RESISTANCE_MOTIFS) {
-    const pattern = motif.pattern.toUpperCase();
-    // Also try reverse-complement for DNA — but here we assume protein-like
-    if (seq.includes(pattern)) {
-      const pos = seq.indexOf(pattern) + 1;
-      hits.push({
-        drugClass: motif.drugClass,
-        drugExamples: motif.drugExamples,
-        position: pos,
-        wildType: motif.pattern[0],
-        mutant: motif.pattern[0], // presence indicates resistance
-        mechanism: `[${motif.gene}] ${motif.mechanism}`,
-        confidence: motif.confidence,
-        source: motif.source,
-      });
-      if (!resistanceGenes.includes(motif.gene)) {
-        resistanceGenes.push(motif.gene);
-      }
-    }
-  }
 
   // ── Context-based mutation detection ──
   // For each known mutation, search for pattern: motifBefore + [mutant] + motifAfter
@@ -352,6 +258,9 @@ export function predictAMR(sequence: string): AMRResult {
           confidence: mut.confidence,
           source: mut.source,
         });
+        if (!resistanceGenes.includes(mut.gene)) {
+          resistanceGenes.push(mut.gene);
+        }
         idx = seq.indexOf(mutPattern, idx + 1);
       }
     }

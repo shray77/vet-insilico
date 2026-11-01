@@ -1,16 +1,20 @@
 /**
  * ML-based toxicity classifiers via HuggingFace Inference API.
  *
- * Replaces the unreliable LLM-based ADMET (Qwen "guessing" from SMILES)
- * with real fine-tuned ChemBERTa classifiers trained on MoleculeNet:
+ * ⚠️ Статус панели (аудит SW-11, 2026-11-01): ВСЕ 5 modelId ниже
+ * (`seyonec/ChemBERTa-zinc-base-v1_{Ames,hERG,ClinTox,DILI,SkinSens}`)
+ * НЕ существуют на HuggingFace (у автора только fill-mask чекпойнты;
+ * text-classification fine-tunes нет, API отдаёт 401/HTML). Верифицированных
+ * существующих замен в аудите нет — поэтому панель НЕ рапортует «низкий риск»,
+ * а честно возвращает available=false / «панель недоступна» ( totalCount=0 ).
+ * Замена modelId на существующие модели — отдельная задача владельцу.
+ *
+ * Endpoints (целевые):
  *   - Ames mutagenicity (binary)
  *   - hERG blockade (binary)
  *   - Hepatotoxicity / DILI (binary)
  *   - ClinTox (FDA trial failure prediction)
- *   - Tox21 (12-endpoint multilabel)
- *   - ESOL (aqueous solubility regression)
- *
- * All models are ~45M params, free on HF Inference API.
+ *   - Skin sensitization (binary)
  *
  * Usage:
  *   import { predictToxicityML } from "@/lib/tox-models";
@@ -35,6 +39,8 @@ export interface ToxResult {
 export interface ToxPanel {
   /** All endpoint results. */
   results: ToxResult[];
+  /** False when no classifier returned a valid prediction — панель недоступна, риск НЕ оценён. */
+  available: boolean;
   /** Overall risk score 0-100 (higher = more toxic). */
   overallRisk: number;
   /** Number of positive (toxic) endpoints. */
@@ -56,8 +62,9 @@ interface ToxModel {
   description: string;
 }
 
-// Models — all free on HF Inference API (text-classification task)
-// Using multiple fine-tuned ChemBERTa checkpoints from the MoleculeNet suite
+// ⚠️ Модели не существуют на HF (аудит SW-11 2026-11-01) — оставлены как
+// декларация эндпоинтов панели; любой вызов деградирует в UNKNOWN, а панель
+// честно отвечает «недоступна» (см. predictToxicityML), а не «низкий риск».
 const TOX_MODELS: ToxModel[] = [
   {
     endpoint: "Ames mutagenicity",
@@ -207,11 +214,16 @@ export async function predictToxicityML(
 
   const totalCount = results.filter((r) => r.label !== "UNKNOWN" && r.label !== "ERROR").length;
   const positiveCount = positiveResults.length;
-  const overallRisk = totalCount > 0 ? Math.round((positiveCount / totalCount) * 100) : 0;
+  const available = totalCount > 0;
+  const overallRisk = available ? Math.round((positiveCount / totalCount) * 100) : 0;
 
   // Generate summary
   let summary: string;
-  if (overallRisk >= 60) {
+  if (!available) {
+    // SW-11: ни один классификатор не вернул результат — честная деградация,
+    // а не «низкая вероятность токсичности» на пустых данных.
+    summary = "⚠️ Панель ML-токсичности недоступна: ни один классификатор не вернул результат (указанные fine-tune модели отсутствуют на HuggingFace — аудит SW-11). Проверка токсичности НЕ выполнена, риск не оценён.";
+  } else if (overallRisk >= 60) {
     summary = `⚠️ Высокий риск токсичности: ${positiveCount}/${totalCount} тестов положительны. Не рекомендуется без дальнейших испытаний.`;
   } else if (overallRisk >= 30) {
     summary = `⚡ Умеренный риск: ${positiveCount}/${totalCount} тестов положительны. Требуется осторожность.`;
@@ -223,6 +235,7 @@ export async function predictToxicityML(
 
   return {
     results,
+    available,
     overallRisk,
     positiveCount,
     totalCount,

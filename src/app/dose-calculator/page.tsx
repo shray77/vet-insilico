@@ -13,11 +13,16 @@ export default function DoseCalculatorPage() {
   const [ageGroup, setAgeGroup] = useState<"neonate" | "young" | "adult">("adult");
   const [pricePerMl, setPricePerMl] = useState(0);
 
+  // SW-13/Ш1: десятичная запятая («1,5») в числовых полях нормализуется в точку,
+  // иначе en-US-локаль молча превращает 1,5 в 15 (доза в мл ×10 меньше).
+  const parseNum = (raw: string): number => Number(raw.replace(",", "."));
+
   const availableDrugs = useMemo(() => getDrugsForSpecies(species), [species]);
   const doseRates = useMemo(() => getDoseRates(drug, species), [drug, species]);
 
   const results = useMemo(() => {
-    return doseRates.map(dr => calculateDose(dr, weight, { concentration, pricePerMl: pricePerMl || undefined, ageGroup }));
+    // Ш3: отрицательная цена не считается (было «Стоимость курса: −37.5 ₽»).
+    return doseRates.map(dr => calculateDose(dr, weight, { concentration, pricePerMl: pricePerMl > 0 ? pricePerMl : undefined, ageGroup }));
   }, [doseRates, weight, concentration, pricePerMl, ageGroup]);
 
   const loadSpecies = (sp: string) => {
@@ -78,13 +83,13 @@ export default function DoseCalculatorPage() {
               <label className="block">
                 <span className="text-xs text-zinc-500">Концентрация препарата: <b>{concentration} мг/мл</b></span>
                 <input type="number" min={1} max={1000} value={concentration}
-                  onChange={(e) => setConcentration(Number(e.target.value))}
+                  onChange={(e) => setConcentration(parseNum(e.target.value))}
                   className="w-full px-3 py-2 mt-1 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-sm" />
               </label>
               <label className="block">
                 <span className="text-xs text-zinc-500">Цена за мл (₽, опционально)</span>
                 <input type="number" min={0} step={0.1} value={pricePerMl}
-                  onChange={(e) => setPricePerMl(Number(e.target.value))}
+                  onChange={(e) => setPricePerMl(parseNum(e.target.value))}
                   className="w-full px-3 py-2 mt-1 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-sm" />
               </label>
             </div>
@@ -117,12 +122,12 @@ export default function DoseCalculatorPage() {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
                       <div className="rounded-lg bg-zinc-100 dark:bg-zinc-800 p-2 text-center">
                         <div className="text-xs text-zinc-400">Разовая доза</div>
-                        <div className="font-bold text-cyan-600">{r.dosePerAdministration} мг</div>
+                        <div className="font-bold text-cyan-600">{r.dosePerAdministration} {r.doseUnit === "IU/kg" ? "IU" : "мг"}</div>
                         {r.doseVolume > 0 && <div className="text-[10px] text-zinc-400">= {r.doseVolume} мл</div>}
                       </div>
                       <div className="rounded-lg bg-zinc-100 dark:bg-zinc-800 p-2 text-center">
                         <div className="text-xs text-zinc-400">В день</div>
-                        <div className="font-bold text-cyan-600">{r.totalDailyDose} мг</div>
+                        <div className="font-bold text-cyan-600">{r.totalDailyDose} {r.doseUnit === "IU/kg" ? "IU" : "мг"}</div>
                       </div>
                       <div className="rounded-lg bg-zinc-100 dark:bg-zinc-800 p-2 text-center">
                         <div className="text-xs text-zinc-400">Введений</div>
@@ -130,7 +135,7 @@ export default function DoseCalculatorPage() {
                       </div>
                       <div className="rounded-lg bg-zinc-100 dark:bg-zinc-800 p-2 text-center">
                         <div className="text-xs text-zinc-400">Курс всего</div>
-                        <div className="font-bold text-cyan-600">{r.totalCourseDose} мг</div>
+                        <div className="font-bold text-cyan-600">{r.totalCourseDose} {r.doseUnit === "IU/kg" ? "IU" : "мг"}</div>
                       </div>
                     </div>
                     {r.estimatedCost && (

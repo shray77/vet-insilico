@@ -3,19 +3,21 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
-import { analyzeELISA } from "@/lib/elisa";
+import { analyzeELISA, parseODInput } from "@/lib/elisa";
 
 export default function ELISAPage() {
   const [negInput, setNegInput] = useState("0.105\n0.098\n0.112\n0.087\n0.103\n0.095\n0.118\n0.091\n0.100\n0.109");
   const [posInput, setPosInput] = useState("0.456\n0.523\n0.389\n0.612\n0.445\n0.501\n0.578\n0.412");
-  const [method, setMethod] = useState<"2SD" | "3SD">("2SD");
+  const [method, setMethod] = useState<"2SD" | "3SD" | "frey">("2SD");
+
+  const parsedNeg = useMemo(() => parseODInput(negInput), [negInput]);
+  const parsedPos = useMemo(() => parseODInput(posInput), [posInput]);
 
   const result = useMemo(() => {
-    const negatives = negInput.split(/[\n,\s]+/).map(Number).filter(n => !isNaN(n));
-    const positives = posInput.trim() ? posInput.split(/[\n,\s]+/).map(Number).filter(n => !isNaN(n)) : undefined;
-    if (negatives.length < 2) return null;
-    return analyzeELISA(negatives, positives, method);
-  }, [negInput, posInput, method]);
+    if (parsedNeg.values.length < 2) return null;
+    const positives = parsedPos.values.length > 0 ? parsedPos.values : undefined;
+    return analyzeELISA(parsedNeg.values, positives, method);
+  }, [parsedNeg, parsedPos, method]);
 
   return (
     <div className="min-h-screen">
@@ -29,7 +31,7 @@ export default function ELISAPage() {
         <div className="rounded-xl bg-teal-50 dark:bg-teal-950/30 border border-teal-200 dark:border-teal-800 p-4 mb-6">
           <h2 className="font-semibold text-teal-700 mb-1">ELISA Cut-off Calculator</h2>
           <p className="text-sm text-teal-700">
-            Статистический анализ OD значений ELISA. Cut-off = mean + 2SD (или 3SD).
+            Статистический анализ OD значений ELISA. Cut-off = mean + 2SD / 3SD / верхняя граница предсказания (Frey 1998).
             ROC curve, AUC, sensitivity/specificity если есть positive controls.
           </p>
         </div>
@@ -37,13 +39,13 @@ export default function ELISAPage() {
           <div className="lg:col-span-1">
             <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 mb-3">Входные данные (OD значения)</h3>
             <label className="block mb-4">
-              <span className="text-xs text-zinc-500">Negative controls ({negInput.split(/[\n,\s]+/).filter(Boolean).length} знач.)</span>
+              <span className="text-xs text-zinc-500">Negative controls ({parsedNeg.values.length} знач.)</span>
               <textarea value={negInput} onChange={(e) => setNegInput(e.target.value)} rows={6}
                 className="w-full px-3 py-2 mt-1 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-mono"
                 placeholder="0.105&#10;0.098&#10;..." />
             </label>
             <label className="block mb-4">
-              <span className="text-xs text-zinc-500">Positive controls (опционально, {posInput.trim() ? posInput.split(/[\n,\s]+/).filter(Boolean).length : 0} знач.)</span>
+              <span className="text-xs text-zinc-500">Positive controls (опционально, {parsedPos.values.length} знач.)</span>
               <textarea value={posInput} onChange={(e) => setPosInput(e.target.value)} rows={4}
                 className="w-full px-3 py-2 mt-1 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-mono"
                 placeholder="0.456&#10;0.523&#10;..." />
@@ -54,10 +56,20 @@ export default function ELISAPage() {
                 className="w-full px-3 py-2 mt-1 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-sm">
                 <option value="2SD">Mean + 2SD (95% CI) — рекомендуется</option>
                 <option value="3SD">Mean + 3SD (99.7% CI) — более строгий</option>
+                <option value="frey">Верхняя граница предсказания (Frey 1998)</option>
               </select>
             </label>
           </div>
           <div className="lg:col-span-2 space-y-6">
+            {(parsedNeg.problems.length > 0 || parsedPos.problems.length > 0) && (
+              <div className="rounded-lg border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/30 p-3 text-xs text-amber-800 dark:text-amber-300">
+                <b>Проблемы ввода (значения НЕ вошли в расчёт):</b>
+                <ul className="list-disc ml-4 mt-1">
+                  {parsedNeg.problems.map((p, i) => <li key={"n" + i}>{p}</li>)}
+                  {parsedPos.problems.map((p, i) => <li key={"p" + i}>{p}</li>)}
+                </ul>
+              </div>
+            )}
             {!result ? (
               <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-8 text-center text-zinc-400">Введите минимум 2 negative control значения</div>
             ) : (
@@ -134,9 +146,11 @@ export default function ELISAPage() {
                 <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 text-xs text-zinc-500 dark:text-zinc-400">
                   <b>Метод:</b><br/>
                   • Cut-off = mean(negatives) + k × SD(negatives), k=2 (95% CI) или k=3 (99.7% CI)<br/>
+                  • Frey 1998: mean + t<sub>0.95,n−1</sub> × SD × √(1+1/n) — верхняя граница предсказания (статистически корректнее mean±SD)<br/>
+                  • Десятичная запятая («0,105») нормализуется в точку; значения вне диапазона OD 0–4 отбрасываются с предупреждением<br/>
                   • CV% (Coefficient of Variation) = SD/mean × 100. Хорошо если &lt; 15%<br/>
                   • ROC: sweep через все возможные cut-off → sensitivity vs 1-specificity<br/>
-                  • AUC: trapezoidal rule. 0.5 = random, 1.0 = perfect. &gt;0.9 = отличный тест<br/>
+                  • AUC: Манн–Уитни U (эквивалент эмпирической ROC, устойчив к связям). 0.5 = random, 1.0 = perfect. &gt;0.9 = отличный тест<br/>
                   <b>⚠</b> Минимум 8-10 negative controls для надёжной оценки. Для публикации — подтвердить на независимой выборке.
                 </div>
               </>

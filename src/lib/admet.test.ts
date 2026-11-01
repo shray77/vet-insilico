@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { predictADMET, type AdmetResult } from "./admet";
-import type { Drug } from "@/data/drugs";
+import { DRUGS, type Drug } from "@/data/drugs";
 
 // Test drug — drug-like molecule that passes Lipinski
 const goodDrug: Drug = {
@@ -76,5 +76,20 @@ describe("predictADMET", () => {
     expect(validLevels).toContain(result.oralBioavailabilityLevel);
     expect(validLevels).toContain(result.bbbPermeabilityLevel);
     expect(validLevels).toContain(result.hergRiskLevel);
+  });
+
+  it("logS follows ESOL (Delaney 2004): 0.16 − 0.63·cLogP − 0.0062·MW + 0.066·RB − 0.74·AP", () => {
+    // Ибупрофен из базы: MW 206.3, cLogP 3.1, RB 3, AP 0.4 (6 аром./15 тяжёлых, RDKit)
+    const ibu = DRUGS.find((d) => d.inn.toLowerCase().includes("ibuprof"))!;
+    const expected = 0.16 - 0.63 * ibu.logp - 0.0062 * ibu.mw + 0.066 * ibu.rotatable_bonds - 0.74 * 0.4;
+    const result = predictADMET(ibu);
+    expect(result.logS).toBeCloseTo(Number(expected.toFixed(2)), 2);
+    // SW-11: старый «GSE с MW вместо Tm» занижал растворимость 3–10×
+    expect(result.logS).toBeGreaterThan(-4);
+  });
+
+  it("logS for drug without SMILES/map entry uses AP=0 and reports an honest alert", () => {
+    const result = predictADMET(badDrug);
+    expect(result.alerts.some((a) => a.includes("AP"))).toBe(true);
   });
 });

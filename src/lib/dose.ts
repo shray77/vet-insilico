@@ -21,6 +21,8 @@ export interface DoseRate {
   species: string;
   /** Dose in mg/kg. */
   doseMgKg: number;
+  /** Dose units: mg/kg (default) or IU/kg (penicillin G — dose value is in IU, mg/ml volume math does NOT apply). */
+  doseUnit?: "mg/kg" | "IU/kg";
   /** Route. */
   route: "IV" | "IM" | "SC" | "oral" | "topical";
   /** Frequency in hours. */
@@ -47,9 +49,11 @@ export const DOSE_DATABASE: DoseRate[] = [
   { drug: "enrofloxacin", species: "КРС", doseMgKg: 5, route: "SC", intervalHours: 24, durationDays: 3, notes: "Период ожидания 14 дней (молоко 84 часа)" },
   { drug: "oxytetracycline", species: "КРС", doseMgKg: 10, route: "IV", intervalHours: 24, durationDays: 4, notes: "Вводить медленно IV. Период ожидания 22 дня" },
   { drug: "florfenicol", species: "КРС", doseMgKg: 40, route: "SC", intervalHours: 48, durationDays: 2, notes: "2 введения с интервалом 48ч. Период ожидания 38 дней" },
-  { drug: "ceftiofur", species: "КРС", doseMgKg: 1.1, route: "SC", intervalHours: 24, durationDays: 3, notes: "Для лечения пневмонии. Не применять у жвачных < 8 недель" },
+  // Ceftiofur КРС: лейбл-доза 2.2 мг/кг q24h ×3–5 сут (PLoS One 2019;14:e0223378;
+  // Antibiotics 2026;15:154; диапазон 1.1–2.2 — Antibiotics 2025;14:686). Было 1.1 — занижение ×2.
+  { drug: "ceftiofur", species: "КРС", doseMgKg: 2.2, route: "SC", intervalHours: 24, durationDays: 3, notes: "Для лечения пневмонии. Не применять у жвачных < 8 недель" },
   { drug: "tulathromycin", species: "КРС", doseMgKg: 2.5, route: "SC", intervalHours: 0, durationDays: 1, notes: "Однократно. Период ожидания 49 дней" },
-  { drug: "penicillin G", species: "КРС", doseMgKg: 10000, route: "IM", intervalHours: 24, durationDays: 3, notes: "Доза в IU/кг. Период ожидания 14 дней" },
+  { drug: "penicillin G", species: "КРС", doseMgKg: 10000, doseUnit: "IU/kg", route: "IM", intervalHours: 24, durationDays: 3, notes: "Доза в IU/кг. Период ожидания 14 дней" },
   { drug: "sulfadiazine", species: "КРС", doseMgKg: 30, route: "IV", intervalHours: 24, durationDays: 5, notes: "В комбинации с триметопримом" },
   // ─── Poultry ───
   { drug: "enrofloxacin", species: "Птица", doseMgKg: 10, route: "oral", intervalHours: 24, durationDays: 5, notes: "Через воду. Период ожидания 12 дней" },
@@ -60,11 +64,13 @@ export const DOSE_DATABASE: DoseRate[] = [
   { drug: "sulfadimidine", species: "Птица", doseMgKg: 100, route: "oral", intervalHours: 24, durationDays: 5, notes: "Через воду" },
   // ─── Dog ───
   { drug: "enrofloxacin", species: "Собака", doseMgKg: 5, route: "oral", intervalHours: 24, durationDays: 7, notes: "Не применять щенкам < 8 мес (хрящевая ткань)" },
-  { drug: "amoxicillin", species: "Собака", doseMgKg: 10, route: "oral", intervalHours: 12, durationDays: 7, notes: "Клавулановая кислота 2:1" },
+  { drug: "amoxicillin", species: "Собака", doseMgKg: 10, route: "oral", intervalHours: 12, durationDays: 7, notes: "Клавулановая кислота 4:1 (вет. формы)" },
   { drug: "doxycycline", species: "Собака", doseMgKg: 5, route: "oral", intervalHours: 12, durationDays: 7, notes: "Давать с водой (эзофагит)" },
   { drug: "metronidazole", species: "Собака", doseMgKg: 15, route: "oral", intervalHours: 12, durationDays: 7, notes: "Антианаэробный" },
   { drug: "gentamicin", species: "Собака", doseMgKg: 6, route: "IM", intervalHours: 24, durationDays: 5, notes: "Контроль функции почек. Не > 7 дней" },
-  { drug: "clindamycin", species: "Собака", doseMgKg: 11, route: "oral", intervalHours: 12, durationDays: 7, notes: "Нефротоксичный у кошек" },
+  // Clindamycin собаке: лейбл — 5.5 мг/кг q12h ИЛИ 11 мг/кг q24h (Vet Dermatol 2011;22:429-35;
+  // Vet Q 2013;33:7-12). Было 11 q12h = 22 мг/кг/сут — превышение суточной лейбл-дозы ×2.
+  { drug: "clindamycin", species: "Собака", doseMgKg: 5.5, route: "oral", intervalHours: 12, durationDays: 7, notes: "Нефротоксичный у кошек" },
   { drug: "cefalexin", species: "Собака", doseMgKg: 15, route: "oral", intervalHours: 12, durationDays: 7, notes: "Кожные инфекции" },
   // ─── Cat ───
   { drug: "amoxicillin", species: "Кошка", doseMgKg: 12.5, route: "oral", intervalHours: 12, durationDays: 7, notes: "С клавулановой кислотой" },
@@ -74,7 +80,7 @@ export const DOSE_DATABASE: DoseRate[] = [
   { drug: "metronidazole", species: "Кошка", doseMgKg: 10, route: "oral", intervalHours: 12, durationDays: 7, notes: "Горький — давать в капсуле" },
   { drug: "cefalexin", species: "Кошка", doseMgKg: 15, route: "oral", intervalHours: 12, durationDays: 7 },
   // ─── Horse ───
-  { drug: "penicillin G", species: "Лошадь", doseMgKg: 22000, route: "IM", intervalHours: 12, durationDays: 5, notes: "IU/кг. Не давать лошадям orally" },
+  { drug: "penicillin G", species: "Лошадь", doseMgKg: 22000, doseUnit: "IU/kg", route: "IM", intervalHours: 12, durationDays: 5, notes: "IU/кг. Не давать лошадям orally" },
   { drug: "gentamicin", species: "Лошадь", doseMgKg: 6.6, route: "IV", intervalHours: 24, durationDays: 5, notes: "Контроль функции почек" },
   { drug: "enrofloxacin", species: "Лошадь", doseMgKg: 5, route: "oral", intervalHours: 24, durationDays: 7, notes: "Не применять жеребятам < 12 мес" },
   { drug: "doxycycline", species: "Лошадь", doseMgKg: 10, route: "oral", intervalHours: 12, durationDays: 7, notes: "Давать с водой" },
@@ -96,6 +102,8 @@ export interface DoseCalculationResult {
   durationDays: number;
   notes: string;
   contraindications?: string;
+  /** Dose units (mg/kg or IU/kg — SW-11: IU doses must not be mixed with mg/ml concentration math). */
+  doseUnit: "mg/kg" | "IU/kg";
   /** Estimated cost (if price provided). */
   estimatedCost?: number;
   /** Warning if dose is unusually high. */
@@ -118,17 +126,21 @@ export function calculateDose(
     adjustedDose *= 0.85;
   }
 
-  const dosePerAdministration = adjustedDose * bodyWeight; // mg
+  const doseUnit = doseRate.doseUnit ?? "mg/kg";
+
+  const dosePerAdministration = adjustedDose * bodyWeight; // mg (или IU при doseUnit=IU/kg)
   const administrationsPerDay = doseRate.intervalHours > 0 ? 24 / doseRate.intervalHours : 1;
   const totalDailyDose = dosePerAdministration * administrationsPerDay;
   const numberOfAdministrations = doseRate.intervalHours > 0 ? doseRate.durationDays * administrationsPerDay : doseRate.durationDays;
   const totalCourseDose = dosePerAdministration * numberOfAdministrations;
 
-  const doseVolume = concentration ? dosePerAdministration / concentration : 0;
+  // Концентрация задаётся в мг/мл — для доз в IU/кг расчёт объёма неприменим (SW-11).
+  const doseVolume = concentration && doseUnit === "mg/kg" ? dosePerAdministration / concentration : 0;
 
   let warning: string | undefined;
   if (dosePerAdministration > 5000) warning = "Большая разовая доза — разделить на 2 точки введения";
   if (bodyWeight > 500 && doseRate.route === "IM") warning = "Не применять IM у крупных животных — использовать IV";
+  if (doseUnit === "IU/kg" && concentration) warning = "Доза в IU/кг — объём не рассчитан: нужна концентрация в IU/мл (поле «мг/мл» неприменимо)";
 
   const estimatedCost = pricePerMl && doseVolume ? doseVolume * numberOfAdministrations * pricePerMl : undefined;
 
@@ -142,6 +154,7 @@ export function calculateDose(
     totalCourseDose: Number(totalCourseDose.toFixed(1)),
     numberOfAdministrations: Math.ceil(numberOfAdministrations),
     route: doseRate.route,
+    doseUnit,
     intervalHours: doseRate.intervalHours,
     durationDays: doseRate.durationDays,
     notes: doseRate.notes || "",

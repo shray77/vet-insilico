@@ -80,6 +80,41 @@ describe("DOSE_DATABASE", () => {
     expect(DOSE_DATABASE.length).toBeGreaterThanOrEqual(30);
   });
 
+  it("ceftiofur cattle dose = 2.2 mg/kg (label, SW-11: было 1.1 — занижение ×2)", () => {
+    const rates = getDoseRates("ceftiofur", "КРС");
+    expect(rates.length).toBeGreaterThan(0);
+    expect(rates[0].doseMgKg).toBe(2.2);
+    expect(calculateDose(rates[0], 100).dosePerAdministration).toBeCloseTo(220, 1);
+  });
+
+  it("clindamycin dog dose = 5.5 mg/kg q12h (label, SW-11: было 11 q12h — суточная ×2)", () => {
+    const rates = getDoseRates("clindamycin", "Собака");
+    expect(rates.length).toBeGreaterThan(0);
+    expect(rates[0].doseMgKg).toBe(5.5);
+    expect(rates[0].intervalHours).toBe(12);
+    // суточная доза = 11 мг/кг/сут — лейбл (Vet Dermatol 2011;22:429-35)
+    expect(calculateDose(rates[0], 10).totalDailyDose).toBeCloseTo(110, 1);
+  });
+
+  it("penicillin G entries are marked IU/kg and skip mg/ml volume math (SW-11)", () => {
+    for (const species of ["КРС", "Лошадь"]) {
+      const rate = getDoseRates("penicillin G", species)[0];
+      expect(rate.doseUnit).toBe("IU/kg");
+      const res = calculateDose(rate, 500, { concentration: 300 });
+      expect(res.doseUnit).toBe("IU/kg");
+      expect(res.doseVolume).toBe(0);
+      expect(res.warning).toBeTruthy();
+    }
+  });
+
+  it("mg/kg entries keep volume math", () => {
+    const enro = getDoseRates("enrofloxacin", "Свинья")[0];
+    expect(enro.doseUnit).toBeUndefined();
+    const res = calculateDose(enro, 50, { concentration: 100 });
+    expect(res.doseUnit).toBe("mg/kg");
+    expect(res.doseVolume).toBeCloseTo(1.25, 2);
+  });
+
   it("all doses have positive doseMgKg", () => {
     DOSE_DATABASE.forEach((d) => {
       expect(d.doseMgKg).toBeGreaterThan(0);
