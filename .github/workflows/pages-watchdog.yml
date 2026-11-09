@@ -1,0 +1,122 @@
+name: Pages deploy watchdog
+
+# Зачем: пуш снапшотов делает GITHUB_TOKEN и не триггерит on:push
+# воркфлоу, поэтому деплой сайта диспетчится явно из дата-воркфлоу
+# (d1f0b4b). Но сам деплой может МОЛЧА упасть — кейс 2026-11-09 12:55 UTC:
+# actions/deploy-pages@v4 не вышел из syncing_files за 10 минут (транзиент
+# CDN Pages), prod остался на прошлом коммите до ручного перезапуска.
+# Сторож каждые 6 часов сверяет main с последним деплоем/билдом Pages и
+# при расхождении сам перезапускает деплой (self-healing дрейфа прода).
+
+on:
+  schedule:
+    - cron: "15 */6 * * *"   # 00:15/06:15/12:15/18:15 UTC — мимо снапшотов (:30)
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: read
+  actions: write
+
+concurrency:
+  group: pages-watchdog
+  cancel-in-progress: false
+
+jobs:
+  watchdog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Дрейф прода (main против последнего деплоя Pages)
+        id: drift
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const main = await github.rest.repos.getBranch({
+              owner: context.repo.owner, repo: context.repo.repo, branch: 'main',
+            });
+            const mainSha = main.data.commit.sha;
+            let drift = false, catchingUp = false;
+            const why = [];
+
+            // 1) последний деплой окружения github-pages
+            try {
+              const deps = await github.rest.repos.listDeployments({
+                owner: context.repo.owner, repo: context.repo.repo,
+                environment: 'github-pages', per_page: 1,
+              });
+              const dep = deps.data[0];
+              if (dep) {
+                const st = await github.rest.repos.listDeploymentStatuses({
+                  owner: context.repo.owner, repo: context.repo.repo,
+                  deployment_id: dep.id, per_page: 1,
+                });
+                const state = (st.data[0] && st.data[0].state) || 'unknown';
+                core.info(`последний деплой: ${dep.sha.slice(0, 7)} → ${state}`);
+                if (dep.sha === mainSha && state === 'failure') {
+                  drift = true;
+                  why.push(`деплой ${mainSha.slice(0, 7)} провален`);
+                }
+                if (dep.sha === mainSha &&
+                    ['in_progress', 'queued', 'pending', 'waiting'].includes(state)) {
+                  catchingUp = true;
+                }
+              }
+            } catch (e) {
+              core.warning('deployments API: ' + e.message);
+            }
+
+            // 2) последний билд Pages (если прод не «догоняет» прямо сейчас)
+            if (!catchingUp) {
+              try {
+                const latest = await github.request(
+                  'GET /repos/{owner}/{repo}/pages/builds/latest',
+                  { owner: context.repo.owner, repo: context.repo.repo },
+                );
+                const sha = latest.data.commit || null;
+                const status = String(latest.data.status || '').toLowerCase();
+                core.info(`pages/builds/latest: ${sha ? sha.slice(0, 7) : '—'} (${status})`);
+                if (sha !== mainSha) {
+                  drift = true;
+                  why.push(`prod на ${sha ? sha.slice(0, 7) : '—'}, main на ${mainSha.slice(0, 7)}`);
+                }
+                if (['errored', 'error', 'failed'].includes(status)) {
+                  drift = true;
+                  why.push(`билд Pages: ${status}`);
+                }
+              } catch (e) {
+                core.warning('pages/builds/latest: ' + e.message);
+              }
+            }
+
+            // 3) grace: main только что пушнулся — деплою дают время, сторож не шумит
+            let grace = false;
+            try {
+              const when = new Date(
+                main.data.commit.commit.committer.date ||
+                main.data.commit.commit.author.date);
+              const ageMin = (Date.now() - when.getTime()) / 60000;
+              if (drift && ageMin < 30) {
+                grace = true;
+                core.info(`main обновлён ${Math.round(ageMin)} мин назад — grace, не шумим`);
+              }
+            } catch (e) { /* без дат — без grace */ }
+
+            if (drift && !grace) {
+              core.warning('ДРЕЙФ ПРОДА: ' + why.join('; '));
+              core.setOutput('drift', 'true');
+            } else {
+              core.info(catchingUp ? 'деплой main уже в полёте' : 'прод синхронен с main');
+              core.setOutput('drift', 'false');
+            }
+
+      - name: Перезапуск деплоя (self-healing)
+        if: steps.drift.outputs.drift == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner, repo: context.repo.repo,
+              workflow_id: 'deploy.yml', ref: 'main',
+            });
+            core.notice('Деплой перезапущен сторожем: prod отставал от main');

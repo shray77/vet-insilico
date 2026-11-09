@@ -54,3 +54,5 @@ jobs:
     steps:
       - uses: actions/deploy-pages@v4
         id: deployment
+        with:
+          timeout: 900000   # 15 мин: кейс 2026-11-09 — CDN не успел за 10
