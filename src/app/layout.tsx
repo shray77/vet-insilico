@@ -66,6 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <a href="https://shray77.github.io/">Визитка</a>
               <a href="https://shray77.github.io/vetpredis-site/">Атлас предрасположенностей</a>
               <a href="https://shray77.github.io/biobarrier-site/">БиоБарьер</a>
+              <a href="https://shray77.github.io/vetpain-site/">Шкалы боли</a>
               <a href="https://shray77.github.io/vettools/">ВетТулзы</a>
               <a href="https://shray77.github.io/vet-heatmap/">ВетКарта</a>
               <a href="https://shray77.github.io/vetflu-site/">Окна риска ВПГП</a>
