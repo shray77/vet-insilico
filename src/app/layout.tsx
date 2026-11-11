@@ -64,6 +64,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="max-w-7xl mx-auto px-4 min-w-0 w-full">
             <nav className="ds-hub" aria-label="Экосистема">
               <a href="https://shray77.github.io/">Визитка</a>
+              <a href="https://shray77.github.io/vetpredis-site/">Атлас предрасположенностей</a>
+              <a href="https://shray77.github.io/biobarrier-site/">БиоБарьер</a>
               <a href="https://shray77.github.io/vettools/">ВетТулзы</a>
               <a href="https://shray77.github.io/vet-heatmap/">ВетКарта</a>
               <a href="https://shray77.github.io/vetflu-site/">Окна риска ВПГП</a>
