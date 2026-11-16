@@ -1,6 +1,6 @@
 {
   "model": "boltz-2",
-  "generated": "2026-11-07T10:56:14Z",
+  "generated": "2026-11-16T12:44:58Z",
   "params": {
     "recycling_steps": 3,
     "sampling_steps": 200,
@@ -33,17 +33,17 @@
       },
       "hypothesis": null,
       "status": "ok",
-      "affinity_pred_value": 0.515625,
+      "affinity_pred_value": 0.421875,
       "affinity_probability_binary": 0.1279296875,
-      "ic50_um_est": 3.278121,
-      "delta_g_kcal_mol": 7.48,
+      "ic50_um_est": 2.641648,
+      "delta_g_kcal_mol": 7.61,
       "confidence": {
-        "confidence_score": 0.7702133655548096,
-        "iptm": 0.7276181578636169,
-        "ligand_iptm": 0.8339402675628662,
-        "complex_plddt": 0.7808621525764465
+        "confidence_score": 0.7748939990997314,
+        "iptm": 0.7309636473655701,
+        "ligand_iptm": 0.83379065990448,
+        "complex_plddt": 0.7858765721321106
       },
-      "runtime_s": 499.1
+      "runtime_s": 802.4
     },
     {
       "drug_id": "drug-109-amantadine",
@@ -64,17 +64,17 @@
       },
       "hypothesis": null,
       "status": "ok",
-      "affinity_pred_value": 1.3984375,
-      "affinity_probability_binary": 0.09033203125,
-      "ic50_um_est": 25.028654,
-      "delta_g_kcal_mol": 6.28,
+      "affinity_pred_value": 1.5,
+      "affinity_probability_binary": 0.08544921875,
+      "ic50_um_est": 31.622777,
+      "delta_g_kcal_mol": 6.14,
       "confidence": {
-        "confidence_score": 0.7260076403617859,
-        "iptm": 0.7057004570960999,
-        "ligand_iptm": 0.8015730381011963,
-        "complex_plddt": 0.7310844659805298
+        "confidence_score": 0.7450299263000488,
+        "iptm": 0.7443282604217529,
+        "ligand_iptm": 0.8584156632423401,
+        "complex_plddt": 0.7452053427696228
       },
-      "runtime_s": 489.5
+      "runtime_s": 768.2
     },
     {
       "drug_id": "drug-111-oseltamivir",
@@ -92,17 +92,17 @@
       },
       "hypothesis": null,
       "status": "ok",
-      "affinity_pred_value": 0.0869140625,
-      "affinity_probability_binary": 0.5546875,
-      "ic50_um_est": 1.221558,
-      "delta_g_kcal_mol": 8.07,
+      "affinity_pred_value": -0.296875,
+      "affinity_probability_binary": 0.65234375,
+      "ic50_um_est": 0.504807,
+      "delta_g_kcal_mol": 8.59,
       "confidence": {
-        "confidence_score": 0.9486135244369507,
-        "iptm": 0.9281048774719238,
-        "ligand_iptm": 0.9281048774719238,
-        "complex_plddt": 0.953740656375885
+        "confidence_score": 0.9319442510604858,
+        "iptm": 0.8764393925666809,
+        "ligand_iptm": 0.8764393925666809,
+        "complex_plddt": 0.9458204507827759
       },
-      "runtime_s": 1888.2
+      "runtime_s": 2519.1
     },
     {
       "drug_id": "drug-112-zanamivir",
@@ -120,17 +120,17 @@
       },
       "hypothesis": null,
       "status": "ok",
-      "affinity_pred_value": -1.0546875,
-      "affinity_probability_binary": 0.8046875,
-      "ic50_um_est": 0.088168,
-      "delta_g_kcal_mol": 9.62,
+      "affinity_pred_value": -1.0234375,
+      "affinity_probability_binary": 0.80078125,
+      "ic50_um_est": 0.094746,
+      "delta_g_kcal_mol": 9.58,
       "confidence": {
-        "confidence_score": 0.9424031972885132,
-        "iptm": 0.8880427479743958,
-        "ligand_iptm": 0.8880427479743958,
-        "complex_plddt": 0.9559933543205261
+        "confidence_score": 0.9459255933761597,
+        "iptm": 0.9050917625427246,
+        "ligand_iptm": 0.9050917625427246,
+        "complex_plddt": 0.9561340808868408
       },
-      "runtime_s": 1875.9
+      "runtime_s": 2490.3
     },
     {
       "drug_id": "drug-116-remdesivir",
@@ -145,17 +145,17 @@
       "reference": null,
       "hypothesis": "АЧС не имеет терапии; PolX — уникальная репаративная полимераза ASFV (нет гомолога у свиньи), ремдесивир — нуклеозидный аналог. Прямых данных нет — гипотеза для in vitro.",
       "status": "ok",
-      "affinity_pred_value": 0.8359375,
-      "affinity_probability_binary": 0.20703125,
-      "ic50_um_est": 6.853896,
-      "delta_g_kcal_mol": 7.04,
+      "affinity_pred_value": 0.91796875,
+      "affinity_probability_binary": 0.197265625,
+      "ic50_um_est": 8.278826,
+      "delta_g_kcal_mol": 6.93,
       "confidence": {
-        "confidence_score": 0.8256314396858215,
-        "iptm": 0.6728333234786987,
-        "ligand_iptm": 0.6728333234786987,
-        "complex_plddt": 0.8638309240341187
+        "confidence_score": 0.8140614628791809,
+        "iptm": 0.6255401372909546,
+        "ligand_iptm": 0.6255401372909546,
+        "complex_plddt": 0.8611918091773987
       },
-      "runtime_s": 694.1
+      "runtime_s": 1080.1
     },
     {
       "drug_id": "drug-118-favipiravir",
@@ -170,17 +170,17 @@
       "reference": null,
       "hypothesis": "Фавипиравир — синтетический аналог пуриновой нуклеобазы с широким противовирусным профилем РНК-полимераз. Прямых данных по PolX нет — гипотеза.",
       "status": "ok",
-      "affinity_pred_value": 1.703125,
-      "affinity_probability_binary": 0.55078125,
-      "ic50_um_est": 50.480657,
-      "delta_g_kcal_mol": 5.86,
+      "affinity_pred_value": 1.75,
+      "affinity_probability_binary": 0.546875,
+      "ic50_um_est": 56.234133,
+      "delta_g_kcal_mol": 5.8,
       "confidence": {
-        "confidence_score": 0.9158136248588562,
-        "iptm": 0.7837070226669312,
-        "ligand_iptm": 0.7837070226669312,
-        "complex_plddt": 0.9488402605056763
+        "confidence_score": 0.8987902402877808,
+        "iptm": 0.7210713028907776,
+        "ligand_iptm": 0.7210713028907776,
+        "complex_plddt": 0.9432199597358704
       },
-      "runtime_s": 504.0
+      "runtime_s": 825.9
     },
     {
       "drug_id": "drug-018-doxycycline",
@@ -195,17 +195,17 @@
       "reference": null,
       "hypothesis": "Доксициклин — препарат выбора при лептоспирозе (in vivo мишень — рибосома), но связывание с поверхностным LipL32 не изучено. Пара сравнивает реальный ИИ-докинг с упрощённым скорером витрины.",
       "status": "ok",
-      "affinity_pred_value": 0.6640625,
-      "affinity_probability_binary": 0.5390625,
-      "ic50_um_est": 4.61384,
-      "delta_g_kcal_mol": 7.28,
+      "affinity_pred_value": 0.71875,
+      "affinity_probability_binary": 0.54296875,
+      "ic50_um_est": 5.232991,
+      "delta_g_kcal_mol": 7.2,
       "confidence": {
-        "confidence_score": 0.7926530838012695,
-        "iptm": 0.6854296326637268,
-        "ligand_iptm": 0.6854296326637268,
-        "complex_plddt": 0.8194589614868164
+        "confidence_score": 0.814622700214386,
+        "iptm": 0.7236374020576477,
+        "ligand_iptm": 0.7236374020576477,
+        "complex_plddt": 0.8373689651489258
       },
-      "runtime_s": 924.9
+      "runtime_s": 1360.4
     }
   ]
 }
